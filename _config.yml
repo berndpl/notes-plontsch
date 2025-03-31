@@ -20,9 +20,9 @@
 
 title: Bernd Plontsch • Notes
 email: 
-description: "Notes and insights"
+description: "Notes, insights, questions"
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://plontsch.de" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://notes.plontsch.de" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: berndplontsch
 github_username:  berndpl
 
@@ -30,6 +30,18 @@ github_username:  berndpl
 # theme: minima  # Comment out or remove this line
 plugins:
   - jekyll-feed
+  - jekyll-paginate-v2
+
+# Pagination settings
+pagination:
+  enabled: true
+  per_page: 3
+  permalink: "/page/:num/"
+  title: ":title - page :num"
+  limit: 0
+  sort_field: "date"
+  sort_reverse: true
+  
 
 # Collections
 collections:

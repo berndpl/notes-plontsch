@@ -1,7 +1,5 @@
 ---
-layout: note
 date: 2024-03-31
-categories: note
 ---
 We drive the future.
 It’s not about what we can do.
