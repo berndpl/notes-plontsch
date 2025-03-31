@@ -58,6 +58,7 @@ body {
     background: #B2F0AD;
 }
 
+<<<<<<< HEAD
 .notes-header {
     margin-bottom: 40px;
 }
@@ -155,10 +156,15 @@ blockquote::before {
 
 a {
     color: #F5E2B1;
+=======
+a {
+    color: #fff;
+>>>>>>> 4048321 (initial)
     text-decoration: underline;
 }
 
 .post-list {
+<<<<<<< HEAD
     
 }
 
@@ -168,6 +174,20 @@ margin: 0 0 6pt 0;
 
 .post-item {
     /* margin: 0 0 30pt 0; */
+=======
+    margin: 0;
+    padding: 0;
+}
+
+.post-item {
+    margin: 0 0 30px 0;
+    padding: 0 0 20px 0;
+}
+
+.post-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+>>>>>>> 4048321 (initial)
 }
 
 .note-title {
@@ -186,6 +206,10 @@ margin: 0 0 6pt 0;
 .note-date {
     color: #888;
     margin: 0;
+<<<<<<< HEAD
+=======
+    font-size: 0.9em;
+>>>>>>> 4048321 (initial)
     display: inline;
 }
 
@@ -203,6 +227,7 @@ margin: 0 0 6pt 0;
 }
 
 .quote-item .note-excerpt {
+<<<<<<< HEAD
     color: #666;
     font-style: italic;
     border-left: none;
@@ -212,6 +237,14 @@ margin: 0 0 6pt 0;
 
 .quote-item .note-date {
     color: #555;
+=======
+    color: #888;
+    font-style: italic;
+}
+
+.quote-item .note-date {
+    color: #888;
+>>>>>>> 4048321 (initial)
 }
 
 .quote-source {
@@ -228,6 +261,7 @@ margin: 0 0 6pt 0;
 .quote-source a:hover {
     color: #888;
     text-decoration: underline;
+<<<<<<< HEAD
 }
 
 .pagination {
@@ -255,4 +289,6 @@ margin: 0 0 6pt 0;
 
 .pagination .page_number {
     color: #888;
+=======
+>>>>>>> 4048321 (initial)
 } 
