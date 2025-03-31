@@ -8,14 +8,14 @@ pagination:
 {% for post in paginator.posts %}
     <div class="post-item">
         {{ post.content }}
-        <div class="note-meta">
+        <!-- <div class="note-meta">
             <span class="note-date">{{ post.date | date: "%y%m%d" }}</span>
             {% if post.source %}
                 <span class="note-source">
                     <a href="{{ post.source }}" target="_blank">Source ↗</a>
                 </span>
             {% endif %}
-        </div>
+        </div> -->
     </div>
 {% endfor %}
 </div>
