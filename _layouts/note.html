@@ -1,0 +1,52 @@
+---
+layout: default
+---
+
+<div class="note">
+
+  <div class="content">
+    {{ content }}
+  </div>
+
+  <div class="meta">
+    {{ page.date | date: "%y%m%d" }}
+  </div>
+</div>
+
+<style>
+  .note {
+    font-family: monospace;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .back-link {
+    margin-bottom: 40px;
+  }
+  
+  .back-link a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .content {
+    font-size: 24px;
+    line-height: 1.4;
+    margin: 40px 0;
+  }
+  
+  .meta {
+    margin-top: 40px;
+  }
+  
+  .meta a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  body {
+    background: #1c1c1c;
+    color: #fff;
+  }
+</style> 

@@ -1,0 +1,137 @@
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('../fonts/JetBrainsMono-ExtraLight.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+body {
+    background: #1c1c1c;
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    margin: 0;
+    padding: 20px;
+    font-size: 16px;
+    line-height: 1.4;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.nav {
+    margin-bottom: 60px;
+}
+
+.nav a {
+    color: #888;
+    text-decoration: none;
+    margin-right: 20px;
+    transition: color 0.2s ease;
+}
+
+.nav a:hover {
+    color: #fff;
+}
+
+.nav a:first-child {
+    color: #B2F0AD;
+}
+
+.nav a.active {
+    color: #fff;
+    position: relative;
+}
+
+.nav a.active:after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: #B2F0AD;
+}
+
+a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.post-list {
+    margin: 0;
+    padding: 0;
+}
+
+.post-item {
+    margin: 0 0 30px 0;
+    padding: 0 0 20px 0;
+}
+
+.post-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.note-title {
+    margin: 0 0 10px 0;
+}
+
+.note-title a {
+    color: #B2F0AD;
+    text-decoration: none;
+}
+
+.note-title a:hover {
+    text-decoration: underline;
+}
+
+.note-date {
+    color: #888;
+    margin: 0;
+    font-size: 0.9em;
+    display: inline;
+}
+
+.note-excerpt {
+    color: #fff;
+}
+
+/* Quote-specific styles */
+.quote-item {
+    opacity: 0.85;
+}
+
+.quote-item .note-title a {
+    color: #888;
+}
+
+.quote-item .note-excerpt {
+    color: #888;
+    font-style: italic;
+}
+
+.quote-item .note-date {
+    color: #888;
+}
+
+.quote-source {
+    margin-top: 0;
+    display: inline;
+}
+
+.quote-source a {
+    color: #888;
+    font-size: 0.9em;
+    text-decoration: none;
+}
+
+.quote-source a:hover {
+    color: #888;
+    text-decoration: underline;
+} 
