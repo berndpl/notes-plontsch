@@ -1,5 +1,5 @@
+Game Boy Camera [Guide](#)
+
 > "Funtography"
-> 
-> Game Boy Camera [Guide](#)
 
 Great term 👌
