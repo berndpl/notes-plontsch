@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Jekyll build output
 _site/
 .sass-cache/
@@ -16,3 +17,10 @@ vendor/
 .vscode/
 *.swp
 *.swo 
+=======
+_site
+.sass-cache
+.jekyll-cache
+.jekyll-metadata
+vendor
+>>>>>>> new-main
