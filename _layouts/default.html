@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ page.title }} - {{ site.title }}</title>
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+    <link rel="icon" type="image/png" href="{{ '/apple-touch-icon.png' | relative_url }}">
+    <link rel="apple-touch-icon" href="{{ '/apple-touch-icon.png' | relative_url }}">
   </head>
   <body>
     <header>
       <nav>
         <a href="{{ '/' | relative_url }}">Notes</a>
+        <a href="#" class="inactive">Meaning <span class="badge">alpha</span></a>
       </nav>
     </header>
 
@@ -18,7 +21,7 @@
     </main>
 
     <footer>
-      <p>&copy; {{ site.time | date: '%Y' }} {{ site.title }}</p>
+      <p>&copy; {{ site.time | date: '%Y' }} {{ site.title }} {{ site.description }}</p>
     </footer>
   </body>
 </html>
