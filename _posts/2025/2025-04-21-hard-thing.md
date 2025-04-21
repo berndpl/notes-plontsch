@@ -6,4 +6,4 @@ Do the hard thing. That’s what you will get payed for.
 
 But what used to be hard in the past isn’t hard anymore. What’s hard now won’t be hard in the future. 
 
-Keeping seeking the hard thing.
+Keep seeking the hard thing.
