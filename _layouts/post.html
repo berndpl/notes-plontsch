@@ -6,6 +6,21 @@ layout: default
   {{ content }}
   <footer>
     <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
-    <a href="https://twitter.com/intent/tweet?text={{ content | strip_html | strip_newlines | url_encode }}&url={{ page.url | absolute_url | url_encode }}" target="_blank" rel="noopener">Post</a>
+    <div class="share-buttons">
+      <button class="post-link">Post</button>
+      <div class="platforms">
+        <a href="https://twitter.com/intent/tweet?text={{ content | strip_html | replace: '</p>', ' ' | replace: '<p>', '' | strip_newlines | url_encode }}&url={{ page.url | absolute_url | url_encode }}" target="_blank" rel="noopener">Twitter</a>
+        <a href="https://www.threads.net/intent/post?text={{ content | strip_html | replace: '</p>', ' ' | replace: '<p>', '' | strip_newlines | url_encode }}&url={{ page.url | absolute_url | url_encode }}" target="_blank" rel="noopener">Threads</a>
+      </div>
+    </div>
   </footer>
 </article>
+
+<script>
+document.querySelectorAll('.post-link').forEach(button => {
+  button.addEventListener('click', () => {
+    const platforms = button.nextElementSibling;
+    platforms.classList.toggle('visible');
+  });
+});
+</script>
