@@ -29,12 +29,12 @@ nav {
 }
 
 nav a {
-  color: #89b4fa; /* Catppuccin Mocha blue */
+  color: #b4befe; /* Catppuccin Mocha lavender */
   text-decoration: none;
 }
 
 nav a:hover {
-  color: #b4befe; /* Catppuccin Mocha lavender */
+  color: #f5e0dc; /* Catppuccin Mocha rosewater */
   text-decoration: underline;
 }
 
@@ -59,12 +59,12 @@ li h2 {
 }
 
 li a {
-  color: #89b4fa; /* Catppuccin Mocha blue */
+  color: #b4befe; /* Catppuccin Mocha lavender */
   text-decoration: none;
 }
 
 li a:hover {
-  color: #b4befe; /* Catppuccin Mocha lavender */
+  color: #f5e0dc; /* Catppuccin Mocha rosewater */
   text-decoration: underline;
 }
 
@@ -103,12 +103,46 @@ article p:last-child {
   margin-bottom: 0;
 }
 
+article a {
+  color: #b4befe; /* Catppuccin Mocha lavender */
+  text-decoration: none;
+}
+
+article a:hover {
+  color: #f5e0dc; /* Catppuccin Mocha rosewater */
+  text-decoration: underline;
+}
+
+/* Post footer */
+article footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  /* border-top: 1px solid #313244; */ /* Catppuccin Mocha surface1 */
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+article footer time {
+  margin-bottom: 0;
+}
+
+article footer a {
+  color: #b4befe; /* Catppuccin Mocha lavender */
+  text-decoration: none;
+}
+
+article footer a:hover {
+  color: #f5e0dc; /* Catppuccin Mocha rosewater */
+  text-decoration: underline;
+}
+
 /* Blockquote styles */
 article blockquote {
   margin: 1.5rem 0;
   padding: 0 1rem;
   border-left: 3px solid #6c7086; /* Catppuccin Mocha surface2 */
-  color: #a6e3a1; /* Catppuccin Mocha green */
+  color: #a6adc8; /* Dimmed version of body text (#cdd6f4) */
   font-style: italic;
 }
 
@@ -124,7 +158,7 @@ article blockquote p:last-child {
 footer {
   margin-top: 2rem;
   padding-top: 1rem;
-  border-top: 1px solid #313244; /* Catppuccin Mocha surface1 */
+  /*border-top: 1px solid #313244; */ /* Catppuccin Mocha surface1 */
   font-size: 0.9rem;
   color: #6c7086; /* Catppuccin Mocha surface2 */
 }
