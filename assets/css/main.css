@@ -1,0 +1,89 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header styles */
+header {
+  margin-bottom: 2rem;
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
+}
+
+nav a {
+  color: #333;
+  text-decoration: none;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* Main content styles */
+main {
+  min-height: 70vh;
+}
+
+/* Post list styles */
+ul {
+  list-style: none;
+}
+
+li {
+  margin-bottom: 2rem;
+}
+
+li h2 {
+  margin-bottom: 0.5rem;
+}
+
+li a {
+  color: #333;
+  text-decoration: none;
+}
+
+li a:hover {
+  text-decoration: underline;
+}
+
+time {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Individual post styles */
+article {
+  margin-bottom: 2rem;
+}
+
+article h1 {
+  margin-bottom: 1rem;
+}
+
+article time {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+/* Footer styles */
+footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  font-size: 0.9rem;
+  color: #666;
+}
