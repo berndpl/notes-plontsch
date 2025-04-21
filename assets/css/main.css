@@ -68,6 +68,8 @@ time {
 /* Individual post styles */
 article {
   margin-bottom: 2rem;
+  font-size: 1.1rem;
+  line-height: 1.8;
 }
 
 article h1 {
@@ -77,6 +79,31 @@ article h1 {
 article time {
   display: block;
   margin-bottom: 1rem;
+}
+
+article p {
+  margin-bottom: 1.5rem;
+}
+
+article p:last-child {
+  margin-bottom: 0;
+}
+
+/* Blockquote styles */
+article blockquote {
+  margin: 1.5rem 0;
+  padding: 0 1rem;
+  border-left: 3px solid #eee;
+  color: #666;
+  font-style: italic;
+}
+
+article blockquote p {
+  margin-bottom: 1rem;
+}
+
+article blockquote p:last-child {
+  margin-bottom: 0;
 }
 
 /* Footer styles */
