@@ -3,10 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ page.title }} - {{ site.title }}</title>
+    <title>{{ page.title | default: content | strip_html | truncatewords: 10, "" }} - {{ site.title }}</title>
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
     <link rel="icon" type="image/png" href="{{ '/apple-touch-icon.png' | relative_url }}">
     <link rel="apple-touch-icon" href="{{ '/apple-touch-icon.png' | relative_url }}">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="{{ page.title | default: content | strip_html | truncatewords: 10, '' }}" />
+    <meta property="og:description" content="{{ content | strip_html | strip_newlines | truncate: 160 }}" />
+    <meta property="og:url" content="{{ page.url | absolute_url }}" />
+    <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}" />
   </head>
   <body>
     <header>
