@@ -246,6 +246,10 @@ GEM
     minitest (5.25.5)
     net-http (0.6.0)
       uri
+    no-style-please (0.4.9)
+      jekyll (~> 3.10.0)
+      jekyll-feed (~> 0.17.0)
+      jekyll-seo-tag (~> 2.8.0)
     nokogiri (1.18.7)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
@@ -328,6 +332,7 @@ DEPENDENCIES
   http_parser.rb (~> 0.6.0)
   jekyll-feed (~> 0.12)
   minima (~> 2.5)
+  no-style-please
   tzinfo (>= 1, < 3)
   tzinfo-data
   wdm (~> 0.1)
