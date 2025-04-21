@@ -2,24 +2,17 @@
 layout: default
 ---
 <article>
-  <h1>{{ page.title | default: content | strip_html | truncatewords: 10, "" }}</h1>
+    {% if page.image %}
+    <img src="{{ page.image | relative_url }}" alt="{{ page.title }}">
+    {% else %}
+    <h1>{{ page.title }}</h1>
+    {% endif %}
   {{ content }}
   <footer>
     <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
     <div class="share-buttons">
       <button class="post-link">Post</button>
       <div class="platforms">
-        {% assign image_url = nil %}
-        {% assign content_parts = content | split: '![' %}
-        {% for part in content_parts %}
-          {% if part contains '](' and part contains ')' %}
-            {% assign potential_url = part | split: '](' | last | split: ')' | first %}
-            {% if potential_url contains '.png' or potential_url contains '.jpg' or potential_url contains '.jpeg' or potential_url contains '.gif' %}
-              {% assign image_url = potential_url %}
-              {% break %}
-            {% endif %}
-          {% endif %}
-        {% endfor %}
         <a href="https://twitter.com/intent/tweet?text={{ content | replace: '</p>', ' ' | replace: '<p>', '' | strip_html | strip_newlines | url_encode }}{% if image_url %}&url={{ page.url | absolute_url | url_encode }}&image={{ image_url | absolute_url | url_encode }}{% else %}&url={{ page.url | absolute_url | url_encode }}{% endif %}" target="_blank" rel="noopener">Twitter</a>
         <a href="https://www.threads.net/intent/post?text={{ content | replace: '</p>', ' ' | replace: '<p>', '' | strip_html | strip_newlines | url_encode }}{% if image_url %}&url={{ page.url | absolute_url | url_encode }}&image={{ image_url | absolute_url | url_encode }}{% else %}&url={{ page.url | absolute_url | url_encode }}{% endif %}" target="_blank" rel="noopener">Threads</a>
         <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ page.url | absolute_url | url_encode }}" target="_blank" rel="noopener">LinkedIn</a>

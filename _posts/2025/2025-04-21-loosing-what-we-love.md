@@ -1,4 +1,6 @@
-![Scribble](/assets/images/2025/2025-04-21-loosing-what-we-love.png)
+---
+image: /assets/images/2025/2025-04-21-loosing-what-we-love.png
+---
 
 Why do we replace things we love doing with things that are just easy.
 

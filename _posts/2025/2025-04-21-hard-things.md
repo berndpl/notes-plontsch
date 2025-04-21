@@ -1,4 +1,6 @@
-![Hard things](/assets/images/2025/2025-04-21-hard-things.png)
+---
+image: /assets/images/2025/2025-04-21-hard-things.png
+---
 
 Picking a job.
 
