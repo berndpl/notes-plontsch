@@ -130,6 +130,16 @@ article p:last-child {
   margin-bottom: 0;
 }
 
+article img {
+    max-width: 80%;
+    height: auto;
+    display: block;
+    margin: 1.5rem 0;  /* This left aligns the image */
+    border-radius: 4px;
+  }
+
+  
+
 article a {
   color: #b4befe; /* Catppuccin Mocha lavender */
   text-decoration: none;
