@@ -1,3 +1,6 @@
+/* Import Inconsolata font */
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap');
+
 /* Reset and base styles */
 * {
   margin: 0;
@@ -6,9 +9,10 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Inconsolata', monospace;
   line-height: 1.6;
-  color: #333;
+  color: #cdd6f4; /* Catppuccin Mocha text */
+  background-color: #1e1e2e; /* Catppuccin Mocha base */
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
@@ -25,11 +29,12 @@ nav {
 }
 
 nav a {
-  color: #333;
+  color: #89b4fa; /* Catppuccin Mocha blue */
   text-decoration: none;
 }
 
 nav a:hover {
+  color: #b4befe; /* Catppuccin Mocha lavender */
   text-decoration: underline;
 }
 
@@ -52,16 +57,17 @@ li h2 {
 }
 
 li a {
-  color: #333;
+  color: #89b4fa; /* Catppuccin Mocha blue */
   text-decoration: none;
 }
 
 li a:hover {
+  color: #b4befe; /* Catppuccin Mocha lavender */
   text-decoration: underline;
 }
 
 time {
-  color: #666;
+  color: #6c7086; /* Catppuccin Mocha surface2 */
   font-size: 0.9rem;
 }
 
@@ -74,6 +80,12 @@ article {
 
 article h1 {
   margin-bottom: 1rem;
+  color: #f5e0dc; /* Catppuccin Mocha rosewater */
+}
+
+article h2 {
+  margin-bottom: 1rem;
+  color: #f5e0dc; /* Catppuccin Mocha rosewater */
 }
 
 article time {
@@ -93,8 +105,8 @@ article p:last-child {
 article blockquote {
   margin: 1.5rem 0;
   padding: 0 1rem;
-  border-left: 3px solid #eee;
-  color: #666;
+  border-left: 3px solid #6c7086; /* Catppuccin Mocha surface2 */
+  color: #a6e3a1; /* Catppuccin Mocha green */
   font-style: italic;
 }
 
@@ -110,7 +122,7 @@ article blockquote p:last-child {
 footer {
   margin-top: 2rem;
   padding-top: 1rem;
-  border-top: 1px solid #eee;
+  border-top: 1px solid #313244; /* Catppuccin Mocha surface1 */
   font-size: 0.9rem;
-  color: #666;
+  color: #6c7086; /* Catppuccin Mocha surface2 */
 }
