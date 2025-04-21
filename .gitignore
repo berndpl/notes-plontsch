@@ -1,26 +1,5 @@
-<<<<<<< HEAD
-# Jekyll build output
-_site/
-.sass-cache/
-.jekyll-cache/
-.jekyll-metadata
-
-# Ruby environment
-.bundle/
-vendor/
-
-# Mac OS system files
-.DS_Store
-
-# Editor directories and files
-.idea/
-.vscode/
-*.swp
-*.swo 
-=======
 _site
 .sass-cache
 .jekyll-cache
 .jekyll-metadata
 vendor
->>>>>>> new-main
