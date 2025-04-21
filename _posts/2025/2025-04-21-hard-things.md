@@ -1,3 +1,5 @@
+![Hard things](/assets/images/2025/2025-04-21-hard-things.png)
+
 Picking a job.
 
 Do what people can’t do or don’t want to do. That’s what you will get payed for. 
