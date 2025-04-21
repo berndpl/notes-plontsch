@@ -49,11 +49,13 @@ ul {
 }
 
 li {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 li h2 {
-  margin-bottom: 0.5rem;
+  display: inline;
+  margin-right: 1rem;
+  margin-bottom: 0;
 }
 
 li a {
