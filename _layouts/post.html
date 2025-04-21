@@ -6,6 +6,6 @@ layout: default
   {{ content }}
   <footer>
     <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
-    <a href="https://twitter.com/intent/tweet?text={{ page.title | url_encode }}&url={{ page.url | absolute_url | url_encode }}" target="_blank" rel="noopener">Post</a>
+    <a href="https://twitter.com/intent/tweet?text={{ content | strip_html | strip_newlines | url_encode }}&url={{ page.url | absolute_url | url_encode }}" target="_blank" rel="noopener">Post</a>
   </footer>
 </article>
