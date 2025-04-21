@@ -1,1 +1,3 @@
-Future proof. AI will be able to do so everything we do… with our hands, our minds. There’s one thing it will never do. Feeling our feelings.
+Future proof. AI will be able to do so everything we do… with our hands, our minds. 
+
+There’s one thing it will never do.Feeling our feelings.
