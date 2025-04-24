@@ -8,4 +8,4 @@ Do what people can’t do or don’t want to do. That’s what you will get paye
 
 But what used to be hard in the past isn’t hard anymore. What’s hard now won’t be hard in the future. 
 
-Find the hard thing and do that. The annoying thing. Find beauty in it.
+Find the thing that's hard and annoying. Do that. Find beauty in it.
