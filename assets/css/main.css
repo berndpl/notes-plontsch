@@ -28,7 +28,7 @@ nav {
   gap: 1rem;
 }
 
-nav a {
+nav a, a {
   color: #b4befe; /* Catppuccin Mocha lavender */
   text-decoration: none;
 }
