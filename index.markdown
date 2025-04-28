@@ -6,7 +6,7 @@ layout: default
 title: Notes
 ---
 
-<ul class="post-list">
+<ul class="posts">
   {% for post in site.posts %}
     <li>
       <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
