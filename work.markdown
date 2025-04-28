@@ -57,3 +57,30 @@ Device-level AI integration and supporting OEM partnerships.
 ### Insights
 - Human interactions
 - Building for trust
+
+---
+
+# Artefacts
+
+## Press
+
+<ul class="press-list">
+
+
+- [FastCompany "Apple’s iBeacons Are Going To Transform Much More Than Advertising"](https://www.fastcompany.com/3035729/apples-ibeacons-are-going-to-transform-much-more-than-advertising)
+
+- [Techcrunch "iBeacons Aren't Just For Retail: Placed Lets You Use Them As iPhone Quick Launchers At Home"](
+https://techcrunch.com/2014/03/21/ibeacons-arent-just-for-retail-placed-lets-you-use-them-as-iphone-quick-launchers-at-home/)
+
+- [MacStories "Luggage Tracking With iBeacon"](https://www.macstories.net/?s=ibeacon+travel+radar)
+
+- [9to5Mac "Placed app brings context-aware app launching via iBeacons into the home"](https://9to5mac.com/2014/03/21/placed-app-brings-context-aware-app-launching-via-ibeacons-into-the-home/)
+
+## Patents
+
+- [Efficiency enhancements in task management applications](https://patents.google.com/patent/US20210103878A1/en?inventor=Bernd+plontsch&oq=Bernd+plontsch)
+- [Contextually-aware recommendations for assisting users with task completion](https://patents.google.com/patent/EP3740865B1/en?inventor=Bernd+plontsch&oq=Bernd+plontsch)
+- [Semi-autonomous intelligent task hub](https://patents.google.com/patent/US20220350654A1/en?inventor=Bernd+plontsch&oq=Bernd+plontsch&sort=new)
+- [Natural language processing and machine learning for personalized tasks experience](https://patents.google.com/patent/WO2020231579A1/en?inventor=Bernd+plontsch&oq=Bernd+plontsch&sort=new)
+- [Enhanced task management feature for electronic applications](https://patents.google.com/patent/EP3942490A1/en?inventor=Bernd+plontsch&oq=Bernd+plontsch&sort=new)
+- [Contextual workflow triggering on devices](https://patents.google.com/patent/EP4217820A1/en?q=(Contextual+workflow+triggering+devices)&inventor=Bernd+plontsch&oq=Bernd+plontsch+Contextual+workflow+triggering+on+devices&sort=new&dups=language)
