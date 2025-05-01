@@ -64,9 +64,6 @@ Device-level AI integration and supporting OEM partnerships.
 
 ## Press
 
-<ul class="press-list">
-
-
 - [FastCompany "Apple’s iBeacons Are Going To Transform Much More Than Advertising"](https://www.fastcompany.com/3035729/apples-ibeacons-are-going-to-transform-much-more-than-advertising)
 
 - [Techcrunch "iBeacons Aren't Just For Retail: Placed Lets You Use Them As iPhone Quick Launchers At Home"](

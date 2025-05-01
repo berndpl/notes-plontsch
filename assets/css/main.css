@@ -67,27 +67,6 @@ main {
   min-height: 70vh;
 }
 
-.press-list {
-  list-style: none;
-  padding-left: 0;
-  margin-bottom: 1rem;
-}
-
-.press-list li {
-  position: relative;
-  padding-left: 1.5em;
-  margin-bottom: 0.7em;
-}
-
-.press-list li::before {
-  content: "▲";
-  position: absolute;
-  left: 0;
-  color: #b4befe; /* Or any color you prefer */
-  font-size: 1em;
-  line-height: 1;
-}
-
 /* Post list styles */
 ul.posts {
   list-style: none;
