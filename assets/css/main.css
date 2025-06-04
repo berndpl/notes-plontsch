@@ -99,6 +99,15 @@ h3 {
   margin-top: 1rem;
 }
 
+h4 {
+  /* color: #f4b8e4; */
+  font-size: inherit;
+  font-weight: inherit;
+  padding: 0;
+  margin-bottom: 1rem;
+  display: block;
+}
+
 li h2 {
   display: inline;
   margin-right: 1rem;
@@ -137,6 +146,11 @@ article h1 {
 article h2 {
   margin-bottom: 1rem;
   color: #f5e0dc; /* Catppuccin Mocha rosewater */
+}
+
+article h3 {
+  margin-bottom: 1rem;
+  
 }
 
 article time {
@@ -230,10 +244,13 @@ article footer time {
 /* Blockquote styles */
 article blockquote {
   margin: 1.5rem 0;
-  padding: 0 1rem;
-  border-left: 3px solid #6c7086; /* Catppuccin Mocha surface2 */
+  padding: 1rem 1rem; /* Added vertical padding */
+  /* border-left: 3px solid #6c7086; Catppuccin Mocha surface2 */
   color: #a6adc8; /* Dimmed version of body text (#cdd6f4) */
-  font-style: italic;
+  background: #313244; /* Catppuccin Mocha surface1 */
+  /* border: 1.5px solid #b4befe; Catppuccin Mocha lavender */
+  border-radius: 1.2em;
+  /* box-shadow: 0 2px 8px 0 rgba(0,0,0,0.07); */
 }
 
 article blockquote p {
@@ -242,6 +259,35 @@ article blockquote p {
 
 article blockquote p:last-child {
   margin-bottom: 0;
+}
+
+article blockquote ol,
+article blockquote ul {
+  list-style-position: outside;
+  padding-left: 2em; /* Adjust as needed for your design */
+}
+
+article blockquote li {
+  text-indent: 0;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+article blockquote h3 {
+  color: #a6adc8; /* Match blockquote text color */
+  margin-top: 0;
+}
+
+article blockquote li:last-child {
+  margin-bottom: 0;
+}
+
+article blockquote ul {
+  list-style-type: disc;
+  padding-left: 1.2em; /* Reduced indentation for bullets */
+}
+article blockquote ol {
+  list-style-type: decimal;
 }
 
 /* Footer styles */
