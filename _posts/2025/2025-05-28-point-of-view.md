@@ -4,7 +4,7 @@ category: Chat
 
 How would your point of view be different if you were human?
 
-GPT-4o, Chat
+**GPT-4o, Chat**
 
 > Great question! If I were human, my point of view would be shaped by:
 
