@@ -1,3 +1,7 @@
+---
+category: Chat
+---
+
 How would your point of view be different if you were human?
 
 GPT-4o, Chat

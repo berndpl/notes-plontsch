@@ -1,9 +1,10 @@
+---
+category: Chat
+---
+
 Learning from the history of emerging technology causing replacements vs coexistence.
 
 So there are examples in history where technology that was emerging replaced other existing turnaround technology. There are also examples where they didn't replace and existed side by side in the world. Name five examples for both.
-
-
-GPT-4o
 
 > Here are **five examples** where emerging technology **replaced** older tech, and **five examples** where both **coexisted**:
 
@@ -31,6 +32,7 @@ GPT-4o
 > 5.  **Mechanical watches and smartwatches**  
     → Luxury, tradition vs. functionality and tech features.
 > Want examples focused on a particular era or industry?
+> > GPT-4o
 
 #### But there are certain attributes of the technology that differentiate both the V2 and the other.
 
