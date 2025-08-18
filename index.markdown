@@ -10,7 +10,6 @@ title: Notes
   {% for post in site.posts %}
     <li>
       <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
-      {% if post.categories contains "Chat" %}<img src="{{ '/assets/images/chat-icon.svg' | relative_url }}" alt="Icon" style="height: 1em;">{% endif %}
       <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%B %-d, %Y" }}</time>
     </li>
   {% endfor %}

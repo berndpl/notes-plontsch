@@ -77,6 +77,12 @@ ul.posts {
   line-height: 1.4;
 }
 
+.posts {
+  h2 {
+      font-size: 1.1em
+  }
+}
+
 ul {
   list-style: none;
   margin-bottom: 1rem;
@@ -139,8 +145,9 @@ article {
 }
 
 article h1 {
+  font-size: 1.1em;
   margin-bottom: 1rem;
-  color: #f5e0dc; /* Catppuccin Mocha rosewater */
+  /*color: #f5e0dc; */
 }
 
 article h2 {
