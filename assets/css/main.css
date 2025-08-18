@@ -185,7 +185,7 @@ article img {
 
 article a {
   color: #b4befe; /* Catppuccin Mocha lavender */
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 article a:hover {
