@@ -1,5 +1,5 @@
 ---
-title: "Building Apps is becoming like Journaling"
+title: "Building an App is Becoming like Journaling"
 ---
 
 Everybody can build their own apps now.
