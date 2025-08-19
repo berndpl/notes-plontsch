@@ -9,6 +9,6 @@ It’s easy to get started and it’s very rewarding when you stick to it, evolv
 Revolving around your ever changing needs and preferences.
 
 Sometimes you need a fresh start and that’s okay, too. 
-You’ll build on your learnings. Everything becomes better, more personal, more effective over time. Your very own needs at the center.
+You’ll build on your learnings. Your app becomes more personal and more effective over time. Your very own needs at the center.
 
 Apps are becoming the most personal and the most accessible they’ve ever been.
