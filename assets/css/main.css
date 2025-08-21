@@ -114,6 +114,8 @@ h4 {
   display: block;
 }
 
+
+
 li h2 {
   display: inline;
   margin-right: 1rem;
@@ -320,4 +322,19 @@ footer {
 .share-buttons a:hover {
   color: #f5e0dc; /* Catppuccin Mocha rosewater */
   text-decoration: underline;
+}
+
+h5 {
+  color: #6c7086;
+}
+
+/* Table styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #6c7086;
+}
+th, td {
+  text-align: left;
+  padding: 0.5em;
 }
