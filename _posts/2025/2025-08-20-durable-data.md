@@ -1,14 +1,11 @@
 ---
-title: "Building an App is Becoming like Journaling"
+title: "Durable data"
 ---
 
-Everybody can build their own apps now.
+Your data is the most precious thing. Apps should be build around your data, not the other way around. 
 
-It’s easy to get started and it’s very rewarding when you stick to it, evolving an idea in tiny steps over time.
+You should always be in full control to see what’s stored, move it around and rest assured that even if you don’t touch it for 10 years, it’ll still be around and be perfectly accessible even if the app around your data won’t, which is extremely likely.
 
-Revolving around your ever changing needs and preferences.
+Historically the most durable, portable and accessible place for data storage is a simple folder with text files files. Why aren’t most apps build around just that? Do they really need to?
 
-Sometimes you need a fresh start and that’s okay, too. 
-You’ll build on your learnings. Your app becomes more personal and more effective over time. Your very own needs at the center.
-
-Apps are becoming the most personal and the most accessible they’ve ever been.
+Inspired by Obsidian's [Manifesto](https://obsidian.md/about).
