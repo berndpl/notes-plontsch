@@ -12,14 +12,14 @@ Historically, the most durable, portable, and accessible way to store digital da
 
 Why aren’t most apps built around just that as a foundation?
 
-> |  | Format         | Age | Lifespan Bar                         |
-|-----:|-----------------------|----:|--------------------------------------|
-| 1    | Plain Text (.txt)     | ~65 | ████████████████████████             |
-| 2    | CSV (.csv)            | ~55 | ████████████████████                 |
-| 3    | LaTeX (.tex)          | ~40 | ███████████████                      |
-| 4    | HTML (.html)          | ~34 | █████████████                        |
-| 5    | XML (.xml)            | ~28 | █████████                            |
-| ...   | Vector Databases (for reference only)      | ~5  | █                                    |
+> |  | Format         | Age |
+|-----:|-----------------------|----:|
+| 1    | Plain Text (.txt)     | ~65 |
+| 2    | CSV (.csv)            | ~55 |
+| 3    | LaTeX (.tex)          | ~40 |
+| 4    | HTML (.html)          | ~34 |
+| 5    | XML (.xml)            | ~28 |
+| ...   | Vector Databases (for reference only)      | ~5  | 
 
 Source: GPT-5, "Top 5, most durable, human readable and editable file formats, sorted by age"
 
