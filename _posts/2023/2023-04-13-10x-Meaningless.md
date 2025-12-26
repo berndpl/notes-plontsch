@@ -1,0 +1,1 @@
+In a world of 10x productivity, it seems like productivity itself will matter less and less as a differentiator. What will it be instead?

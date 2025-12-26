@@ -1,1 +1,0 @@
-In a world of 10x productivity, it seems like productivity itself will matter less and less as a major product differentiator. What will it be instead?

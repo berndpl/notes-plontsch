@@ -1,3 +1,3 @@
 It’s fascinating how GPT and Auto GPT shape the lingo we use to describe machine processes. They now “hallucinate”, “reflect”, “reason”, “critique”.
 
-Along with Ethics it seems now like a good time to dig into Psychology and Psychotherapy for inspiration and context when developing new systems.
+Along with Ethics it seems now like a good time to dig into Psychology and Psychotherapy for inspiration and grounding the systems to come.

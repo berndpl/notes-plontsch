@@ -1,4 +1,4 @@
-Music already introduced us to the concept of remixes—official re-interpretations by other artists.
+Music already introduced us to the concept of remixes as official re-interpretations by other artists.
 
 Perhaps this is also how original art and music relate to AI variations.
 Not a replacement, but a harmonious, well-defined coexistence.
