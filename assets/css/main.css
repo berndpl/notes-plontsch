@@ -77,6 +77,24 @@ ul.posts {
   line-height: 1.4;
 }
 
+.posts li.year-separator {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  list-style: none;
+}
+
+.posts li.year-separator:first-child {
+  margin-top: 0;
+}
+
+.posts li.year-separator h3 {
+  color: #6c7086; /* Catppuccin Mocha surface2 */
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
 .posts {
   h2 {
       font-size: 1.1em
