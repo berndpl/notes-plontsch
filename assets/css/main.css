@@ -73,14 +73,18 @@ ul.posts {
 }
 
 .posts li {
-  margin-bottom: 1rem;
-  line-height: 1.4;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
 }
 
 .posts li.year-separator {
   margin-top: 2rem;
   margin-bottom: 1rem;
   list-style: none;
+  display: block;
 }
 
 .posts li.year-separator:first-child {
@@ -138,7 +142,21 @@ li h2 {
   display: inline;
   margin-right: 1rem;
   margin-bottom: 0;
-  line-height: 1.4;
+  margin-top: 0;
+  line-height: 1.2;
+  flex: 1;
+  font-weight: 400;
+}
+
+.posts li time {
+  display: inline;
+  color: #6c7086; /* Catppuccin Mocha surface2 */
+  font-size: 0.9rem;
+  line-height: 1.2;
+  flex-shrink: 0;
+  margin-left: 1rem;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 li a {
