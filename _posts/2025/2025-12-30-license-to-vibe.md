@@ -2,20 +2,12 @@
 title: "A license for vibes"
 ---
 
-With the effort of creating and shipping a new app approaching zero, a new question arises: what license should you choose when sharing the code of your project on Github?
-
-A license that encourages the open, collaborative spirit of a weekend project, but doesn't feel like a corporate giveaway. Encouraging people to join the party and build together, but with a gentle brake on purely commercial redistribution.
-
-There's a new dynamic shaped by rapid, community driven creation that feels different. Does it call for a new kind of license? One that protects the "vibe" of a project without closing it off?
+With the effort of creating and shipping software approaching zero I am wondering how this new dynamic affects the choice of picking the right license for your latest creation. One that protects the "vibe" of a project without closing it off. A license that encourages the open, collaborative spirit of e.g. a weekend project but with a gentle brake on out of control commercial redistribution and scalping.
 
 So, what about...
 
-*   **MIT License:** This is the most permissive. **Nice:** Anyone can use, modify, and distribute your work, which is great for adoption. **Con:** They can also sell it without giving you a cut. It’s total freedom, for better or worse.
+- MIT License The most permissive. Anyone can use, modify, and distribute your work – great for adoption. But they can also sell it without giving you a cut. Total freedom, for better or worse.
+- GPL (GNU General Public License) ensures that any project using your code must also be open source. Sounds nice, but maybe a little too restrictive for many commercial uses.
+- Creative Commons (CC): Primarily used for creative works, not code. The "NonCommercial" version seems to match nicely with what I was looking for. However it doesn't seem to be designed for software which might create legal confusion about what constitutes "non commercial" use.
 
-*   **GPL (GNU General Public License):** This license is the bedrock of "copyleft." **Nice:** It ensures that any project using your code must also be open source. **Con:** This can be too restrictive for many commercial uses, which might scare away potential collaborators.
-
-*   **Creative Commons (CC):** Primarily for creative works, not code. **Nice:** The "NonCommercial" version seems perfect for passion projects. **Con:** It’s not designed for software and can create legal confusion about what constitutes "non commercial" use.
-
-None of these feel quite right. The MIT is too loose, the GPL is too strict, and CC might be a good fit if there would be a proven equivalent covering software specifically.
-
-What licenses are you using for your passion projects? I'd love to hear what feels right to you.
+What licenses are you using for passion projects you would share publicly e.g. on Github? I'd love to hear what feels right to you and why.
