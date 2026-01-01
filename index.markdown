@@ -6,6 +6,10 @@ layout: default
 title: Notes
 ---
 
+<div class="post-graph-container">
+  <canvas id="post-graph"></canvas>
+</div>
+
 <ul class="posts">
   {% assign current_year = "" %}
   {% for post in site.posts %}
@@ -22,3 +26,5 @@ title: Notes
     </li>
   {% endfor %}
 </ul>
+
+<script src="{{ '/assets/js/post-graph.js' | relative_url }}"></script>
