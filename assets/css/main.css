@@ -171,6 +171,10 @@ li h2 {
   font-weight: 400;
 }
 
+li h2 a {
+  font-weight: 400;
+}
+
 .posts li time {
   display: inline;
   color: #6c7086; /* Catppuccin Mocha surface2 */
@@ -180,7 +184,6 @@ li h2 {
   margin-left: 1rem;
   margin-top: 0;
   margin-bottom: 0;
-  letter-spacing: normal;
 }
 
 li a {
