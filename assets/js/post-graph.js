@@ -39,8 +39,7 @@
     y: 0,
     vx: 0,
     vy: 0,
-    radius: 24,
-    pulsePhase: Math.random() * Math.PI * 2 // Random phase for pulsing
+    radius: 24
   }));
 
     // Create edges based on date proximity (connect posts within 30 days)
@@ -171,10 +170,7 @@
   }
 
     // Render
-    let animationTime = 0;
     function render() {
-      animationTime += 0.02; // Increment time for pulsing animation
-      
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.save();
       
@@ -185,9 +181,9 @@
       ctx.scale(zoom, zoom);
       ctx.translate(-graphCenterX, -graphCenterY);
 
-      // Draw edges
-      ctx.strokeStyle = 'rgba(108, 112, 134, 0.2)'; // Catppuccin Mocha surface2 with opacity
-      ctx.lineWidth = 0.5;
+      // Draw edges (clearer visibility)
+      ctx.strokeStyle = 'rgba(108, 112, 134, 0.66)'; // Catppuccin Mocha surface2 with higher opacity
+      ctx.lineWidth = 4.5;
       edges.forEach(edge => {
         const source = nodes[edge.source];
         const target = nodes[edge.target];
@@ -197,27 +193,11 @@
         ctx.stroke();
       });
 
-      // Draw nodes with pulsing animation
+      // Draw nodes (static, no pulsing)
       nodes.forEach(node => {
-        // Calculate pulsing radius (oscillates with smaller amplitude to prevent too much fade)
-        // Pulse between 0.7 and 1.3 times base radius (instead of 0.25 to 1.75)
-        const pulse = Math.sin(animationTime + node.pulsePhase) * 0.3 + 1;
-        const currentRadius = node.radius * pulse;
-        
-        // Draw outer glow for pulsing effect (more visible)
-        const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, currentRadius * 2.5);
-        gradient.addColorStop(0, 'rgba(180, 190, 254, 0.5)'); // Catppuccin Mocha lavender with higher opacity
-        gradient.addColorStop(0.4, 'rgba(180, 190, 254, 0.2)');
-        gradient.addColorStop(1, 'rgba(180, 190, 254, 0)');
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, currentRadius * 2.5, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Draw main node (more opaque)
         ctx.fillStyle = '#b4befe'; // Catppuccin Mocha lavender
         ctx.beginPath();
-        ctx.arc(node.x, node.y, currentRadius, 0, Math.PI * 2);
+        ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
         ctx.fill();
       });
 
