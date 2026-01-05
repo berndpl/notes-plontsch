@@ -219,15 +219,28 @@ article h1 {
 }
 
 article h2 {
+  font-size: 1rem; /* Same size as body text */
   margin-bottom: 1rem;
   color: #bac2de; /* Base color for headings */
 }
 
 article h3 {
-  font-size: 1em;
+  font-size: 1rem; /* Same size as body text */
   color: #bac2de; /* Base color for headings */
   margin-bottom: 1rem;
   
+}
+
+article h4 {
+  font-size: 1rem; /* Same size as body text */
+  color: #bac2de; /* Base color for headings */
+  margin-bottom: 1rem;
+}
+
+article h5 {
+  font-size: 1rem; /* Same size as body text */
+  color: #bac2de; /* Base color for headings */
+  margin-bottom: 1rem;
 }
 
 article time {
