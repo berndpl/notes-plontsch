@@ -221,6 +221,7 @@ article h2 {
 }
 
 article h3 {
+  font-size: 1em;
   margin-bottom: 1rem;
   
 }
@@ -241,6 +242,10 @@ article p:last-child {
 article ul {
   list-style-type: disc;
   padding-left: 1.5em;
+}
+
+article ul li::marker {
+  color: #6c7086; /* Catppuccin Mocha surface2 - lighter color for bullets */
 }
 
 article ol {
@@ -346,6 +351,7 @@ article blockquote {
 }
 
 article blockquote p {
+  color: #6c7086; /* Catppuccin Mocha surface2 - lighter than headlines */
   margin-bottom: 1rem;
 }
 
