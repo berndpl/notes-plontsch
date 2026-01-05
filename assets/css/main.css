@@ -18,7 +18,7 @@ body {
   color: #cdd6f4; /* Catppuccin Mocha text */
   background-color: #1e1e2e; /* Catppuccin Mocha base */
   max-width: 800px;
-  margin: 0 auto;
+  margin: 0 clamp(20px, calc((100vw - 800px) / 2), 328px);
   padding: 20px;
 }
 
@@ -33,9 +33,10 @@ nav {
 }
 
 nav a {
-  color: #b4befe; /* Catppuccin Mocha text - same as body text */
+  color: #b4befe; /* Catppuccin Mocha lavender */
   text-decoration: none;
   font-weight: 400;
+  font-size: 1rem; /* Same size as body text */
 }
 
 a {
@@ -49,13 +50,13 @@ nav a:hover {
 }
 
 nav a.inactive, .subtle {
-  color: #6c7086; /* Catppuccin Mocha surface2 */
+  color: #6c7086; /* Catppuccin Mocha overlay0 */
   cursor: not-allowed;
   opacity: 0.7;
 }
 
 nav a.inactive:hover {
-  color: #6c7086; /* Catppuccin Mocha surface2 */
+  color: #6c7086; /* Catppuccin Mocha overlay0 */
   text-decoration: none;
 }
 
@@ -63,7 +64,7 @@ nav a.inactive:hover {
   display: inline-block;
   font-size: 0.6em;
   padding: 0.1em 0.4em;
-  background-color: #313244; /* Catppuccin Mocha surface1 */
+  background-color: #313244; /* Catppuccin Mocha surface0 */
   color: #cdd6f4; /* Catppuccin Mocha text */
   border-radius: 3px;
   margin-left: 0.3em;
@@ -115,7 +116,7 @@ ul.posts {
 }
 
 .posts li.year-separator h3 {
-  color: #6c7086; /* Catppuccin Mocha surface2 */
+  color: #6c7086; /* Catppuccin Mocha overlay0 */
   font-size: 0.9rem;
   font-weight: 400;
   margin-top: 0;
@@ -135,11 +136,11 @@ ul {
 
 hr {
   border: none;
-  border-top: 1px dotted #6c7086; /* Catppuccin Mocha surface2, lighter */
+  border-top: 1px dotted #6c7086; /* Catppuccin Mocha overlay0 */
   margin: 2.5rem 0;
   height: 0;
   background: none;
-  opacity: 0.6; /* even lighter */
+  opacity: 0.6;
 }
 
 h2 {
@@ -177,7 +178,7 @@ li h2 a {
 
 .posts li time {
   display: inline;
-  color: #6c7086; /* Catppuccin Mocha surface2 */
+  color: #6c7086; /* Catppuccin Mocha overlay0 */
   font-size: 0.9rem;
   line-height: 1.2;
   flex-shrink: 0;
@@ -197,7 +198,7 @@ li a:hover {
 }
 
 time {
-  color: #6c7086; /* Catppuccin Mocha surface2 */
+  color: #6c7086; /* Catppuccin Mocha overlay0 */
   font-size: 0.9rem;
   line-height: 1.4;
 }
@@ -210,18 +211,21 @@ article {
 }
 
 article h1 {
-  font-size: 1.1em;
-  margin-bottom: 1rem;
-  /*color: #f5e0dc; */
+  font-size: 1rem; /* Same size as body text */
+  color: #bac2de; /* Base color for headings */
+  max-width: 80%; /* Match image width for consistent horizontal alignment */
+  display: block; /* Match image display property */
+  margin: 1rem 0; /* Match image margin for consistent spacing */
 }
 
 article h2 {
   margin-bottom: 1rem;
-  color: #f5e0dc; /* Catppuccin Mocha rosewater */
+  color: #bac2de; /* Base color for headings */
 }
 
 article h3 {
   font-size: 1em;
+  color: #bac2de; /* Base color for headings */
   margin-bottom: 1rem;
   
 }
@@ -232,6 +236,9 @@ article time {
 }
 
 article p {
+  color: rgba(166, 173, 200, 0.6); /* Body text color at 60% opacity */
+  font-size: 1rem; /* Same size as body text */
+  font-weight: 500;
   margin-bottom: 1rem;
 }
 
@@ -242,10 +249,12 @@ article p:last-child {
 article ul {
   list-style-type: disc;
   padding-left: 1.5em;
+  line-height: 0;
+  font-size: 18px;
 }
 
 article ul li::marker {
-  color: #6c7086; /* Catppuccin Mocha surface2 - lighter color for bullets */
+  color: #6c7086; /* Catppuccin Mocha overlay0 */
 }
 
 article ol {
@@ -255,7 +264,10 @@ article ol {
 
 article ul li,
 article ol li {
-  margin-bottom: 1rem;
+  color: rgba(166, 173, 200, 0.6); /* Body text color at 60% opacity */
+  font-size: 1rem; /* Same size as paragraph text */
+  line-height: 29px;
+  margin-bottom: 0;
 }
 
 article ul li:last-child,
@@ -263,11 +275,24 @@ article ol li:last-child {
   margin-bottom: 0;
 }
 
+/* Bold text in paragraphs and list items uses full opacity */
+article p strong,
+article p b,
+article ul li strong,
+article ul li b,
+article ol li strong,
+article ol li b,
+article p [style*="font-weight: bold"],
+article ul li [style*="font-weight: bold"],
+article ol li [style*="font-weight: bold"] {
+  color: rgba(166, 173, 200, 1); /* Full opacity for bold text */
+}
+
 article img {
     max-width: 80%;
     height: auto;
     display: block;
-    margin: 1.5rem 0;  /* This left aligns the image */
+    margin: 1rem 0;  /* Consistent with paragraph spacing */
     border-radius: 4px;
   }
 
@@ -340,10 +365,10 @@ article footer time {
 
 /* Blockquote styles */
 article blockquote {
-  margin: 1.5rem 0;
+  margin: 1rem 0; /* Consistent with other elements */
   padding: 1rem 1rem; /* Added vertical padding */
-  /* border-left: 3px solid #6c7086; Catppuccin Mocha surface2 */
-  color: #a6adc8; /* Dimmed version of body text (#cdd6f4) */
+  /* border-left: 3px solid #6c7086; Catppuccin Mocha overlay0 */
+  color: #a6adc8; /* Catppuccin Mocha subtext0 */
   background: rgba(245, 189, 230, 0.02); /* Catppuccin Mocha surface1 with alpha 40% */
   /* border: 1.5px solid #b4befe; Catppuccin Mocha lavender */
   border-radius: 1.2em;
@@ -351,7 +376,7 @@ article blockquote {
 }
 
 article blockquote p {
-  color: #6c7086; /* Catppuccin Mocha surface2 - lighter than headlines */
+  color: #6c7086; /* Catppuccin Mocha overlay0 - lighter than headlines */
   margin-bottom: 1rem;
 }
 
@@ -372,7 +397,7 @@ article blockquote li {
 }
 
 article blockquote h3 {
-  color: #a6adc8; /* Match blockquote text color */
+  color: #a6adc8; /* Catppuccin Mocha subtext0 */
   margin-top: 0;
 }
 
@@ -392,9 +417,9 @@ article blockquote ol {
 footer {
   margin-top: 2rem;
   padding-top: 1rem;
-  /*border-top: 1px solid #313244; */ /* Catppuccin Mocha surface1 */
+  /*border-top: 1px solid #313244; */ /* Catppuccin Mocha surface0 */
   font-size: 0.9rem;
-  color: #6c7086; /* Catppuccin Mocha surface2 */
+  color: #6c7086; /* Catppuccin Mocha overlay0 */
 }
 
 .share-buttons {
@@ -414,14 +439,14 @@ footer {
 }
 
 h5 {
-  color: #6c7086;
+  color: #6c7086; /* Catppuccin Mocha overlay0 */
 }
 
 /* Table styles */
 table {
   width: 100%;
   border-collapse: collapse;
-  color: #6c7086;
+  color: #6c7086; /* Catppuccin Mocha overlay0 */
 }
 th, td {
   text-align: left;
