@@ -385,14 +385,12 @@ article footer time {
 
 /* Blockquote styles */
 article blockquote {
-  margin: 1rem 0; /* Consistent with other elements */
-  padding: 1rem 1rem; /* Added vertical padding */
-  /* border-left: 3px solid #6c7086; Catppuccin Mocha overlay0 */
+  margin: 0 0 1rem 0; /* No top margin, keep bottom margin */
+  padding: 1rem 1rem 1rem 1.5rem; /* Added padding, extra left for border */
+  border-left: 1px solid #313244; /* Catppuccin Mocha overlay0 */
   color: #a6adc8; /* Catppuccin Mocha subtext0 */
-  background: rgba(245, 189, 230, 0.02); /* Catppuccin Mocha surface1 with alpha 40% */
-  /* border: 1.5px solid #b4befe; Catppuccin Mocha lavender */
-  border-radius: 1.2em;
-  /* box-shadow: 0 2px 8px 0 rgba(0,0,0,0.07); */
+  background: none; /* No background, using border instead */
+  border-radius: 0; /* No rounded corners */
 }
 
 article blockquote p {
@@ -419,6 +417,10 @@ article blockquote li {
 article blockquote h3 {
   color: #a6adc8; /* Catppuccin Mocha subtext0 */
   margin-top: 0;
+}
+
+article blockquote h3 strong {
+  font-weight: 400; /* Normal text weight */
 }
 
 article blockquote li:last-child {
