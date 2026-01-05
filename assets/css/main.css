@@ -76,6 +76,9 @@ nav a.inactive:hover {
 /* Main content styles */
 main {
   min-height: 70vh;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  line-height: 1.4;
 }
 
 /* Post graph visualization */
@@ -198,6 +201,17 @@ li a:hover {
   text-decoration: underline;
 }
 
+/* Posts list links should not be underlined */
+.posts li a,
+.posts li h2 a {
+  text-decoration: none;
+}
+
+.posts li a:hover,
+.posts li h2 a:hover {
+  text-decoration: underline;
+}
+
 time {
   color: #6c7086; /* Catppuccin Mocha overlay0 */
   font-size: 0.9rem;
@@ -211,7 +225,8 @@ article {
   line-height: 1.4;
 }
 
-article h1 {
+article h1,
+main h1 {
   font-size: 1rem; /* Same size as body text */
   font-weight: 400; /* Normal weight, not bold */
   color: #bac2de; /* Base color for headings */
@@ -220,14 +235,16 @@ article h1 {
   margin: 1rem 0; /* Match image margin for consistent spacing */
 }
 
-article h2 {
+article h2,
+main h2 {
   font-size: 1rem; /* Same size as body text */
   font-weight: 400; /* Normal weight, not bold */
   margin-bottom: 1rem;
   color: #bac2de; /* Base color for headings */
 }
 
-article h3 {
+article h3,
+main h3 {
   font-size: 1rem; /* Same size as body text */
   font-weight: 400; /* Normal weight, not bold */
   color: #bac2de; /* Base color for headings */
@@ -235,54 +252,64 @@ article h3 {
   
 }
 
-article h4 {
+article h4,
+main h4 {
   font-size: 1rem; /* Same size as body text */
   font-weight: 400; /* Normal weight, not bold */
   color: #bac2de; /* Base color for headings */
   margin-bottom: 1rem;
 }
 
-article h5 {
+article h5,
+main h5 {
   font-size: 1rem; /* Same size as body text */
   font-weight: 400; /* Normal weight, not bold */
   color: #bac2de; /* Base color for headings */
   margin-bottom: 1rem;
 }
 
-article time {
+article time,
+main time {
   display: block;
   margin-bottom: 1rem;
 }
 
-article p {
+article p,
+main p {
   color: rgba(166, 173, 200, 0.6); /* Body text color at 60% opacity */
   font-size: 1rem; /* Same size as body text */
   font-weight: 500;
   margin-bottom: 1rem;
 }
 
-article p:last-child {
+article p:last-child,
+main p:last-child {
   margin-bottom: 0;
 }
 
-article ul {
+article ul,
+main ul {
   list-style-type: disc;
   padding-left: 1.5em;
   line-height: 0;
   font-size: 18px;
 }
 
-article ul li::marker {
+article ul li::marker,
+main ul li::marker {
   color: #6c7086; /* Catppuccin Mocha overlay0 */
 }
 
-article ol {
+article ol,
+main ol {
   list-style-type: decimal;
   padding-left: 1.5em;
 }
 
 article ul li,
-article ol li {
+article ol li,
+main ul li,
+main ol li {
   color: rgba(166, 173, 200, 0.6); /* Body text color at 60% opacity */
   font-size: 1rem; /* Same size as paragraph text */
   line-height: 29px;
@@ -290,7 +317,9 @@ article ol li {
 }
 
 article ul li:last-child,
-article ol li:last-child {
+article ol li:last-child,
+main ul li:last-child,
+main ol li:last-child {
   margin-bottom: 0;
 }
 
@@ -303,12 +332,22 @@ article ol li strong,
 article ol li b,
 article p [style*="font-weight: bold"],
 article ul li [style*="font-weight: bold"],
-article ol li [style*="font-weight: bold"] {
+article ol li [style*="font-weight: bold"],
+main p strong,
+main p b,
+main ul li strong,
+main ul li b,
+main ol li strong,
+main ol li b,
+main p [style*="font-weight: bold"],
+main ul li [style*="font-weight: bold"],
+main ol li [style*="font-weight: bold"] {
   color: rgba(166, 173, 200, 1); /* Full opacity for bold text */
   font-weight: 400; /* Normal weight, not bold */
 }
 
-article img {
+article img,
+main img {
     max-width: 80%;
     height: auto;
     display: block;
@@ -318,12 +357,14 @@ article img {
 
   
 
-article a {
+article a,
+main a {
   color: #b4befe; /* Catppuccin Mocha lavender */
   text-decoration: underline;
 }
 
-article a:hover {
+article a:hover,
+main a:hover {
   color: #f5e0dc; /* Catppuccin Mocha rosewater */
   text-decoration: underline;
 }
@@ -384,7 +425,8 @@ article footer time {
 }
 
 /* Blockquote styles */
-article blockquote {
+article blockquote,
+main blockquote {
   margin: 0 0 1rem 0; /* No top margin, keep bottom margin */
   padding: 1rem 1rem 1rem 1.5rem; /* Added padding, extra left for border */
   border-left: 1px solid #313244; /* Catppuccin Mocha overlay0 */
@@ -393,45 +435,55 @@ article blockquote {
   border-radius: 0; /* No rounded corners */
 }
 
-article blockquote p {
+article blockquote p,
+main blockquote p {
   color: #6c7086; /* Catppuccin Mocha overlay0 - lighter than headlines */
   margin-bottom: 1rem;
 }
 
-article blockquote p:last-child {
+article blockquote p:last-child,
+main blockquote p:last-child {
   margin-bottom: 0;
 }
 
 article blockquote ol,
-article blockquote ul {
+article blockquote ul,
+main blockquote ol,
+main blockquote ul {
   list-style-position: outside;
   padding-left: 2em; /* Adjust as needed for your design */
 }
 
-article blockquote li {
+article blockquote li,
+main blockquote li {
   text-indent: 0;
   padding-left: 0;
   margin-left: 0;
 }
 
-article blockquote h3 {
+article blockquote h3,
+main blockquote h3 {
   color: #a6adc8; /* Catppuccin Mocha subtext0 */
   margin-top: 0;
 }
 
-article blockquote h3 strong {
+article blockquote h3 strong,
+main blockquote h3 strong {
   font-weight: 400; /* Normal text weight */
 }
 
-article blockquote li:last-child {
+article blockquote li:last-child,
+main blockquote li:last-child {
   margin-bottom: 0;
 }
 
-article blockquote ul {
+article blockquote ul,
+main blockquote ul {
   list-style-type: disc;
   padding-left: 1.2em; /* Reduced indentation for bullets */
 }
-article blockquote ol {
+article blockquote ol,
+main blockquote ol {
   list-style-type: decimal;
 }
 
