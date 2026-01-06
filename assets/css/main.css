@@ -81,6 +81,10 @@ main {
   line-height: 1.4;
 }
 
+main.about-page {
+  padding-top: 2rem;
+}
+
 /* Post graph visualization */
 .post-graph-container {
   width: 100%;
@@ -97,10 +101,12 @@ main {
 /* Post list styles */
 ul.posts {
   list-style: none;
+  margin-bottom: 0px;
+  padding-left: 0px;
 }
 
 .posts li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0px;
   line-height: 1.2;
   display: flex;
   justify-content: space-between;
@@ -198,17 +204,6 @@ li a {
 
 li a:hover {
   color: #f5e0dc; /* Catppuccin Mocha rosewater */
-  text-decoration: underline;
-}
-
-/* Posts list links should not be underlined */
-.posts li a,
-.posts li h2 a {
-  text-decoration: none;
-}
-
-.posts li a:hover,
-.posts li h2 a:hover {
   text-decoration: underline;
 }
 
@@ -366,6 +361,17 @@ main a {
 article a:hover,
 main a:hover {
   color: #f5e0dc; /* Catppuccin Mocha rosewater */
+  text-decoration: underline;
+}
+
+/* Posts list links should not be underlined */
+.posts li a,
+.posts li h2 a {
+  text-decoration: none;
+}
+
+.posts li a:hover,
+.posts li h2 a:hover {
   text-decoration: underline;
 }
 

@@ -22,12 +22,14 @@
   <body>
     <header>
       <nav>
+        <!-- <a href="{{ '/about/' | relative_url }}"><img src="{{ '/assets/images/leaf.svg' | relative_url }}" alt="Home" width="24" height="24"></a> -->
         <a href="{{ '/' | relative_url }}">Notes</a>
+        <a href="{{ '/about/' | relative_url }}">About</a> 
         <!-- <a href="#" class="inactive">Meaning <span class="badge">alpha</span></a> -->
       </nav>
     </header>
 
-    <main>
+    <main{% if page.permalink == '/about/' %} class="about-page"{% endif %}>
       {{ content }}
     </main>
 
