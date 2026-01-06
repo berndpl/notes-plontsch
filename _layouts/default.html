@@ -23,8 +23,16 @@
     <header>
       <nav>
         <!-- <a href="{{ '/about/' | relative_url }}"><img src="{{ '/assets/images/leaf.svg' | relative_url }}" alt="Home" width="24" height="24"></a> -->
-        <a href="{{ '/' | relative_url }}">Notes</a>
-        <a href="{{ '/about/' | relative_url }}">About</a> 
+        {% assign is_notes_active = false %}
+        {% if page.url == '/' %}{% assign is_notes_active = true %}{% endif %}
+        {% if page.url == '' %}{% assign is_notes_active = true %}{% endif %}
+        {% if page.layout == 'default' and page.title == 'Notes' %}{% assign is_notes_active = true %}{% endif %}
+        {% if page.layout == 'post' %}{% assign is_notes_active = true %}{% endif %}
+        <a href="{{ '/' | relative_url }}"{% if is_notes_active %} class="active"{% endif %}>Notes</a>
+        {% assign is_about_active = false %}
+        {% if page.permalink == '/about/' %}{% assign is_about_active = true %}{% endif %}
+        {% if page.url == '/about/' %}{% assign is_about_active = true %}{% endif %}
+        <a href="{{ '/about/' | relative_url }}"{% if is_about_active %} class="active"{% endif %}>About</a> 
         <!-- <a href="#" class="inactive">Meaning <span class="badge">alpha</span></a> -->
       </nav>
     </header>

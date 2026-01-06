@@ -33,7 +33,7 @@ nav {
 }
 
 nav a {
-  color: #b4befe; /* Catppuccin Mocha lavender */
+  color: rgba(166, 173, 200, 0.6); /* Body text color at 60% opacity - same as paragraphs */
   text-decoration: none;
   font-weight: 400;
   font-size: 1rem; /* Same size as body text */
@@ -47,6 +47,11 @@ a {
 nav a:hover {
   color: #f5e0dc; /* Catppuccin Mocha rosewater */
   text-decoration: underline;
+}
+
+nav a.active {
+  color: #cdd6f4; /* Catppuccin Mocha text - same as body text */
+  text-decoration: none;
 }
 
 nav a.inactive, .subtle {
