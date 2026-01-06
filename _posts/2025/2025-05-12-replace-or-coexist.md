@@ -35,7 +35,7 @@ So there are examples in history where technology that was emerging replaced oth
     → Luxury, tradition vs. functionality and tech features.
 > Want examples focused on a particular era or industry?
 
-#### But there are certain attributes of the technology that differentiate both the V2 and the other.
+But there are certain attributes of the technology that differentiate both the V2 and the other.
 
 > Absolutely. When technologies coexist or one replaces the other, it's usually due to **distinct attributes** that shape adoption. Here's a breakdown using a few from each category:
 
@@ -62,7 +62,7 @@ So there are examples in history where technology that was emerging replaced oth
 >     *   **Planes**: Long-distance speed, global connectivity.
 > Would you like a table comparing one of these pairs in more detail?
 
-#### when we transfer this type of thinking to the situation with AI and how it relates to human contribution, creativity, the human as creator. What does this tell us? what might be the human
+when we transfer this type of thinking to the situation with AI and how it relates to human contribution, creativity, the human as creator. What does this tell us? what might be the human
 
 > Great question. When we apply this framework to **AI vs. human creativity**, the coexistence/replacement pattern tells us a few key things:
 
@@ -87,5 +87,5 @@ So there are examples in history where technology that was emerging replaced oth
 > So like vinyl vs. digital, or mechanical watches vs. smartwatches — **humans will still matter > deeply**, especially where soul, story, and significance are needed.
 > 
 > Would you like a visual summary of this comparison?
-> 
-> [Continue conversation](https://chatgpt.com/share/6821e49a-5bac-8002-b12e-d74995ab34b8)
+
+[Continue conversation](https://chatgpt.com/share/6821e49a-5bac-8002-b12e-d74995ab34b8)

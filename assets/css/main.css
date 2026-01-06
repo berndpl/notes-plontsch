@@ -65,6 +65,30 @@ nav a.inactive:hover {
   text-decoration: none;
 }
 
+/* Let's talk button - only shown on about page */
+.lets-talk-button {
+  background-color: #cdd6f4; /* Selected nav color */
+  color: #1e1e2e; /* Page background color */
+  padding: 2px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 400;
+  margin-left: auto;
+  transition: background-color 0.2s ease;
+}
+
+.lets-talk-button:hover {
+  background-color: #f5e0dc; /* Catppuccin Mocha rosewater */
+  color: #1e1e2e; /* Page background color */
+  text-decoration: none;
+}
+
+/* When about page is active, adjust nav to space items */
+.about-header nav {
+  justify-content: space-between;
+  align-items: center;
+}
+
 .badge {
   display: inline-block;
   font-size: 0.6em;
