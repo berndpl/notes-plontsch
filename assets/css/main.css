@@ -4,6 +4,9 @@
 /* Reset and base styles */
 html {
   text-align: left;
+  /* Always reserve vertical scrollbar space to prevent horizontal layout jumps
+     when page height changes between routes (e.g. with/without header image or canvas) */
+  overflow-y: scroll;
 }
 
 * {
@@ -18,7 +21,7 @@ body {
   color: #cdd6f4; /* Catppuccin Mocha text */
   background-color: #1e1e2e; /* Catppuccin Mocha base */
   max-width: 800px;
-  margin: 0 clamp(20px, calc((100vw - 800px) / 2), 328px);
+  margin: 0 auto;
   padding: 20px;
 }
 
@@ -110,9 +113,11 @@ main {
   line-height: 1.4;
 }
 
-main.about-page {
-  padding-top: 2rem;
+/* Ensure consistent spacing - remove top margin from first element in main */
+main > *:first-child {
+  margin-top: 0;
 }
+
 
 /* Post graph visualization */
 .post-graph-container {
