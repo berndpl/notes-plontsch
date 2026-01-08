@@ -192,6 +192,7 @@ h2 {
 
 h3 {
   margin-top: 1rem;
+  margin-bottom: 16px;
 }
 
 h4 {
@@ -527,6 +528,17 @@ main blockquote ol {
   list-style-type: decimal;
 }
 
+/* Blockquote styles for generated pages - subtle mauve color scheme */
+.generated-page blockquote {
+  margin-top: 3rem;
+  border-left-color: rgba(221, 182, 242, 0.3); /* Subtle mauve border */
+  background: none; /* No background */
+}
+
+.generated-page blockquote p {
+  color: rgba(221, 182, 242, 0.7); /* Mauve tint for generated text - same as generated page paragraphs */
+}
+
 /* Footer styles */
 footer {
   margin-top: 2rem;
@@ -534,6 +546,16 @@ footer {
   /*border-top: 1px solid #313244; */ /* Catppuccin Mocha surface0 */
   font-size: 0.9rem;
   color: #6c7086; /* Catppuccin Mocha overlay0 */
+}
+
+footer a {
+  color: #ddb6f2; /* Catppuccin Mocha mauve - generated color for footer links */
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: #f5c2e7; /* Catppuccin Mocha pink - lighter on hover */
+  text-decoration: underline;
 }
 
 .share-buttons {
@@ -630,6 +652,36 @@ th, td {
   opacity: 1; /* Full opacity for filled circle */
 }
 
+/* Questions page card styling - top align text, arrow as content */
+.questions-page .card {
+  justify-content: space-between; /* Space between text and arrow */
+}
+
+.questions-page .card h3 {
+  padding-top: 0; /* Reset top padding */
+  padding-bottom: 0; /* No bottom padding */
+  margin-top: 0;
+  margin-bottom: 16px;
+  flex: 1; /* Take available space */
+}
+
+.questions-page .card-arrow {
+  align-self: flex-end; /* Align to bottom right */
+  margin-top: auto; /* Push to bottom */
+  margin-bottom: 0px;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  /* Match arrow color exactly to text color (#ddb6f2 = rgb(221, 182, 242)) */
+  filter: brightness(0) saturate(100%) invert(80%) sepia(38%) saturate(2000%) hue-rotate(260deg) brightness(108%) contrast(98%);
+  opacity: 1;
+}
+
+.questions-page .card:hover .card-arrow {
+  /* Match hover text color exactly (#f5c2e7 = rgb(245, 194, 231)) */
+  filter: brightness(0) saturate(100%) invert(88%) sepia(28%) saturate(2000%) hue-rotate(300deg) brightness(112%) contrast(98%);
+}
+
 .card:hover {
   border-color: #45475a; /* Catppuccin Mocha surface1 - lighter on hover */
   text-decoration: none;
@@ -671,6 +723,10 @@ th, td {
 /* Generated page styles - distinct color tone */
 .generated-page {
   /* Subtle warm tone to distinguish generated content */
+}
+
+.generated-page h1 {
+  color: #ddb6f2; /* Catppuccin Mocha mauve - distinct color for generated content */
 }
 
 .generated-page .card {

@@ -13,10 +13,8 @@
 Everytime I add a new posts the pages for questions and insights need to be re-generated.
 Use a distinct color tone for content that is generated
 
-Description:
-- The page description containes anote that the respective pages was generated. when and which model was used to    
-  genrate it.
-- add another paragraph with a 2 sentence summary of the content for each page. Highlighting 1-3 prominent areas.
+- Add a short paragraph with a short 2 sentence summary highlighting some shared themes. Telling what this page is about. Short message encouraging replying with answers. Don't write with a subjective "I" perspective
+- Add a disclaimer at the end of the page using the block quote style. Also using the generated color scheme but a more subtle secondary version of it. Short text. No line breaks. Secondary text color with disclosing the following information: That the page was auto generated, which model was used, when it was generated with human readable timestamp, a short version of the prompt used to generate the content.
 
 List of cards
 - Each page shows extracted content as cards 
