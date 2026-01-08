@@ -11,9 +11,14 @@
 ### Generated Pages
 
 Everytime I add a new posts the pages for questions and insights need to be re-generated.
+Use a distinct color tone for content that is generated
 
+Description:
 - The page description containes anote that the respective pages was generated. when and which model was used to    
   genrate it.
+- add another paragraph with a 2 sentence summary of the content for each page. Highlighting 1-3 prominent areas.
+
+List of cards
 - Each page shows extracted content as cards 
 - each card can be based on one or more posts
 - link back to these posts

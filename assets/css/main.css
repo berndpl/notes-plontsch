@@ -575,13 +575,22 @@ th, td {
   margin-top: 2rem;
 }
 
+@media (min-width: 720px) {
+  .cards {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
 .card {
   background-color: #181825; /* Catppuccin Mocha mantle - slightly darker than base */
   border: 1px solid #313244; /* Catppuccin Mocha surface0 */
   border-radius: 8px;
-  padding: 1.5rem;
+  padding: 1.75rem;
   transition: border-color 0.2s ease;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 150px; /* Bigger, consistent card height */
   text-decoration: none;
   cursor: pointer;
 }
@@ -621,4 +630,31 @@ th, td {
 .card p em {
   color: #6c7086; /* Catppuccin Mocha overlay0 - for source attribution */
   font-style: italic;
+}
+
+/* Generated page styles - distinct color tone */
+.generated-page {
+  /* Subtle warm tone to distinguish generated content */
+}
+
+.generated-page .card {
+  background-color: #1a1825; /* Slightly warmer/different tone */
+  border-color: #3a3444; /* Warmer border color */
+}
+
+.generated-page .card h3 {
+  color: #ddb6f2; /* Catppuccin Mocha mauve - distinct color for generated content */
+}
+
+.generated-page .card:hover h3 {
+  color: #f5c2e7; /* Catppuccin Mocha pink - lighter on hover */
+}
+
+.generated-page p {
+  color: rgba(221, 182, 242, 0.7); /* Mauve tint for generated text */
+}
+
+.generated-page .badge {
+  background-color: #3a3444; /* Warmer background */
+  color: #ddb6f2; /* Mauve text */
 }

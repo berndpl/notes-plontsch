@@ -7,6 +7,8 @@ title: Questions
 
 Questions that emerge from my notes - topics I'm exploring and thinking about. This page was generated on 2026-01-08 using Claude Sonnet 4.5.
 
+These questions explore the relationship between technology and human experience, particularly around AI's role in creativity and productivity. Key themes include attention management, the coexistence of technology with human practices, and how we maintain meaningful work in an increasingly automated world.
+
 <div class="cards">
 
 <a href="/2025/04/attention/" class="card">

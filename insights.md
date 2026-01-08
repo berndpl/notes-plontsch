@@ -7,6 +7,8 @@ title: Insights
 
 Key learnings and observations from my notes. This page was generated on 2026-01-08 using Claude Sonnet 4.5.
 
+These insights emphasize the enduring value of human creativity, attention, and craft in an age of AI. Prominent themes include the importance of writing and perspective, the need for durable and portable data systems, and the recognition that humans bring something fundamentally un-automatable to creative work.
+
 <div class="cards">
 
 <a href="/2025/04/attention/" class="card">
