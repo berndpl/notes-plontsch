@@ -18,4 +18,4 @@ How does this change the work? Perhaps it's the return of the double diamond, no
 
 ### Fun
 
-Unlike coding, the important parts of design are non-deterministic. There's no perfect computed answer. It's the ever-evolving interplay of looking back, looking ahead, contextualizing and feeling. That's also what makes it fun.
+Unlike coding, the important parts of design are non-deterministic. There's no perfect computed answer. It's the ever-evolving interplay of looking back, looking ahead, contextualizing and feeling. That's where the fun is to me.
