@@ -14,7 +14,7 @@ Finding the right balance between unconstrained exploration and careless ad hoc 
 
 ### It's our job now
 
-How does this change the work? Perhaps it's the return of the double diamond, now part of a chain-of-thought thinking loop. Designers who sense and direct. Teams that invest more effort in articulating why their product matters.
+How does this change our work? Perhaps it's the return of the double diamond, now part of a chain-of-thought thinking loop. Designers who sense and direct. Teams that invest more effort in articulating why their product matters.
 
 ### Fun
 
