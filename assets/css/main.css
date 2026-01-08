@@ -566,3 +566,59 @@ th, td {
   text-align: left;
   padding: 0.5em;
 }
+
+/* Card layout styles */
+.cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.card {
+  background-color: #181825; /* Catppuccin Mocha mantle - slightly darker than base */
+  border: 1px solid #313244; /* Catppuccin Mocha surface0 */
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: border-color 0.2s ease;
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: #45475a; /* Catppuccin Mocha surface1 - lighter on hover */
+  text-decoration: none;
+}
+
+.card h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  color: #cdd6f4; /* Catppuccin Mocha text */
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.card:hover h3 {
+  color: #f5e0dc; /* Catppuccin Mocha rosewater - on hover */
+}
+
+.card p {
+  color: rgba(166, 173, 200, 0.6);
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.card p:last-of-type {
+  margin-bottom: 0;
+}
+
+.card p strong {
+  color: #bac2de;
+  font-weight: 400;
+}
+
+.card p em {
+  color: #6c7086; /* Catppuccin Mocha overlay0 - for source attribution */
+  font-style: italic;
+}
