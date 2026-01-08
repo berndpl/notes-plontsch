@@ -585,7 +585,8 @@ th, td {
   background-color: #181825; /* Catppuccin Mocha mantle - slightly darker than base */
   border: 1px solid #313244; /* Catppuccin Mocha surface0 */
   border-radius: 8px;
-  padding: 1.75rem;
+  padding: 1.5rem;
+  margin: 0;
   transition: border-color 0.2s ease;
   display: flex;
   flex-direction: column;
@@ -593,6 +594,23 @@ th, td {
   min-height: 150px; /* Bigger, consistent card height */
   text-decoration: none;
   cursor: pointer;
+  position: relative; /* For absolute positioning of emoji */
+}
+
+.card-emoji {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  font-size: 1.5rem;
+  line-height: 1;
+  filter: grayscale(100%) brightness(0.7);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.generated-page .card-emoji {
+  filter: grayscale(100%) brightness(0.8) sepia(100%) hue-rotate(260deg) saturate(200%);
+  opacity: 0.7;
 }
 
 .card:hover {
@@ -606,6 +624,7 @@ th, td {
   color: #cdd6f4; /* Catppuccin Mocha text */
   font-size: 1rem;
   font-weight: 400;
+  padding-top: 2.5rem; /* Space for emoji at top */
 }
 
 .card:hover h3 {
@@ -657,4 +676,9 @@ th, td {
 .generated-page .badge {
   background-color: #3a3444; /* Warmer background */
   color: #ddb6f2; /* Mauve text */
+}
+
+.generated-page .card-emoji {
+  filter: grayscale(100%) brightness(0.8) sepia(100%) hue-rotate(260deg) saturate(200%);
+  opacity: 0.7;
 }
