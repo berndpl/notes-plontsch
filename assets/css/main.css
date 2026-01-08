@@ -613,6 +613,23 @@ th, td {
   opacity: 0.7;
 }
 
+/* Question mark in circle for questions page */
+.questions-page .card-emoji {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background-color: #ddb6f2; /* Mauve color from generated page */
+  border-radius: 50%;
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1;
+  color: #1e1e2e; /* Dark text for contrast against filled circle */
+  filter: none; /* Remove grayscale filter for questions page */
+  opacity: 1; /* Full opacity for filled circle */
+}
+
 .card:hover {
   border-color: #45475a; /* Catppuccin Mocha surface1 - lighter on hover */
   text-decoration: none;
@@ -624,7 +641,7 @@ th, td {
   color: #cdd6f4; /* Catppuccin Mocha text */
   font-size: 1rem;
   font-weight: 400;
-  padding-top: 2.5rem; /* Space for emoji at top */
+  padding-top: 3rem; /* Space for emoji at top */
 }
 
 .card:hover h3 {

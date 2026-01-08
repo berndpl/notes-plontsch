@@ -23,6 +23,7 @@ List of cards
 - each card can be based on one or more posts
 - link back to these posts
 - Before generating, read all the posts but don't change anything
+- limit items to top 11. Rank by interestingness
 
 Card content
 A simple card structure

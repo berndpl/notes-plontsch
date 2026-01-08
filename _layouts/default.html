@@ -42,7 +42,9 @@
 
     {% assign is_generated = false %}
     {% if page.title == 'Questions' or page.title == 'Insights' %}{% assign is_generated = true %}{% endif %}
-    <main{% if page.permalink == '/about/' %} class="about-page"{% elsif is_generated %} class="generated-page"{% endif %}>
+    {% assign is_questions = false %}
+    {% if page.title == 'Questions' %}{% assign is_questions = true %}{% endif %}
+    <main{% if page.permalink == '/about/' %} class="about-page"{% elsif is_questions %} class="generated-page questions-page"{% elsif is_generated %} class="generated-page"{% endif %}>
       {{ content }}
     </main>
 
