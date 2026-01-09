@@ -1,19 +1,26 @@
-// Interactive Double Diamond Visualization - Breathing Animation
+// Deep Exploration - Expansion and Collapse Visualization
 (function() {
     'use strict';
     
-    function initDoubleDiamond() {
+    function initDeepExploration() {
         const canvas = document.getElementById('deep-exploration-canvas');
-        if (!canvas) return;
+        if (!canvas) {
+            console.warn('Deep Exploration: Canvas element not found');
+            return;
+        }
         
         const ctx = canvas.getContext('2d');
+        if (!ctx) {
+            console.error('Deep Exploration: Could not get 2D context');
+            return;
+        }
         
         // Set canvas size to match header images (1200x638)
         canvas.width = 1200;
         canvas.height = 638;
         
         // Color scheme matching the site (Catppuccin Mocha)
-        const catppuccinColors = {
+        const colors = {
             lavender: '#b4befe',
             blue: '#89b4fa',
             sapphire: '#74c7ec',
@@ -27,191 +34,191 @@
             mauve: '#cba6f7',
             pink: '#f5c2e7',
             rosewater: '#f5e0dc',
-            flamingo: '#f2cdcd'
+            overlay0: '#6c7086',
+            surface0: '#313244'
         };
         
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
-        const maxRadius = 200;
-        const numNodes = 18;
         
         // Animation state
-        let animationPhase = 0;
+        let time = 0;
         let hoveredNode = null;
+        let currentCycle = -1;
+        let nodeSpeedOffsets = []; // Randomized speed offsets for each node per cycle
         
-        // Node properties
-        const nodeSize = 4;
-        const activeNodeSize = 6;
+        // ===== TIMING CONFIGURATION =====
+        // Adjust these values to control the animation timing
+        const cycleDuration = 6; // seconds for full cycle
         
-        // Color palette for nodes
+        // Phase durations (as fractions of the cycle, should sum to 1.0)
+        const expandDuration = 0.3;    // Duration of expansion (inhale)
+        const expandRestDuration = 0.3; // Rest at expanded state
+        const collapseDuration = 0.2;   // Duration of collapse (exhale)
+        const collapseRestDuration = 0.00; // Rest at center state
+        
+        // Calculate phase boundaries
+        const expandEnd = expandDuration;
+        const expandRestEnd = expandEnd + expandRestDuration;
+        const collapseEnd = expandRestEnd + collapseDuration;
+        const collapseRestEnd = collapseEnd + collapseRestDuration; // Should be 1.0
+        // ===== END TIMING CONFIGURATION =====
+        
+        // Node configuration
+        const numExplorationNodes = 24;
+        const maxExplorationRadius = 280;
+        const minExplorationRadius = 0; // Start from center
+        const nodeSize = 5;
+        const activeNodeSize = 7;
+        
+        // Speed variation per node (0.0 = no variation, 0.1 = 10% variation)
+        const nodeSpeedVariation = 0.08; // 8% variation for organic feel
+        
+        // Color palette for exploration nodes
         const nodeColors = [
-            catppuccinColors.blue,
-            catppuccinColors.sapphire,
-            catppuccinColors.sky,
-            catppuccinColors.teal,
-            catppuccinColors.green,
-            catppuccinColors.lavender,
-            catppuccinColors.mauve,
-            catppuccinColors.pink,
-            catppuccinColors.rosewater,
-            catppuccinColors.flamingo,
-            catppuccinColors.maroon,
-            catppuccinColors.red
+            colors.blue,
+            colors.sapphire,
+            colors.sky,
+            colors.teal,
+            colors.green,
+            colors.lavender,
+            colors.mauve,
+            colors.pink
         ];
         
-        // Spring easing function with overshoot
-        function springEase(t) {
-            // Spring physics: overshoots and bounces back
-            const c4 = (2 * Math.PI) / 3;
-            return t === 0 ? 0 : t === 1 ? 1 : Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * c4) + 1;
+        // Easing function for organic, breathing-like motion (ease-in-out with slight curve)
+        function easeInOutCubic(t) {
+            return t < 0.5 
+                ? 4 * t * t * t 
+                : 1 - Math.pow(-2 * t + 2, 3) / 2;
         }
         
-        // Get node positions based on breathing animation
-        function getNodePositions(phase) {
-            const positions = [];
-            const angleStep = (Math.PI * 2) / numNodes;
-            const normalizedPhase = phase % (Math.PI * 2);
+        // More organic easing - like breathing with smooth ramps
+        function breathingEase(t) {
+            // Intensified ease-in-out quartic for stronger acceleration/deceleration
+            return t < 0.5 
+                ? 8 * t * t * t * t 
+                : 1 - Math.pow(-2 * t + 2, 4) / 2;
+        }
+        
+        
+        // Get phase (0-1) and track cycle changes
+        function getPhase(t) {
+            const phase = (t % cycleDuration) / cycleDuration;
+            const cycleNumber = Math.floor(t / cycleDuration);
             
-            // Extended cycle: longer collapsed state
-            // 0 to 0.3π: collapsed with pulsing
-            // 0.3π to 1.3π: expansion
-            // 1.3π to 2π: collapse
-            const collapsedEnd = Math.PI * 0.3;
-            const expansionEnd = Math.PI * 1.3;
-            
-            // Calculate base expansion
-            let baseExpansion;
-            let isCollapsedState = false;
-            
-            if (normalizedPhase < collapsedEnd) {
-                // Collapsed state - stay at 0, just pulse
-                baseExpansion = 0;
-                isCollapsedState = true;
-            } else if (normalizedPhase < expansionEnd) {
-                // Expansion phase - slower, less linear
-                const t = (normalizedPhase - collapsedEnd) / (expansionEnd - collapsedEnd);
-                // Use ease-out cubic for smoother, less linear expansion
-                baseExpansion = 1 - Math.pow(1 - t, 3);
-            } else {
-                // Collapse phase - simple ease-in
-                const t = (normalizedPhase - expansionEnd) / (Math.PI * 2 - expansionEnd);
-                // Simple ease-in for smooth collapse
-                baseExpansion = Math.pow(1 - t, 2);
-            }
-            
-            // During expansion, calculate how many nodes should be visible
-            let visibleNodes = numNodes;
-            if (isCollapsedState) {
-                // No nodes visible during collapsed state
-                visibleNodes = 0;
-            } else if (normalizedPhase >= collapsedEnd && normalizedPhase < expansionEnd) {
-                // During expansion: nodes appear one at a time
-                visibleNodes = Math.max(1, Math.ceil(baseExpansion * numNodes));
-            }
-            
-            for (let i = 0; i < numNodes; i++) {
-                // Calculate individual node expansion
-                let nodeExpansion = baseExpansion;
+            // Generate new random speed offsets for each node at the start of each cycle
+            if (cycleNumber !== currentCycle) {
+                currentCycle = cycleNumber;
+                nodeSpeedOffsets = [];
+                let sumOffsets = 0;
                 
-                if (isCollapsedState) {
-                    // No nodes during collapsed state
-                    continue;
-                } else if (normalizedPhase >= collapsedEnd && normalizedPhase < expansionEnd) {
-                    // During expansion: nodes appear one at a time
-                    const nodeAppearanceProgress = i / numNodes;
-                    if (i >= visibleNodes) {
-                        // Node hasn't appeared yet - skip it
-                        continue;
-                    }
-                    // Calculate expansion for this specific node
-                    if (visibleNodes > 1 && baseExpansion > nodeAppearanceProgress) {
-                        const remainingProgress = 1 - nodeAppearanceProgress;
-                        const nodeT = (baseExpansion - nodeAppearanceProgress) / remainingProgress;
-                        nodeExpansion = Math.max(0, Math.min(1, nodeT));
-                    } else if (i === 0) {
-                        // First node always expands with base expansion
-                        nodeExpansion = baseExpansion;
-                    }
+                // Generate random offsets for each node
+                for (let i = 0; i < numExplorationNodes; i++) {
+                    const offset = (Math.random() * 2 - 1) * nodeSpeedVariation; // -variation to +variation
+                    nodeSpeedOffsets.push(offset);
+                    sumOffsets += offset;
                 }
                 
-                // More circular during expansion: reduce variations more aggressively, especially near full expansion
-                const circleFactor = nodeExpansion > 0.4 ? Math.pow((1 - nodeExpansion) / 0.6, 4) : 1; // Fade out variations earlier and more aggressively
-                const angleVariation = Math.sin(phase * 0.7 + i) * 0.05 * circleFactor; // Reduced angle wobble
-                const radiusVariation = 1 + Math.sin(phase * 0.5 + i * 0.8) * 0.04 * circleFactor; // Reduced radius variation
-                const angle = angleStep * i + angleVariation;
-                const radius = maxRadius * nodeExpansion * radiusVariation;
-                
+                // Normalize offsets so they average to 0 (keeps total cycle duration constant)
+                const averageOffset = sumOffsets / numExplorationNodes;
+                for (let i = 0; i < numExplorationNodes; i++) {
+                    nodeSpeedOffsets[i] -= averageOffset;
+                }
+            }
+            
+            return phase;
+        }
+        
+        // Get exploration radius based on phase with organic easing
+        function getExplorationRadius(phase) {
+            if (phase < expandEnd) {
+                // Expand from center - breathing in
+                const p = phase / expandEnd;
+                const eased = breathingEase(p);
+                return maxExplorationRadius * eased; // Start from 0, expand to max
+            } else if (phase < expandRestEnd) {
+                // Rest at expanded state
+                return maxExplorationRadius;
+            } else if (phase < collapseEnd) {
+                // Collapse back to center - breathing out
+                const p = (phase - expandRestEnd) / collapseDuration;
+                const eased = breathingEase(p);
+                return maxExplorationRadius * (1 - eased); // Collapse from max to 0
+            } else {
+                // Rest at center
+                return 0; // All nodes at center
+            }
+        }
+        
+        // Get node-specific phase offset for variable expansion speed
+        function getNodePhaseOffset(nodeIndex) {
+            // Use randomized offset for this cycle (generated in getPhase)
+            return nodeSpeedOffsets[nodeIndex] || 0;
+        }
+        
+        // Get exploration radius for a specific node with speed variation
+        function getNodeRadius(phase, nodeIndex) {
+            // Apply node-specific phase offset
+            const nodeOffset = getNodePhaseOffset(nodeIndex);
+            const adjustedPhase = phase + nodeOffset;
+            
+            // Clamp phase to 0-1 range to prevent abrupt jumps (no wrap-around)
+            const normalizedPhase = Math.max(0, Math.min(1, adjustedPhase));
+            
+            return getExplorationRadius(normalizedPhase);
+        }
+        
+        // Get node positions for current phase
+        function getNodePositions(phase) {
+            const positions = [];
+            const angleStep = (Math.PI * 2) / numExplorationNodes;
+            
+            // Add center node (always visible)
+            positions.push({
+                x: centerX,
+                y: centerY,
+                angle: 0,
+                radius: 0,
+                color: colors.lavender,
+                index: -1,
+                isCenter: true
+            });
+            
+            // Always show all exploration nodes with variable expansion speed
+            for (let i = 0; i < numExplorationNodes; i++) {
+                // Get node-specific radius with speed variation
+                const radius = getNodeRadius(phase, i);
+                const angle = angleStep * i;
                 const x = centerX + Math.cos(angle) * radius;
                 const y = centerY + Math.sin(angle) * radius;
+                
+                // Full opacity for all nodes - no fading
+                const opacity = 1;
                 
                 positions.push({
                     x,
                     y,
                     angle,
                     radius,
-                    expansion: nodeExpansion,
                     color: nodeColors[i % nodeColors.length],
-                    shape: 'circle',
-                    index: i
+                    index: i,
+                    isCenter: false,
+                    opacity: opacity
                 });
             }
-            
-            // Always include center dot with pulsing during collapsed state
-            let centerExpansion = baseExpansion;
-            let centerPulse = 1;
-            
-            if (isCollapsedState) {
-                // Pulsing effect during collapsed state
-                centerPulse = 1 + Math.sin(phase * 3) * 0.3; // Pulse size
-            }
-            
-            positions.push({
-                x: centerX,
-                y: centerY,
-                angle: 0,
-                radius: 0,
-                expansion: centerExpansion,
-                pulse: centerPulse,
-                color: catppuccinColors.blue,
-                shape: 'circle',
-                index: -1,
-                isCenter: true
-            });
             
             return positions;
         }
         
-        // Draw different shapes
-        function drawNode(ctx, x, y, size, shape, color, pulse = 1) {
-            const actualSize = size * pulse;
+        // Draw node
+        function drawNode(ctx, x, y, size, color, opacity = 1) {
             ctx.fillStyle = color;
+            ctx.globalAlpha = opacity;
             ctx.beginPath();
-            
-            switch(shape) {
-                case 'square':
-                    ctx.fillRect(x - actualSize, y - actualSize, actualSize * 2, actualSize * 2);
-                    break;
-                case 'triangle':
-                    ctx.moveTo(x, y - actualSize);
-                    ctx.lineTo(x - actualSize, y + actualSize);
-                    ctx.lineTo(x + actualSize, y + actualSize);
-                    ctx.closePath();
-                    ctx.fill();
-                    break;
-                case 'diamond':
-                    ctx.moveTo(x, y - actualSize);
-                    ctx.lineTo(x + actualSize, y);
-                    ctx.lineTo(x, y + actualSize);
-                    ctx.lineTo(x - actualSize, y);
-                    ctx.closePath();
-                    ctx.fill();
-                    break;
-                case 'circle':
-                default:
-                    ctx.arc(x, y, actualSize, 0, Math.PI * 2);
-                    ctx.fill();
-                    break;
-            }
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = 1;
         }
         
         // Draw connecting lines from center to nodes
@@ -222,9 +229,10 @@
             nodes.forEach(node => {
                 if (node.isCenter) return;
                 
-                // Line opacity based on expansion
-                const opacity = node.expansion * 0.3;
-                ctx.strokeStyle = `rgba(180, 190, 254, ${opacity})`;
+                // Line opacity matches node opacity
+                const lineOpacity = (node.opacity || 1) * 0.2;
+                
+                ctx.strokeStyle = `rgba(180, 190, 254, ${lineOpacity})`;
                 ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.moveTo(centerNode.x, centerNode.y);
@@ -244,28 +252,28 @@
         
         // Main draw function
         function draw() {
-            // Clear canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Clear canvas with subtle background
+            ctx.fillStyle = '#1e1e2e'; // Catppuccin Mocha base - matches page background
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            // Get node positions based on breathing animation
-            const nodes = getNodePositions(animationPhase);
+            const phase = getPhase(time);
+            const nodes = getNodePositions(phase);
             
             // Draw connecting lines
             drawLines(nodes);
             
-            // Draw all nodes
+            // Draw all nodes (plain, no glow, minimal style)
             nodes.forEach(node => {
                 const isHovered = hoveredNode === node;
                 const size = isHovered ? activeNodeSize : nodeSize;
-                const pulse = node.pulse || 1;
-                drawNode(ctx, node.x, node.y, size, node.shape, node.color, pulse);
+                
+                // Use node opacity (fades as it approaches center)
+                const opacity = node.opacity !== undefined ? node.opacity : 1;
+                drawNode(ctx, node.x, node.y, size, node.color, opacity);
             });
             
-            // Update animation - faster overall
-            animationPhase += 0.02;
-            if (animationPhase > Math.PI * 2) {
-                animationPhase = 0;
-            }
+            // Update time
+            time += 0.016; // ~60fps
         }
         
         // Mouse interaction
@@ -276,8 +284,8 @@
             const mouseX = (e.clientX - rect.left) * scaleX;
             const mouseY = (e.clientY - rect.top) * scaleY;
             
-            // Get current nodes
-            const nodes = getNodePositions(animationPhase);
+            const phase = getPhase(time);
+            const nodes = getNodePositions(phase);
             
             const previousHovered = hoveredNode;
             hoveredNode = null;
@@ -301,7 +309,7 @@
             draw();
         });
         
-        // Start animation loop
+        // Animation loop
         function animate() {
             draw();
             requestAnimationFrame(animate);
@@ -314,8 +322,8 @@
     
     // Initialize when DOM is ready
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initDoubleDiamond);
+        document.addEventListener('DOMContentLoaded', initDeepExploration);
     } else {
-        initDoubleDiamond();
+        initDeepExploration();
     }
 })();

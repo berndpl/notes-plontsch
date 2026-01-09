@@ -11,6 +11,7 @@ layout: default
       {% else %}
       <img src="{{ page.image | relative_url }}" alt="{{ page.title }}">
       {% endif %}
+    {% endif %}
     <h1>{{ page.title }}{% if page.model %} <span class="badge">{{ page.model }}</span>{% endif %}</h1>
   {{ content }}
   <footer>
