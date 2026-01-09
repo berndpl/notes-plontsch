@@ -159,14 +159,20 @@
         
         // Get exploration radius for a specific node with speed variation
         function getNodeRadius(phase, nodeIndex) {
-            // Apply node-specific phase offset
-            const nodeOffset = getNodePhaseOffset(nodeIndex);
-            const adjustedPhase = phase + nodeOffset;
+            // Only apply speed variation during expansion phase
+            // During collapse, all nodes use the same phase (synchronized collapse)
+            let adjustedPhase = phase;
             
-            // Clamp phase to 0-1 range to prevent abrupt jumps (no wrap-around)
-            const normalizedPhase = Math.max(0, Math.min(1, adjustedPhase));
+            if (phase < expandEnd) {
+                // During expansion: apply node-specific phase offset for variable speed
+                const nodeOffset = getNodePhaseOffset(nodeIndex);
+                adjustedPhase = phase + nodeOffset;
+                // Clamp phase to 0-1 range to prevent abrupt jumps (no wrap-around)
+                adjustedPhase = Math.max(0, Math.min(1, adjustedPhase));
+            }
+            // During collapse and rest phases: use the same phase for all nodes (no offset)
             
-            return getExplorationRadius(normalizedPhase);
+            return getExplorationRadius(adjustedPhase);
         }
         
         // Get node positions for current phase
