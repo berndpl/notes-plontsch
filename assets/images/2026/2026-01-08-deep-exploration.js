@@ -64,6 +64,12 @@
         const collapseRestEnd = collapseEnd + collapseRestDuration; // Should be 1.0
         // ===== END TIMING CONFIGURATION =====
         
+        // ===== EASING CONFIGURATION =====
+        // Adjust these values to control the easing curves
+        const expansionEaseInPower = 5;   // Ease-in power for expansion (higher = stronger acceleration)
+        const expansionEaseOutPower = 2;  // Ease-out power for expansion (higher = slower settling)
+        // ===== END EASING CONFIGURATION =====
+        
         // Node configuration
         const numExplorationNodes = 24;
         const maxExplorationRadius = 280;
@@ -101,6 +107,18 @@
                 : 1 - Math.pow(-2 * t + 2, 4) / 2;
         }
         
+        // More curved easing for expansion - stronger ease-out (slower settling)
+        function expansionEase(t) {
+            // Asymmetric ease-in-out: stronger ease-out for slower settling
+            if (t < 0.5) {
+                // Ease-in: configurable power (scaled to reach 0.5 at t=0.5)
+                return Math.pow(2 * t, expansionEaseInPower) / 2;
+            } else {
+                // Ease-out: configurable power for slower settling at the end
+                return 1 - Math.pow(-2 * t + 2, expansionEaseOutPower) / 2;
+            }
+        }
+        
         
         // Get phase (0-1) and track cycle changes
         function getPhase(t) {
@@ -133,9 +151,9 @@
         // Get exploration radius based on phase with organic easing
         function getExplorationRadius(phase) {
             if (phase < expandEnd) {
-                // Expand from center - breathing in
+                // Expand from center - breathing in (with more curved easing)
                 const p = phase / expandEnd;
-                const eased = breathingEase(p);
+                const eased = expansionEase(p);
                 return maxExplorationRadius * eased; // Start from 0, expand to max
             } else if (phase < expandRestEnd) {
                 // Rest at expanded state
@@ -166,7 +184,18 @@
             if (phase < expandEnd) {
                 // During expansion: apply node-specific phase offset for variable speed
                 const nodeOffset = getNodePhaseOffset(nodeIndex);
-                adjustedPhase = phase + nodeOffset;
+                
+                // Smoothly blend out the offset as we approach expandEnd to ensure smooth landing
+                // Blend starts at 80% of expansion phase
+                const blendStart = expandEnd * 0.8;
+                let blendFactor = 1.0;
+                
+                if (phase > blendStart) {
+                    // Gradually reduce offset effect from 80% to 100% of expansion
+                    blendFactor = 1.0 - ((phase - blendStart) / (expandEnd - blendStart));
+                }
+                
+                adjustedPhase = phase + (nodeOffset * blendFactor);
                 // Clamp phase to 0-1 range to prevent abrupt jumps (no wrap-around)
                 adjustedPhase = Math.max(0, Math.min(1, adjustedPhase));
             }
