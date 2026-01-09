@@ -93,11 +93,10 @@
                 // Use ease-out cubic for smoother, less linear expansion
                 baseExpansion = 1 - Math.pow(1 - t, 3);
             } else {
-                // Collapse phase - with spring overshoot
+                // Collapse phase - simple ease-in
                 const t = (normalizedPhase - expansionEnd) / (Math.PI * 2 - expansionEnd);
-                // Use spring easing for collapse (inverted)
-                const springT = springEase(1 - t);
-                baseExpansion = springT;
+                // Simple ease-in for smooth collapse
+                baseExpansion = Math.pow(1 - t, 2);
             }
             
             // During expansion, calculate how many nodes should be visible
@@ -135,10 +134,10 @@
                     }
                 }
                 
-                // More circular during expansion: reduce variations more aggressively
-                const circleFactor = nodeExpansion > 0.7 ? Math.pow((1 - nodeExpansion) / 0.3, 2) : 1; // Fade out variations earlier and more smoothly
-                const angleVariation = Math.sin(phase * 0.7 + i) * 0.1 * circleFactor; // Subtle angle wobble
-                const radiusVariation = 1 + Math.sin(phase * 0.5 + i * 0.8) * 0.08 * circleFactor; // Subtle radius variation
+                // More circular during expansion: reduce variations more aggressively, especially near full expansion
+                const circleFactor = nodeExpansion > 0.4 ? Math.pow((1 - nodeExpansion) / 0.6, 4) : 1; // Fade out variations earlier and more aggressively
+                const angleVariation = Math.sin(phase * 0.7 + i) * 0.05 * circleFactor; // Reduced angle wobble
+                const radiusVariation = 1 + Math.sin(phase * 0.5 + i * 0.8) * 0.04 * circleFactor; // Reduced radius variation
                 const angle = angleStep * i + angleVariation;
                 const radius = maxRadius * nodeExpansion * radiusVariation;
                 
