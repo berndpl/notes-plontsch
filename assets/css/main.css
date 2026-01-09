@@ -539,6 +539,50 @@ main blockquote ol {
   color: rgba(221, 182, 242, 0.7); /* Mauve tint for generated text - same as generated page paragraphs */
 }
 
+/* Blockquote styles for LLM-Chat posts - using generated theme color */
+.llm-chat-post blockquote {
+  border-left-color: rgba(221, 182, 242, 0.5); /* More intense mauve border - generated theme */
+  background: none;
+  color: #ddb6f2; /* Base mauve color for all text - consistent tone */
+}
+
+.llm-chat-post blockquote p,
+.llm-chat-post blockquote li,
+.llm-chat-post blockquote em,
+.llm-chat-post blockquote i {
+  color: #ddb6f2; /* Base mauve color - consistent tone */
+}
+
+.llm-chat-post blockquote h3,
+.llm-chat-post blockquote h2,
+.llm-chat-post blockquote h4 {
+  color: #ddb6f2; /* Same mauve color as all text */
+}
+
+.llm-chat-post blockquote strong,
+.llm-chat-post blockquote b {
+  color: #ddb6f2; /* Same mauve color as all text */
+}
+
+.llm-chat-post blockquote table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #ddb6f2; /* Generated mauve color for table text */
+}
+
+.llm-chat-post blockquote th,
+.llm-chat-post blockquote td {
+  text-align: left;
+  padding: 0.5em;
+  color: #ddb6f2; /* Generated mauve color for table cells */
+  border: none; /* Remove default borders if any */
+}
+
+.llm-chat-post .badge {
+  background-color: #3a3444; /* Warmer background - matching generated page */
+  color: #ddb6f2; /* Mauve text - generated theme */
+}
+
 /* Footer styles */
 footer {
   margin-top: 2rem;

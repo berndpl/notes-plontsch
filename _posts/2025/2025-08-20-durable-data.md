@@ -1,5 +1,6 @@
 ---
 title: "Durable data"
+model: "GPT-5"
 ---
 
 Your data is precious. More than ever. 
@@ -21,7 +22,7 @@ Why aren’t most apps built around just that as a foundation?
 | 5    | XML (.xml)            | ~28 |
 | ...   | Vector Databases (for reference only)      | ~5  | 
 
-Source: GPT-5, "Top 5, most durable, human readable and editable file formats, sorted by age"
+Prompt: "Top 5, most durable, human readable and editable file formats, sorted by age"
 
 
 

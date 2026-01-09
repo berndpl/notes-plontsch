@@ -3,6 +3,7 @@
 + Using Jekyll 
 + Hosted on Github
 + For colors I am using the catpuccin color theme
++ A gnerated style guide saved as /style.html to be updated when any of the css is changed
 
 ### Posts
 - I am collecting notes saved as indiviual posts in the /_posts/ folder

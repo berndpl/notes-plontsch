@@ -1,10 +1,8 @@
 ---
-category: Chat
+model: "GPT-4o"
 ---
 
 How would your point of view be different if you were human?
-
-**GPT-4o, Chat**
 
 > Great question! If I were human, my point of view would be shaped by:
 > - **Personal experiences**: I’d have memories, emotions, biases, and life lessons that color how I see the world.
