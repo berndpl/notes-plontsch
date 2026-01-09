@@ -385,6 +385,16 @@ main img {
     border-radius: 4px;
   }
 
+/* Interactive header canvas */
+.interactive-header canvas {
+    max-width: 80%;
+    height: auto;
+    display: block;
+    margin: 1rem 0;
+    border-radius: 4px;
+    aspect-ratio: 1200/638;
+}
+
   
 
 article a,

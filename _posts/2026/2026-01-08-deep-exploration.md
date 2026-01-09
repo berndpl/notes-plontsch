@@ -1,5 +1,6 @@
 ---
 title: "Deep Exploration"
+image: /assets/images/2026/2026-01-08-deep-exploration.js
 ---
 
 In a world where design is less about crafting pixels, I believe its true value lies in looking further ahead and empowering businesses to make the best possible choices. Design was always about making futures tangible. Now it's that but at scale.
