@@ -4,8 +4,9 @@ layout: default
 <article{% if page.model %} class="llm-chat-post"{% endif %}>
     {% if page.image %}
       {% if page.image contains '.js' %}
+      {% assign canvas_id = page.image | split: '/' | last | replace: '.js', '-canvas' %}
       <div class="interactive-header">
-        <canvas id="deep-exploration-canvas"></canvas>
+        <canvas id="{{ canvas_id }}"></canvas>
       </div>
       <script src="{{ page.image | relative_url }}"></script>
       {% else %}

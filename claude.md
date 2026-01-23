@@ -5,9 +5,18 @@
 + For colors I am using the catpuccin color theme
 + A gnerated style guide saved as /style.html to be updated when any of the css is changed
 
+### Preview
+- Help me preview the blog locally
+
 ### Posts
 - I am collecting notes saved as indiviual posts in the /_posts/ folder
 - Never edit or change anything in this posts folder
+
+### Visual
+- Some notes contain animation visuals
+- check if there is a file with "_visual.md" at the end. if so create a new visual stored in the "assets/images/<year>" folder
+- make sure the visual style is consistent
+- Add the gnerated visual to the post
 
 ### Generated Pages
 
