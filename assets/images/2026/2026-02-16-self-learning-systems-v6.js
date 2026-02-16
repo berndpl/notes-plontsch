@@ -122,6 +122,173 @@
         };
         // ===== END CONFIGURATION =====
         
+        // ===== SOUND ENGINE =====
+        // Web Audio API synthesizer. Each generation shifts to a new
+        // scale/chord for musical evolution across the growth cycle.
+        // Scales progress through modes that feel like harmonic movement:
+        //   gen0: C maj pent  → gen1: D dorian pent  → gen2: E min pent
+        //   gen3: F lydian pent → gen4: G mixo pent → gen5: A min pent
+        // Three voices: pluck (appear), release (detach), thud (land).
+        // All routed through a convolver reverb for spatial depth.
+        const sound = (function() {
+            let audioCtx = null;
+            let reverbNode = null;
+            let dryGain = null;
+            let wetGain = null;
+            let muted = false;       // start unmuted
+            
+            // Evolving pentatonic scales per generation — each row has
+            // 5 notes across bass (land), mid (detach/appear), and high.
+            // Frequencies: equal-temperament, A4 = 440 Hz.
+            const generationScales = [
+                // Gen 0 — C major pentatonic (C D E G A)
+                [130.81,164.81,196.00,  261.63,329.63,392.00,  523.25,659.26,783.99],
+                // Gen 1 — D dorian pentatonic (D E G A C)
+                [146.83,164.81,196.00,  293.66,329.63,392.00,  587.33,659.26,783.99],
+                // Gen 2 — E minor pentatonic (E G A B D)
+                [164.81,196.00,220.00,  329.63,392.00,440.00,  659.26,783.99,880.00],
+                // Gen 3 — F lydian pentatonic (F G A B D)
+                [174.61,196.00,220.00,  349.23,392.00,440.00,  698.46,783.99,880.00],
+                // Gen 4 — G mixolydian pentatonic (G A B D E)
+                [196.00,220.00,246.94,  392.00,440.00,493.88,  783.99,880.00,987.77],
+                // Gen 5 — A minor pentatonic (A C D E G)
+                [220.00,261.63,293.66,  440.00,523.25,587.33,  880.00,1046.50,1174.66]
+            ];
+            
+            let currentGen = 0;
+            
+            function getScale() {
+                return generationScales[Math.min(currentGen, generationScales.length - 1)];
+            }
+            
+            // Build a synthetic impulse response (reverb tail).
+            // Generates a ~2s decaying noise burst — no external file needed.
+            function buildImpulse(ctx, duration, decay) {
+                const rate = ctx.sampleRate;
+                const len = rate * duration;
+                const buf = ctx.createBuffer(2, len, rate);
+                for (let ch = 0; ch < 2; ch++) {
+                    const data = buf.getChannelData(ch);
+                    for (let i = 0; i < len; i++) {
+                        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
+                    }
+                }
+                return buf;
+            }
+            
+            function ac() {
+                if (!audioCtx) {
+                    try {
+                        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    } catch(e) { return null; }
+                    
+                    dryGain = audioCtx.createGain();
+                    wetGain = audioCtx.createGain();
+                    reverbNode = audioCtx.createConvolver();
+                    
+                    reverbNode.buffer = buildImpulse(audioCtx, 2.2, 2.8);
+                    
+                    dryGain.gain.value = 0.55;
+                    wetGain.gain.value = 0.45;
+                    
+                    dryGain.connect(audioCtx.destination);
+                    reverbNode.connect(wetGain);
+                    wetGain.connect(audioCtx.destination);
+                }
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                return audioCtx;
+            }
+            
+            function playNote(freq, opts) {
+                const ctx = ac();
+                if (!ctx) return;
+                const now = ctx.currentTime + (opts.delay || 0);
+                
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                osc.type = opts.type || 'sine';
+                osc.frequency.setValueAtTime(freq, now);
+                
+                if (opts.slide) {
+                    osc.frequency.exponentialRampToValueAtTime(
+                        freq * opts.slide,
+                        now + (opts.attack || 0.005) + (opts.decay || 0.3)
+                    );
+                }
+                
+                const vol = opts.gain || 0.04;
+                const atk = opts.attack || 0.005;
+                const dec = opts.decay || 0.3;
+                
+                gain.gain.setValueAtTime(0.0001, now);
+                gain.gain.linearRampToValueAtTime(vol, now + atk);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + atk + dec);
+                
+                osc.connect(gain);
+                
+                if (opts.lpf) {
+                    const filter = ctx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(opts.lpf, now);
+                    filter.Q.value = opts.lpfQ || 1.5;
+                    gain.connect(filter);
+                    filter.connect(dryGain);
+                    filter.connect(reverbNode);
+                } else {
+                    gain.connect(dryGain);
+                    gain.connect(reverbNode);
+                }
+                
+                osc.start(now);
+                osc.stop(now + atk + dec + 0.05);
+            }
+            
+            let noteIdx = 0;
+            
+            return {
+                get muted() { return muted; },
+                toggle() { muted = !muted; return muted; },
+                // Advance the harmonic palette to the next generation
+                setGeneration(gen) { currentGen = gen; },
+                // Warm pluck — mid register, LP filtered, snappy decay
+                appear(delay) {
+                    if (muted) return;
+                    const sc = getScale();
+                    const i = 3 + (noteIdx++ % 3);  // mid range (indices 3–5)
+                    playNote(sc[i], {
+                        type: 'sine', gain: 0.035,
+                        attack: 0.002, decay: 0.16,
+                        delay: delay || 0,
+                        lpf: 800, lpfQ: 2.0
+                    });
+                },
+                // Softer release — mid register, gentle pitch drop
+                detach(delay) {
+                    if (muted) return;
+                    const sc = getScale();
+                    const i = 3 + Math.floor(Math.random() * 3);
+                    playNote(sc[i], {
+                        type: 'sine', gain: 0.03,
+                        attack: 0.008, decay: 0.4,
+                        delay: delay || 0, slide: 0.9,
+                        lpf: 1200
+                    });
+                },
+                // Low thud — bass register, very short
+                land() {
+                    if (muted) return;
+                    const sc = getScale();
+                    const i = Math.floor(Math.random() * 3);
+                    playNote(sc[i], {
+                        type: 'sine', gain: 0.04,
+                        attack: 0.002, decay: 0.12,
+                        lpf: 400
+                    });
+                }
+            };
+        })();
+        
         // ===== STATE =====
         let animationTime = 0;
         let nodes = [];
@@ -249,6 +416,7 @@
                         this.x = newX + (Math.random() - 0.5) * 10;
                         this.opacity = 0.6;
                         this.size = config.nodeSize;
+                        sound.land();
                     } else {
                         this.y = newY;
                         this.x = newX;
@@ -335,6 +503,7 @@
                         seedNode.opacity = 0;
                         nodes.push(seedNode);
                         rootNode = seedNode;
+                        sound.appear();
                     }
                     const eased = easeOutCubic(p);
                     seedNode.y = seedStartY + (startY - seedStartY) * eased;
@@ -352,6 +521,9 @@
                 let leafNodes = [];
                 let leafStems = [];
                 let tipAtStart = null;
+                
+                // Shift the harmonic palette for this generation
+                sound.setGeneration(gen);
                 
                 colorIdx++;
                 const thisColorIdx = colorIdx;
@@ -374,6 +546,7 @@
                         topNode = new GrowthNode(fromX, fromY, thisColorIdx);
                         topNode.opacity = 0;
                         nodes.push(topNode);
+                        sound.appear();
                     }
                     topNode.y = fromY + (toY - fromY) * easeOutCubic(p);
                     topNode.x = fromX;
@@ -412,6 +585,8 @@
                             stems.push(stem);
                             leafStems.push(stem);
                         }
+                        // Staggered pluck chord — one note per leaf
+                        leafNodes.forEach((_, li) => sound.appear(li * 0.06));
                     }
                     
                     leafNodes.forEach((leaf, i) => {
@@ -476,6 +651,8 @@
                                 entry.subStems.push(subStem);
                             }
                             
+                            // Staggered sub-leaf pluck
+                            entry.subNodes.forEach((_, si) => sound.appear(si * 0.05));
                             subLeafData.push(entry);
                         });
                     }
@@ -525,6 +702,7 @@
                                 const idx = nodes.indexOf(leaf);
                                 if (idx >= 0) nodes.splice(idx, 1);
                                 leafStems[i]._fading = true;
+                                sound.detach(staggerDelay);
                             }
                         });
                         
@@ -536,6 +714,7 @@
                                 fallingLeaves.push(fl);
                                 const idx = nodes.indexOf(sn);
                                 if (idx >= 0) nodes.splice(idx, 1);
+                                sound.detach(staggerDelay);
                             });
                             entry.subStems.forEach(s => { s._fading = true; });
                         });
@@ -575,11 +754,12 @@
             seq.add(0.8, (p, dt) => {
                 if (!treeFallStarted) {
                     treeFallStarted = true;
-                    nodes.forEach(n => {
+                    nodes.forEach((n, ni) => {
                         if (n === seedNode) return;
                         const stagger = Math.random() * 0.4;
                         const fl = new FallingLeaf(n, true, stagger);
                         fallingLeaves.push(fl);
+                        sound.detach(stagger + ni * 0.03);
                     });
                     nodes = seedNode ? [seedNode] : [];
                 }
