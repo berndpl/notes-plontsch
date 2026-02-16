@@ -1,15 +1,15 @@
 ---
 title: "Self-Learning Systems"
-image: /assets/images/2026/2026-02-16-self-learning-systems-v2.js
+image: /assets/images/2026/2026-02-16-self-learning-systems-v6.js
 ---
 
-Every new system will eventually become a self-learning system—one with greater awareness of what it’s capable of and where its boundaries lie, the type of value it creates for you, able to reflect on what worked and what didn’t.
+Every new system will eventually become a self-learning system. It will have awareness of what it’s capable of and where its boundaries lie, the type of value it creates for you, able to reflect on what worked and what didn’t.
 
 ### This is new.
 
-We’re already used to tools helping us with planning and doing things in varying degrees. But reflection itself used to be uniquely human. And while LLMs are helping us sort things out, identify patterns, and make qualified guesses, the last mile still remains ours: the feelings we feel and the feelings we strive to evoke.
+We’re already used to tools helping us with planning and doing things in varying degrees. But true reflection and a sense of awareness itself used to be uniquely human. And while LLMs are helping us sort things out, identify patterns, and make qualified guesses, the last mile still remains ours: the feelings we feel and the feelings we strive to evoke.
 
-So far, we’ve been focusing on how easily existing experiences can be one-shotted and rebuilt with minimal effort. I’m more interested in the qualitatively new experiences we’re now able to create.
+So far, we’ve been focusing on how easily existing functionality can be one-shotted and rebuilt with minimal effort. I’m more interested in the qualitatively new experiences we’re now able to create.
 
 ### Don’t Write Off Apps Just Yet
 
@@ -19,6 +19,6 @@ Adding self-learning capabilities is an opportunity for each app to reimagine it
 
 ### Getting Started
 
-The first step is deceptively simple: tell the LLM not just to do things, but also instruct it to make notes about what it learns along the way. Start with a simple `learnins.md` and take it from there.
+The first step is deceptively simple: tell the LLM not just to do things, but also instruct it to make notes about what it learns along the way. Start with a simple `learnings.md` and take it from there.
 
 You’ll be delighted to experience how actions improve on efficiency and relatability once they are build on shared practical insight.

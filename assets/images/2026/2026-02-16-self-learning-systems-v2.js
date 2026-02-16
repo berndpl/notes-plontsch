@@ -205,6 +205,9 @@
         }
         
         // ===== FALLING LEAF =====
+        // Ground level — leaves land and rest here
+        const groundY = canvas.height - 30;
+        
         class FallingLeaf {
             constructor(node) {
                 this.startX = node.x;
@@ -216,29 +219,40 @@
                 this.size = node.size;
                 this.opacity = 1;
                 this.elapsed = 0;
-                this.done = false;
+                this.landed = false;
+                this.done = false; // Never true — leaves persist
                 this.driftDir = Math.random() > 0.5 ? 1 : -1;
-                this.driftPhase = Math.random() * Math.PI * 2;
+                // Start driftPhase at 0 so initial position matches
+                // the node's exact position (sin(0) = 0, no jump)
+                this.driftPhase = 0;
+                // Settled position (set when landing)
+                this.landedX = node.x;
+                this.landedY = groundY;
+                this.landedOpacity = 0.5; // Dimmer once settled
             }
             
             update(dt) {
+                if (this.landed) return; // No further movement once settled
+                
                 this.elapsed += dt;
                 const t = this.elapsed;
                 
-                // Gravity
-                this.y = this.startY + 0.5 * config.fallGravity * t * t;
+                // Gravity — accelerating downward
+                const newY = this.startY + 0.5 * config.fallGravity * t * t;
                 
-                // Horizontal drift
-                this.x = this.startX + this.driftDir * Math.sin(t * config.fallDriftFreq + this.driftPhase) * config.fallDrift;
+                // Horizontal drift — starts from 0, so continuous with detach point
+                const newX = this.startX + this.driftDir * Math.sin(t * config.fallDriftFreq) * config.fallDrift;
                 
-                // Fade out
-                const fadeStart = config.fallDuration * 0.4;
-                if (this.elapsed > fadeStart) {
-                    this.opacity = Math.max(0, 1 - (this.elapsed - fadeStart) / (config.fallDuration - fadeStart));
-                }
-                
-                if (this.y > canvas.height + 20 || this.opacity <= 0) {
-                    this.done = true;
+                // Check if leaf has reached the ground
+                if (newY >= groundY) {
+                    this.landed = true;
+                    this.y = groundY;
+                    this.x = newX;
+                    this.landedX = this.x;
+                    this.opacity = this.landedOpacity;
+                } else {
+                    this.y = newY;
+                    this.x = newX;
                 }
             }
             
@@ -247,9 +261,9 @@
                 if (op <= 0) return;
                 
                 ctx.fillStyle = this.color;
-                ctx.globalAlpha = op * 0.7;
+                ctx.globalAlpha = op;
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size * 0.9, 0, Math.PI * 2);
+                ctx.arc(this.x, this.y, this.size * 0.85, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.globalAlpha = 1;
             }
@@ -476,7 +490,6 @@
             nodes.forEach(n => n.update(dt));
             
             fallingLeaves.forEach(l => l.update(dt));
-            fallingLeaves = fallingLeaves.filter(l => !l.done);
         }
         
         // ===== DRAW =====
