@@ -1,5 +1,6 @@
 ---
 title: "Self-Learning Systems"
+image: /assets/images/2026/2026-02-16-self-learning-systems.js
 ---
 
 Every new system will eventually become a self-learning system—one with greater awareness of what it’s capable of and where its boundaries lie, the type of value it creates for you, able to reflect on what worked and what didn’t.
@@ -18,6 +19,6 @@ Adding self-learning capabilities is an opportunity for each app to reimagine it
 
 ### Getting Started
 
-The first step is deceptively simple: tell the LLM not just to do things, but also instruct it to make notes about what it learns along the way. Start with a simple `learning.md` and take it from there.
+The first step is deceptively simple: tell the LLM not just to do things, but also instruct it to make notes about what it learns along the way. Start with a simple `learnins.md` and take it from there.
 
 You’ll be delighted to experience how actions improve on efficiency and relatability once they are build on shared practical insight.
