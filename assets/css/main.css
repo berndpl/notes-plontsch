@@ -317,6 +317,19 @@ main p:last-child {
   margin-bottom: 0;
 }
 
+/* Inline code styling for posts
+   Uses Catppuccin surface0 background with slightly brighter text
+   for subtle distinction from surrounding prose */
+article code,
+main code {
+  background-color: #313244; /* Catppuccin Mocha surface0 */
+  color: #cdd6f4; /* Catppuccin Mocha text - full opacity for emphasis */
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.95em;
+}
+
 article ul,
 main ul {
   list-style-type: disc;
