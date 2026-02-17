@@ -1,26 +1,25 @@
 ---
 title: "Self-Learning Systems"
-image: /assets/images/2026/2026-02-16-self-learning-systems.js
+image: /assets/images/2026/2026-02-16-self-learning-systems-v6.js
 ---
 
-Every new system will eventually become a self-learning system. It will have awareness of what it’s capable of and where its boundaries lie, the type of value it creates for you, able to reflect on what worked and what didn’t.
+Every new system will eventually become a self-learning system. It will have awareness of what it's capable of and where its boundaries lie, what value it creates for you, and what worked versus what didn't.
 
 ### This is new.
 
-We’re already used to tools helping us with planning and doing things in varying degrees. But true reflection and a sense of awareness itself used to be uniquely human. 
+We're already used to tools helping us with planning and doing things in varying degrees. But reflection, not just evaluation and situational awareness, used to be uniquely human. LLMs are helping us sort things out, identify patterns, and make qualified guesses. Yet, the last mile remains ours: the feelings we feel and the feelings we strive to evoke.
 
-But while LLMs are helping us sort things out, identify patterns, and make qualified guesses, the last mile still remains ours: the feelings we feel and the feelings we strive to evoke.
+That boundary matters. A system can optimize efficiency, but it cannot decide what's worth optimizing for. It can surface patterns, but it cannot tell you whether those patterns align with what you actually care about. This is the in between space where human judgment remains irreplaceable and intentional design matters.
 
-So far, we’ve been blinded by how easily existing functionality can be one-shotted and rebuilt with minimal effort. I’m more interested in the qualitatively new experiences we’re now able to create.
 
 ### Don’t Write Off Apps Just Yet
 
-Apps represent a space that provides context, stores data, and makes intuitive use of input modalities—none of which a pure conversational interface fully replaces just yet.
+Where the new and old meet. There's good reason for being hysterical about how easily existing functionality can be one-shotted or rebuilt with now minimal effort. At the same time I'm even more interested in genuinely new experiences we're now able to create.
 
-Adding self-learning capabilities is an opportunity for each app to reimagine itself: allow it to adapt to its user, become easier to use, broaden its audience, help users get more out of every interaction, create value that aligns with users’ aspirations.
+Apps represent unique spaces that provide context, store data with a purpose, and makes intuitive use of input modalities. It's a powerful package. Adding self-learning capabilities lets apps reimagine themselves: adapt to its user, become easier to use over time, broaden its audience, and create value that aligns with your actual aspirations rather than generic defaults.
 
 ### Getting Started
 
-The first step is deceptively simple: tell the LLM not just to do things, but also instruct it to make notes about what it learns along the way. Start with a simple `learnings.md` and take it from there.
+The first step is deceptively simple: tell the LLM not just to do things, but to document what it learns along the way in saved to a simple `learnings.md` file. It might capture patterns like "user prefers detailed summaries" or "this workflow works better in the morning." Small observations that compound. Observations that don't remove your need to reflect but that will trigger just that.
 
-It's delightful to experience how actions improve on efficiency and relatability once they are build on shared practical insight.
+You'll be delighted to experience how actions become more efficient and relatable when built on practical, shared insight.
