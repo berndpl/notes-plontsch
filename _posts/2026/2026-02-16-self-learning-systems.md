@@ -15,10 +15,10 @@ That boundary matters. A system can optimize efficiency, but it cannot decide wh
 
 Where the new and old meet. There's good reason for being hysterical about how easily existing functionality can be one-shotted or rebuilt with now minimal effort. At the same time I'm even more interested in genuinely new experiences we're now able to create.
 
-Apps represent unique spaces that provide context, store data with a purpose, and make intuitive use of input modalities. It's a powerful package. Adding self-learning capabilities lets apps reimagine themselves: adapt to its user, become easier to use over time, broaden its audience, and create value that aligns with your actual aspirations rather than generic defaults.
+Apps represent unique spaces that provide context, store data with a purpose, and make intuitive use of input modalities. It's a powerful package. Adding self-learning capabilities lets apps reimagine themselves: adapt to the people using them, become easier to use over time, broaden their audience, and create value that aligns with your actual aspirations rather than generic defaults.
 
 ### Getting Started
 
-The first step is deceptively simple: tell the LLM not just to do things, but to document what it learns along the way in a `learnings.md` file. At first, it might just capture barely-useful patterns like "user prefers detailed summaries" or "this workflow works better in the morning". Small observations but ready to compound and grow over time. Observations that don't remove your need to reflect but that will trigger just that.
+The first step is deceptively simple: tell the LLM not just to do things, but to document what it learns along the way in a `learnings.md` file. At first, it might just capture barely-useful patterns like "user prefers detailed summaries" or "this workflow works better in the morning". Small observations able to compound over time. Observations that don't remove your need to reflect but that will trigger just that.
 
 You'll be delighted to experience how actions become more efficient and relatable when built on practical, shared insight.
