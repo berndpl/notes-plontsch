@@ -18,6 +18,23 @@
 - make sure the visual style is consistent
 - Add the gnerated visual to the post
 
+### Visual Style
+- Canvas-based JavaScript visualizations
+- Catppuccin Mocha color palette (base: #1e1e2e, text: #cdd6f4, overlay0: #6c7086)
+- 11 pastel accent colors: lavender, blue, sapphire, sky, teal, green, yellow, peach, mauve, pink, rosewater
+- Post header visuals render at 1200×638
+- Node size: 4px in post visuals, 2.5px in homepage graph
+- No glow effects, clean dots, subtle connections (0.04–0.07 opacity)
+- Sine-based organic movement, deterministic breathing
+- Font: Inconsolata monospace throughout
+- Toast overlays: top-left, Inconsolata 1rem, #6c7086, aria-live="polite"
+
+### Homepage Post Graph
+- Interactive circular graph in assets/js/post-graph.js
+- Nodes colored by year-theme, cycle through orderings (Timeline, Themes, Alphabetical, Seasonal, Length, Scatter, Density)
+- Tap to trigger next transition, toast shows state name
+- Transitions use smoothstep easing, no abrupt jumps
+
 ### Generated Pages
 
 Everytime I add a new posts the pages for questions and insights need to be re-generated.
