@@ -1,6 +1,7 @@
 ---
 title: "Self-Learning Systems"
 image: /assets/images/2026/2026-02-16-self-learning-systems.js
+social-teaser: /assets/images/2026/2026-02-16-self-learning-systems.png
 ---
 
 Every new system will eventually become a self-learning system. It will have awareness of what it's capable of and where its boundaries lie, what value it creates for you, and what worked versus what didn't.
