@@ -1,7 +1,7 @@
-// Self-Learning Systems - Adaptive Network Visualization
-// Nodes explore randomly, gradually self-organize into clusters,
-// connections strengthen as patterns emerge, then dissolve and repeat.
-// Represents: exploration → pattern recognition → adaptation → reset.
+// Self-Learning Systems v6 - Sub-leaf Branching & Dissolve
+// Some leaves grow sub-leaves before falling. Fallen leaves dissolve
+// into the ground. New cycle starts quickly.
+// Represents: explore → branch → sub-explore → shed → nourish → grow again.
 (function() {
     'use strict';
     
@@ -18,11 +18,10 @@
             return;
         }
         
-        // Set canvas size to match header images (1200x638)
         canvas.width = 1200;
         canvas.height = 638;
         
-        // Color scheme matching the site (Catppuccin Mocha)
+        // Catppuccin Mocha colors
         const colors = {
             lavender: '#b4befe',
             blue: '#89b4fa',
@@ -43,531 +42,772 @@
         };
         
         const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
+        const groundY = canvas.height - 35;
         
-        // Node color palette
-        const nodeColorPalette = [
-            colors.lavender,
-            colors.blue,
-            colors.sapphire,
-            colors.sky,
-            colors.teal,
-            colors.green,
-            colors.yellow,
-            colors.peach,
-            colors.mauve,
-            colors.pink,
-            colors.rosewater
+        const palette = [
+            colors.lavender, colors.blue, colors.sapphire,
+            colors.sky, colors.teal, colors.green,
+            colors.yellow, colors.peach, colors.mauve,
+            colors.pink, colors.rosewater
         ];
         
-        // ===== CONFIGURATION =====
-        const config = {
-            numNodes: 28,                // Total nodes in the system
-            nodeSize: 4,                 // Base node radius
-            connectionDistance: 140,     // Max distance for connections
-            connectionOpacity: 0.12,     // Base opacity of connection lines
-            
-            // Phase durations (seconds)
-            exploreDuration: 4.0,        // Random wandering phase
-            learnDuration: 5.0,          // Nodes self-organize into clusters
-            settledDuration: 2.5,        // Resting in learned positions
-            fadeDuration: 2.0,           // Fade out before reset
-            restDuration: 1.0,           // Pause before next cycle
-            
-            // Movement
-            exploreSpeed: 0.6,           // Speed during exploration
-            driftSpeed: 0.15,            // Gentle drift when settled
-            attractionStrength: 0.012,   // How strongly nodes pull toward targets
-            repulsionDistance: 30,        // Minimum distance between nodes
-            repulsionStrength: 0.8,      // How strongly close nodes push apart
-            
-            // Clusters
-            numClusters: 4,              // Number of clusters to form
-            clusterSpread: 60,           // Radius of each cluster
-            clusterRegionRadius: 200,    // How far cluster centers are from canvas center
-            
-            // Learning trail
-            trailLength: 8,              // Number of past positions to keep
-            trailOpacity: 0.06           // Opacity of trail dots
-        };
-        // ===== END CONFIGURATION =====
-        
-        // ===== AUDIO ENGINE =====
-        // Simple pluck synth using Web Audio API.
-        // A short oscillator burst with fast exponential decay
-        // simulates a plucked string. Pentatonic scale keeps
-        // random pitches consonant and pleasant.
-        //
-        // Browsers require a user gesture (click/tap/key) before
-        // AudioContext can produce sound. We lazily create the context
-        // on the first interaction and resume it if suspended.
-        let audioCtx = null;
-        let audioReady = false;
-        
-        // Pentatonic scale frequencies (C4 pentatonic + octave above)
-        // Chosen for musical consonance — any random pick sounds good
-        const pluckFreqs = [
-            261.63, 293.66, 329.63, 392.00, 440.00,  // C4 D4 E4 G4 A4
-            523.25, 587.33, 659.25, 783.99, 880.00    // C5 D5 E5 G5 A5
-        ];
-        
-        function initAudio() {
-            if (audioCtx) {
-                // Context exists but may be suspended — try to resume
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume().then(() => { audioReady = true; });
-                }
-                return;
-            }
-            try {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                if (audioCtx.state === 'running') {
-                    audioReady = true;
-                } else {
-                    audioCtx.resume().then(() => { audioReady = true; });
-                }
-            } catch (e) {
-                console.warn('Self-Learning Systems: Web Audio not available');
-            }
-        }
-        
-        // Listen for the first user gesture to unlock audio
-        function unlockAudio() {
-            initAudio();
-            // Remove listeners once audio is initialised
-            document.removeEventListener('click', unlockAudio);
-            document.removeEventListener('touchstart', unlockAudio);
-            document.removeEventListener('keydown', unlockAudio);
-        }
-        document.addEventListener('click', unlockAudio);
-        document.addEventListener('touchstart', unlockAudio);
-        document.addEventListener('keydown', unlockAudio);
-        
-        /**
-         * Play a single pluck note.
-         * @param {number} freq  - Frequency in Hz
-         * @param {number} delay - Seconds from now to schedule the note
-         * @param {number} vol   - Peak gain (0–1)
-         */
-        function pluck(freq, delay, vol) {
-            if (!audioCtx) return;
-            const t = audioCtx.currentTime + delay;
-            
-            // Oscillator: triangle wave gives a softer, string-like tone
-            const osc = audioCtx.createOscillator();
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(freq, t);
-            
-            // Gain envelope: quick attack, fast exponential decay → pluck feel
-            const gain = audioCtx.createGain();
-            gain.gain.setValueAtTime(vol, t);
-            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
-            
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            
-            osc.start(t);
-            osc.stop(t + 0.4);
-        }
-        
-        /**
-         * Trigger a sequence of pluck notes — one at a time.
-         * Each note is spaced far enough apart (~0.4s+) so
-         * the previous one has fully decayed before the next starts.
-         */
-        function playEmergeSounds() {
-            if (!audioCtx || !audioReady) return;
-            
-            // Play 5-8 plucks sequentially, each after the prior decays
-            const count = 5 + Math.floor(Math.random() * 4);
-            const spacing = 0.4; // Seconds between notes (matches decay time)
-            for (let i = 0; i < count; i++) {
-                const freq = pluckFreqs[Math.floor(Math.random() * pluckFreqs.length)];
-                const delay = i * spacing;
-                const vol = 0.06 + Math.random() * 0.04;
-                pluck(freq, delay, vol);
-            }
-        }
-        // ===== END AUDIO ENGINE =====
-        
-        // Animation state
-        let animationTime = 0;
-        let phase = 'explore'; // 'explore', 'learn', 'settled', 'fading', 'rest'
-        let phaseStartTime = 0;
-        let nodes = [];
-        let clusterCenters = [];
-        let cycleCount = 0;
-        
-        // Parse hex color to RGB
         function hexToRgb(hex) {
-            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-            return result ? {
-                r: parseInt(result[1], 16),
-                g: parseInt(result[2], 16),
-                b: parseInt(result[3], 16)
-            } : { r: 180, g: 190, b: 254 };
+            const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return m ? { r: parseInt(m[1], 16), g: parseInt(m[2], 16), b: parseInt(m[3], 16) }
+                     : { r: 180, g: 190, b: 254 };
         }
         
-        // Easing functions
+        function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+        function easeInCubic(t) { return t * t * t; }
         function easeInOutCubic(t) {
             return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
         }
         
-        function easeOutQuad(t) {
-            return 1 - (1 - t) * (1 - t);
+        // ===== CONFIGURATION =====
+        const config = {
+            nodeSize: 4,
+            stemSegmentLength: 55,
+            splitLength: 50,
+            
+            // Sub-leaf branching — smaller secondary branches off non-surviving leaves
+            subLeafSplitLength: 28,     // shorter than main branches
+            subLeafChance: 0.35,        // probability a non-surviving leaf grows sub-leaves
+            subLeafCount: [2, 3],       // min/max sub-leaves per branching leaf
+            subLeafGrowDuration: 0.6,   // how long sub-leaves take to sprout
+            subLeafPause: 0.25,         // pause after sub-leaves appear before everything falls
+            
+            // Starting timing (seconds) — these get faster each generation
+            baseStemGrowDuration: 1.2,
+            baseSplitDuration: 0.9,
+            basePauseAfterSplit: 0.5,
+            baseFallDuration: 2.0,
+            basePauseAfterFall: 0.3,
+            
+            // Speed multiplier: each generation multiplies duration by this
+            // (< 1 means faster — aggressive ramp-up)
+            speedUpFactor: 0.6,
+            
+            // Seed rise
+            seedRiseDuration: 1.5,
+            
+            // Split counts: how many leaves per generation [gen0, gen1, gen2, ...]
+            splitCounts: [2, 3, 3, 4, 5, 6],
+            
+            // How many grow-split-fall cycles
+            maxGenerations: 6,
+            
+            // Falling — mostly straight down
+            fallGravity: 100,
+            fallDrift: 8,
+            fallDriftFreq: 2.2,
+            
+            // Dissolve — landed leaves fade into the ground
+            dissolveDuration: 3.0,
+            
+            // Fade and reset
+            restDuration: 1.0,
+            
+            // Stem
+            stemOpacity: 0.15,
+            stemWidth: 1.2,
+            
+            // Glow
+            glowRadius: 14,
+            glowOpacity: 0.08,
+            
+            // Wind sway — gentle oscillation like grass in a breeze
+            windAmplitude: 6,
+            windFreq: 0.4,
+            windFreq2: 0.17
+        };
+        // ===== END CONFIGURATION =====
+        
+        // ===== SOUND ENGINE =====
+        // Web Audio API synthesizer using a C-major pentatonic scale.
+        // Every event picks notes from the same scale, so simultaneous
+        // sounds naturally form consonant chords.
+        // Three voices: pluck (appear), release (detach), thud (land).
+        //
+        // Sound starts muted. Tapping anywhere on the page toggles
+        // sound on/off and shows a brief "sound on" / "sound off" toast
+        // styled to match blockquote body text (Inconsolata, #6c7086).
+        let soundEnabled = false;
+        
+        // Toast overlay — positioned on top of the canvas container
+        // so text sizing stays consistent with the page's CSS.
+        // Uses blockquote body style: Inconsolata, overlay0 (#6c7086).
+        let toastTimeout = null;
+        
+        const toastEl = document.createElement('div');
+        toastEl.setAttribute('aria-live', 'polite');
+        Object.assign(toastEl.style, {
+            position: 'absolute',
+            top: '1rem',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            fontFamily: "'Inconsolata', monospace",
+            fontSize: '1rem',
+            color: '#6c7086',
+            pointerEvents: 'none',
+            opacity: '0',
+            transition: 'opacity 0.3s ease',
+            zIndex: '1'
+        });
+        
+        // Place inside the canvas's parent container
+        const header = canvas.parentElement;
+        if (header) {
+            header.style.position = 'relative';
+            header.appendChild(toastEl);
         }
         
-        // Node class
-        class Node {
-            constructor(index) {
-                this.index = index;
-                this.x = Math.random() * canvas.width * 0.7 + canvas.width * 0.15;
-                this.y = Math.random() * canvas.height * 0.7 + canvas.height * 0.15;
-                this.vx = (Math.random() - 0.5) * config.exploreSpeed;
-                this.vy = (Math.random() - 0.5) * config.exploreSpeed;
+        function showToast(text, duration) {
+            toastEl.textContent = text;
+            toastEl.style.opacity = '1';
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toastEl.style.opacity = '0';
+            }, duration || 1200);
+        }
+        
+        function toggleSound(e) {
+            if (e.target.closest('a, button')) return;
+            soundEnabled = !soundEnabled;
+            showToast(soundEnabled ? 'unmuted' : 'muted');
+            // Eagerly init AudioContext on first unmute (user gesture)
+            // so subsequent notes play without resume() latency.
+            if (soundEnabled) sound.init();
+        }
+        
+        document.addEventListener('click', toggleSound);
+        
+        // Show initial hint so users know they can click
+        showToast('tap to unmute', 3000);
+        const sound = (function() {
+            let audioCtx = null;
+            
+            // C major pentatonic — C D E G A — across three octaves
+            // Source: equal-temperament tuning, A4 = 440 Hz
+            const scale = [
+                130.81, 146.83, 164.81, 196.00, 220.00,   // C3–A3  (land)
+                261.63, 293.66, 329.63, 392.00, 440.00,   // C4–A4  (detach)
+                523.25, 587.33, 659.26, 783.99, 880.00    // C5–A5  (appear)
+            ];
+            
+            // Create and resume AudioContext once — called on first
+            // user interaction (unmute click) to satisfy browser policy.
+            // After that, playNote skips the resume() overhead entirely.
+            function ensureCtx() {
+                if (!audioCtx) {
+                    try {
+                        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    } catch(e) { return null; }
+                }
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                return audioCtx;
+            }
+            
+            function playNote(freq, opts) {
+                if (!audioCtx || audioCtx.state !== 'running') return;
+                const now = audioCtx.currentTime + (opts.delay || 0);
                 
-                // Visual properties
-                this.colorIndex = Math.floor(Math.random() * nodeColorPalette.length);
-                this.color = nodeColorPalette[this.colorIndex];
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = opts.type || 'triangle';
+                osc.frequency.setValueAtTime(freq, now);
+                
+                // Optional pitch slide for detach voice
+                if (opts.slide) {
+                    osc.frequency.exponentialRampToValueAtTime(
+                        freq * opts.slide,
+                        now + (opts.attack || 0.005) + (opts.decay || 0.3)
+                    );
+                }
+                
+                const vol = opts.gain || 0.04;
+                const atk = opts.attack || 0.005;
+                const dec = opts.decay || 0.3;
+                
+                // Start at target volume immediately for near-zero latency
+                gain.gain.setValueAtTime(vol, now);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + atk + dec);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.start(now);
+                osc.stop(now + atk + dec + 0.05);
+            }
+            
+            let noteIdx = 0;
+            
+            return {
+                // Called on unmute to pre-warm AudioContext
+                init() { ensureCtx(); },
+                
+                // Bright pluck — high register, short decay
+                appear(delay) {
+                    if (!soundEnabled) return;
+                    const i = 10 + (noteIdx++ % 5);
+                    playNote(scale[i], {
+                        type: 'triangle', gain: 0.03,
+                        attack: 0.003, decay: 0.22, delay: delay || 0
+                    });
+                },
+                // Softer release — mid register, gentle pitch drop
+                detach(delay) {
+                    if (!soundEnabled) return;
+                    const i = 5 + Math.floor(Math.random() * 5);
+                    playNote(scale[i], {
+                        type: 'sine', gain: 0.035,
+                        attack: 0.008, decay: 0.35,
+                        delay: delay || 0, slide: 0.92
+                    });
+                },
+                // Low thud — bass register, very short, instant attack
+                land() {
+                    if (!soundEnabled) return;
+                    const i = Math.floor(Math.random() * 3);
+                    playNote(scale[i], {
+                        type: 'sine', gain: 0.04,
+                        attack: 0.001, decay: 0.10
+                    });
+                }
+            };
+        })();
+        
+        // ===== STATE =====
+        let animationTime = 0;
+        let nodes = [];
+        let stems = [];
+        let fallingLeaves = [];
+        let currentTip = null;
+        let sequencer = null;
+        let globalOpacity = 1;
+        let rootNode = null;
+        
+        // Wind skew helper — returns the current horizontal offset
+        // for a point at the given y coordinate due to wind sway.
+        function getWindXOffset(y) {
+            const windOffset = Math.sin(animationTime * Math.PI * 2 * config.windFreq)
+                             * config.windAmplitude
+                             + Math.sin(animationTime * Math.PI * 2 * config.windFreq2 + 1.3)
+                             * config.windAmplitude * 0.5;
+            const skew = windOffset / (canvas.height * 0.6);
+            return skew * (y - groundY);
+        }
+        
+        // ===== NODE =====
+        class GrowthNode {
+            constructor(x, y, colorIndex) {
+                this.x = x;
+                this.y = y;
+                this.color = palette[colorIndex % palette.length];
                 this.rgb = hexToRgb(this.color);
-                this.opacity = 1;
+                this.opacity = 0;
                 this.size = config.nodeSize;
-                
-                // Learning state
-                this.targetX = this.x;
-                this.targetY = this.y;
-                this.clusterIndex = -1;
-                this.learned = 0; // 0 to 1, how "learned" this node is
-                
-                // Trail
-                this.trail = [];
-                
-                // Wander angle for organic movement
-                this.wanderAngle = Math.random() * Math.PI * 2;
-                this.wanderSpeed = 0.5 + Math.random() * 0.5;
+                this._falling = false;
+                this._surviving = false;
             }
             
-            recordTrail() {
-                this.trail.push({ x: this.x, y: this.y });
-                if (this.trail.length > config.trailLength) {
-                    this.trail.shift();
-                }
-            }
-        }
-        
-        // Generate random cluster positions for this cycle
-        function generateClusters() {
-            clusterCenters = [];
-            const angleOffset = Math.random() * Math.PI * 2;
+            update(dt) {}
             
-            for (let i = 0; i < config.numClusters; i++) {
-                const angle = angleOffset + (Math.PI * 2 / config.numClusters) * i;
-                // Add some randomness to cluster positions
-                const radius = config.clusterRegionRadius * (0.7 + Math.random() * 0.6);
-                clusterCenters.push({
-                    x: centerX + Math.cos(angle) * radius + (Math.random() - 0.5) * 60,
-                    y: centerY + Math.sin(angle) * radius + (Math.random() - 0.5) * 40
-                });
-            }
-        }
-        
-        // Assign nodes to clusters and set target positions
-        function assignClusters() {
-            // Assign each node to a cluster
-            nodes.forEach((node, i) => {
-                node.clusterIndex = i % config.numClusters;
-                const cluster = clusterCenters[node.clusterIndex];
+            draw() {
+                const op = this.opacity * globalOpacity;
+                if (op <= 0) return;
                 
-                // Target position within cluster, with some spread
-                const angle = Math.random() * Math.PI * 2;
-                const dist = Math.random() * config.clusterSpread;
-                node.targetX = cluster.x + Math.cos(angle) * dist;
-                node.targetY = cluster.y + Math.sin(angle) * dist;
-            });
-        }
-        
-        // Initialize nodes
-        function initNodes() {
-            nodes = [];
-            for (let i = 0; i < config.numNodes; i++) {
-                nodes.push(new Node(i));
-            }
-            generateClusters();
-            assignClusters();
-            phase = 'explore';
-            phaseStartTime = animationTime;
-            cycleCount++;
-            
-            // Pluck sounds when nodes emerge into the system
-            playEmergeSounds();
-        }
-        
-        // Keep nodes within bounds with soft boundary
-        function constrainToBounds(node) {
-            const margin = 40;
-            const bounce = 0.02;
-            
-            if (node.x < margin) { node.vx += bounce; }
-            if (node.x > canvas.width - margin) { node.vx -= bounce; }
-            if (node.y < margin) { node.vy += bounce; }
-            if (node.y > canvas.height - margin) { node.vy -= bounce; }
-        }
-        
-        // Apply repulsion between close nodes
-        function applyRepulsion(node) {
-            nodes.forEach(other => {
-                if (other === node) return;
-                const dx = node.x - other.x;
-                const dy = node.y - other.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                
-                if (dist < config.repulsionDistance && dist > 0) {
-                    const force = (config.repulsionDistance - dist) / config.repulsionDistance * config.repulsionStrength;
-                    node.vx += (dx / dist) * force * 0.01;
-                    node.vy += (dy / dist) * force * 0.01;
-                }
-            });
-        }
-        
-        // Update explore phase - random wandering
-        function updateExplore(node, deltaTime) {
-            // Organic wandering using angle variation
-            node.wanderAngle += (Math.random() - 0.5) * 1.5 * deltaTime;
-            node.vx += Math.cos(node.wanderAngle) * config.exploreSpeed * deltaTime * 0.3;
-            node.vy += Math.sin(node.wanderAngle) * config.exploreSpeed * deltaTime * 0.3;
-            
-            // Damping
-            node.vx *= 0.98;
-            node.vy *= 0.98;
-            
-            // Speed limit
-            const speed = Math.sqrt(node.vx * node.vx + node.vy * node.vy);
-            const maxSpeed = config.exploreSpeed * 1.5;
-            if (speed > maxSpeed) {
-                node.vx = (node.vx / speed) * maxSpeed;
-                node.vy = (node.vy / speed) * maxSpeed;
-            }
-        }
-        
-        // Update learn phase - attract toward targets
-        function updateLearn(node, deltaTime, progress) {
-            // Attraction toward target position, increasing with progress
-            const attraction = config.attractionStrength * easeInOutCubic(progress);
-            const dx = node.targetX - node.x;
-            const dy = node.targetY - node.y;
-            
-            node.vx += dx * attraction;
-            node.vy += dy * attraction;
-            
-            // Increase damping as learning progresses
-            const damping = 0.96 - progress * 0.06;
-            node.vx *= damping;
-            node.vy *= damping;
-            
-            // Update learned state
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            node.learned = Math.min(1, 1 - dist / 300);
-        }
-        
-        // Update settled phase - gentle drift
-        function updateSettled(node, deltaTime) {
-            // Very gentle oscillation around target
-            const dx = node.targetX - node.x;
-            const dy = node.targetY - node.y;
-            
-            node.vx += dx * 0.003;
-            node.vy += dy * 0.003;
-            node.vx *= 0.95;
-            node.vy *= 0.95;
-            
-            node.learned = 1;
-        }
-        
-        // Main update
-        function update(deltaTime) {
-            animationTime += deltaTime;
-            
-            const phaseElapsed = animationTime - phaseStartTime;
-            
-            switch (phase) {
-                case 'explore':
-                    if (phaseElapsed >= config.exploreDuration) {
-                        phase = 'learn';
-                        phaseStartTime = animationTime;
-                    }
-                    nodes.forEach(node => {
-                        updateExplore(node, deltaTime);
-                        applyRepulsion(node);
-                        constrainToBounds(node);
-                        node.learned = 0;
-                    });
-                    break;
-                    
-                case 'learn':
-                    const learnProgress = Math.min(1, phaseElapsed / config.learnDuration);
-                    if (phaseElapsed >= config.learnDuration) {
-                        phase = 'settled';
-                        phaseStartTime = animationTime;
-                    }
-                    nodes.forEach(node => {
-                        updateLearn(node, deltaTime, learnProgress);
-                        applyRepulsion(node);
-                        constrainToBounds(node);
-                    });
-                    break;
-                    
-                case 'settled':
-                    if (phaseElapsed >= config.settledDuration) {
-                        phase = 'fading';
-                        phaseStartTime = animationTime;
-                    }
-                    nodes.forEach(node => {
-                        updateSettled(node, deltaTime);
-                        applyRepulsion(node);
-                    });
-                    break;
-                    
-                case 'fading':
-                    const fadeProgress = Math.min(1, phaseElapsed / config.fadeDuration);
-                    nodes.forEach(node => {
-                        node.opacity = 1 - easeInOutCubic(fadeProgress);
-                        updateSettled(node, deltaTime);
-                    });
-                    if (phaseElapsed >= config.fadeDuration) {
-                        phase = 'rest';
-                        phaseStartTime = animationTime;
-                    }
-                    break;
-                    
-                case 'rest':
-                    if (phaseElapsed >= config.restDuration) {
-                        initNodes();
-                    }
-                    break;
-            }
-            
-            // Apply velocity and record trail
-            nodes.forEach(node => {
-                node.x += node.vx;
-                node.y += node.vy;
-                
-                // Record trail every few frames
-                if (Math.random() < 0.3) {
-                    node.recordTrail();
-                }
-            });
-        }
-        
-        // Draw connection lines between nearby nodes
-        function drawConnections() {
-            nodes.forEach((nodeA, i) => {
-                for (let j = i + 1; j < nodes.length; j++) {
-                    const nodeB = nodes[j];
-                    const dx = nodeA.x - nodeB.x;
-                    const dy = nodeA.y - nodeB.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (dist < config.connectionDistance) {
-                        // Stronger connections between same-cluster nodes
-                        const sameCluster = nodeA.clusterIndex === nodeB.clusterIndex;
-                        const clusterBonus = sameCluster ? 1.5 : 0.4;
-                        
-                        // Connection strength based on distance and learning state
-                        const distFactor = 1 - dist / config.connectionDistance;
-                        const learnFactor = (nodeA.learned + nodeB.learned) / 2;
-                        const opacity = Math.min(nodeA.opacity, nodeB.opacity) 
-                            * config.connectionOpacity 
-                            * distFactor 
-                            * (0.3 + learnFactor * 0.7)
-                            * clusterBonus;
-                        
-                        if (opacity <= 0.005) return;
-                        
-                        // Blend colors of the two nodes
-                        const rgb = {
-                            r: (nodeA.rgb.r + nodeB.rgb.r) / 2,
-                            g: (nodeA.rgb.g + nodeB.rgb.g) / 2,
-                            b: (nodeA.rgb.b + nodeB.rgb.b) / 2
-                        };
-                        
-                        ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
-                        ctx.lineWidth = sameCluster ? 1.2 : 0.6;
-                        ctx.beginPath();
-                        ctx.moveTo(nodeA.x, nodeA.y);
-                        ctx.lineTo(nodeB.x, nodeB.y);
-                        ctx.stroke();
-                    }
-                }
-            });
-        }
-        
-        // Draw node trails
-        function drawTrails() {
-            nodes.forEach(node => {
-                if (node.opacity <= 0) return;
-                
-                node.trail.forEach((pos, i) => {
-                    const trailOpacity = (i / node.trail.length) * config.trailOpacity * node.opacity;
-                    if (trailOpacity <= 0.003) return;
-                    
-                    ctx.fillStyle = `rgba(${node.rgb.r}, ${node.rgb.g}, ${node.rgb.b}, ${trailOpacity})`;
+                if (op > 0.2) {
+                    const gradient = ctx.createRadialGradient(
+                        this.x, this.y, 0, this.x, this.y, config.glowRadius
+                    );
+                    gradient.addColorStop(0, `rgba(${this.rgb.r}, ${this.rgb.g}, ${this.rgb.b}, ${config.glowOpacity * op})`);
+                    gradient.addColorStop(1, `rgba(${this.rgb.r}, ${this.rgb.g}, ${this.rgb.b}, 0)`);
+                    ctx.fillStyle = gradient;
                     ctx.beginPath();
-                    ctx.arc(pos.x, pos.y, 2, 0, Math.PI * 2);
+                    ctx.arc(this.x, this.y, config.glowRadius, 0, Math.PI * 2);
                     ctx.fill();
-                });
-            });
+                }
+                
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = op;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
         }
         
-        // Draw a single node
-        function drawNode(node) {
-            if (node.opacity <= 0) return;
-            
-            // Size grows slightly as node learns
-            const learnedSize = config.nodeSize + node.learned * 1.5;
-            
-            // Subtle glow for learned nodes
-            if (node.learned > 0.5 && node.opacity > 0) {
-                const glowOpacity = node.opacity * node.learned * 0.08;
-                const gradient = ctx.createRadialGradient(
-                    node.x, node.y, 0,
-                    node.x, node.y, learnedSize * 4
-                );
-                gradient.addColorStop(0, `rgba(${node.rgb.r}, ${node.rgb.g}, ${node.rgb.b}, ${glowOpacity})`);
-                gradient.addColorStop(1, `rgba(${node.rgb.r}, ${node.rgb.g}, ${node.rgb.b}, 0)`);
-                ctx.fillStyle = gradient;
-                ctx.beginPath();
-                ctx.arc(node.x, node.y, learnedSize * 4, 0, Math.PI * 2);
-                ctx.fill();
+        // ===== STEM =====
+        class Stem {
+            constructor(x1, y1, x2, y2, color) {
+                this.x1 = x1; this.y1 = y1;
+                this.x2 = x2; this.y2 = y2;
+                this.color = color;
+                this.rgb = hexToRgb(color);
+                this.progress = 0;
+                this._fading = false;
             }
             
-            // Draw the node
-            ctx.fillStyle = node.color;
-            ctx.globalAlpha = node.opacity;
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, learnedSize, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.globalAlpha = 1;
+            draw() {
+                const op = config.stemOpacity * globalOpacity;
+                if (op <= 0 || this.progress <= 0) return;
+                
+                const ex = this.x1 + (this.x2 - this.x1) * this.progress;
+                const ey = this.y1 + (this.y2 - this.y1) * this.progress;
+                
+                ctx.strokeStyle = `rgba(${this.rgb.r}, ${this.rgb.g}, ${this.rgb.b}, ${op})`;
+                ctx.lineWidth = config.stemWidth;
+                ctx.beginPath();
+                ctx.moveTo(this.x1, this.y1);
+                ctx.lineTo(ex, ey);
+                ctx.stroke();
+            }
         }
         
-        // Main draw function
+        // ===== FALLING LEAF =====
+        class FallingLeaf {
+            constructor(node, noDrift = false, fallDelay = 0) {
+                const windX = getWindXOffset(node.y);
+                this.startX = node.x + windX;
+                this.startY = node.y;
+                this.x = node.x + windX;
+                this.y = node.y;
+                this.color = node.color;
+                this.rgb = node.rgb;
+                this.size = node.size;
+                this.opacity = 1;
+                this.elapsed = 0;
+                this.landed = false;
+                this.dissolved = false;
+                this.driftDir = Math.random() > 0.5 ? 1 : -1;
+                this.driftAmount = noDrift ? 5 : config.fallDrift;
+                this.fallDelay = fallDelay;
+                this.dissolveElapsed = 0;
+                this.dissolveDuration = config.dissolveDuration * (0.7 + Math.random() * 0.6);
+            }
+            
+            update(dt) {
+                if (this.dissolved) return;
+                
+                if (!this.landed) {
+                    this.elapsed += dt;
+                    if (this.elapsed < this.fallDelay) return;
+                    const t = this.elapsed - this.fallDelay;
+                    
+                    const newY = this.startY + 0.5 * config.fallGravity * t * t;
+                    const newX = this.startX + this.driftDir * Math.sin(t * config.fallDriftFreq) * this.driftAmount;
+                    
+                    if (newY >= groundY) {
+                        this.landed = true;
+                        this.y = groundY;
+                        this.x = newX + (Math.random() - 0.5) * 10;
+                        this.opacity = 0.6;
+                        this.size = config.nodeSize;
+                        sound.land();
+                    } else {
+                        this.y = newY;
+                        this.x = newX;
+                    }
+                } else {
+                    this.dissolveElapsed += dt;
+                    const p = Math.min(1, this.dissolveElapsed / this.dissolveDuration);
+                    const eased = easeInCubic(p);
+                    
+                    this.opacity = 0.6 * (1 - eased);
+                    this.size = config.nodeSize * (1 - eased * 0.8);
+                    
+                    if (p >= 1) {
+                        this.dissolved = true;
+                    }
+                }
+            }
+            
+            draw() {
+                if (this.dissolved) return;
+                const op = this.opacity * globalOpacity;
+                if (op <= 0) return;
+                
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = op;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, Math.max(0.5, this.size * 0.85), 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+        }
+        
+        // ===== SEQUENCER =====
+        function createSequencer() {
+            let steps = [];
+            let stepIndex = 0;
+            let stepElapsed = 0;
+            
+            return {
+                add(duration, onUpdate, onComplete) {
+                    steps.push({ duration, onUpdate, onComplete });
+                },
+                update(dt) {
+                    if (stepIndex >= steps.length) return true;
+                    stepElapsed += dt;
+                    const step = steps[stepIndex];
+                    const progress = Math.min(1, stepElapsed / step.duration);
+                    if (step.onUpdate) step.onUpdate(progress, dt);
+                    if (progress >= 1) {
+                        if (step.onComplete) step.onComplete();
+                        stepIndex++;
+                        stepElapsed = 0;
+                    }
+                    return stepIndex >= steps.length;
+                }
+            };
+        }
+        
+        // ===== BUILD SEQUENCE =====
+        function buildSequenceProper() {
+            const seq = createSequencer();
+            
+            const startX = centerX;
+            const startY = groundY;
+            let colorIdx = Math.floor(Math.random() * palette.length);
+            
+            function dur(base, gen) {
+                return base * Math.pow(config.speedUpFactor, gen);
+            }
+            
+            // Seed
+            const seedStartY = canvas.height + 20;
+            let seedNode = null;
+            
+            if (rootNode) {
+                seedNode = rootNode;
+                currentTip = seedNode;
+                // Very brief pause — start growing almost immediately
+                seq.add(0.15, () => {}, () => {});
+            } else {
+                seq.add(config.seedRiseDuration, (p) => {
+                    if (!seedNode) {
+                        seedNode = new GrowthNode(startX, seedStartY, colorIdx);
+                        seedNode.opacity = 0;
+                        nodes.push(seedNode);
+                        rootNode = seedNode;
+                        sound.appear();
+                    }
+                    const eased = easeOutCubic(p);
+                    seedNode.y = seedStartY + (startY - seedStartY) * eased;
+                    seedNode.opacity = Math.min(1, p * 3);
+                }, () => {
+                    seedNode.y = startY;
+                    seedNode.opacity = 1;
+                    currentTip = seedNode;
+                });
+            }
+            
+            function addCycle(gen) {
+                let stemSegment = null;
+                let topNode = null;
+                let leafNodes = [];
+                let leafStems = [];
+                let tipAtStart = null;
+                
+                colorIdx++;
+                const thisColorIdx = colorIdx;
+                const splitCount = config.splitCounts[Math.min(gen, config.splitCounts.length - 1)];
+                
+                // Grow stem upward
+                seq.add(dur(config.baseStemGrowDuration, gen), (p) => {
+                    if (!tipAtStart) tipAtStart = currentTip;
+                    const fromX = tipAtStart.x;
+                    const fromY = tipAtStart.y;
+                    const toY = fromY - config.stemSegmentLength;
+                    
+                    if (!stemSegment) {
+                        stemSegment = new Stem(fromX, fromY, fromX, toY, tipAtStart.color);
+                        stems.push(stemSegment);
+                    }
+                    stemSegment.progress = easeOutCubic(p);
+                    
+                    if (!topNode) {
+                        topNode = new GrowthNode(fromX, fromY, thisColorIdx);
+                        topNode.opacity = 0;
+                        nodes.push(topNode);
+                        sound.appear();
+                    }
+                    topNode.y = fromY + (toY - fromY) * easeOutCubic(p);
+                    topNode.x = fromX;
+                    topNode.opacity = Math.min(1, p * 2);
+                }, () => {
+                    topNode.opacity = 1;
+                    stemSegment.progress = 1;
+                    currentTip = topNode;
+                });
+                
+                // Split into leaves
+                seq.add(dur(config.baseSplitDuration, gen), (p) => {
+                    const tipX = currentTip.x;
+                    const tipY = currentTip.y;
+                    const eased = easeOutCubic(p);
+                    
+                    if (leafNodes.length === 0) {
+                        const totalSpread = Math.PI * 0.7 + splitCount * 0.08;
+                        for (let i = 0; i < splitCount; i++) {
+                            const frac = splitCount === 1 ? 0.5 : i / (splitCount - 1);
+                            const angle = -Math.PI / 2 - totalSpread / 2 + totalSpread * frac;
+                            const jAngle = angle + (Math.random() - 0.5) * 0.15;
+                            const jLen = config.splitLength * (0.85 + Math.random() * 0.3);
+                            
+                            const targetX = tipX + Math.cos(jAngle) * jLen;
+                            const targetY = tipY + Math.sin(jAngle) * jLen;
+                            
+                            const leaf = new GrowthNode(tipX, tipY, thisColorIdx + i + 1);
+                            leaf.opacity = 0;
+                            leaf._targetX = targetX;
+                            leaf._targetY = targetY;
+                            nodes.push(leaf);
+                            leafNodes.push(leaf);
+                            
+                            const stem = new Stem(tipX, tipY, targetX, targetY, leaf.color);
+                            stems.push(stem);
+                            leafStems.push(stem);
+                        }
+                        // Staggered pluck chord — one note per leaf
+                        leafNodes.forEach((_, li) => sound.appear(li * 0.06));
+                    }
+                    
+                    leafNodes.forEach((leaf, i) => {
+                        leaf.x = tipX + (leaf._targetX - tipX) * eased;
+                        leaf.y = tipY + (leaf._targetY - tipY) * eased;
+                        leaf.opacity = Math.min(1, p * 2.5);
+                        leafStems[i].progress = eased;
+                    });
+                    
+                    currentTip.size = config.nodeSize * (1 - eased * 0.3);
+                }, () => {
+                    leafNodes.forEach(l => { l.opacity = 1; });
+                });
+                
+                // Pause after split
+                seq.add(dur(config.basePauseAfterSplit, gen), () => {}, () => {});
+                
+                // Determine survivor and which non-survivors get sub-leaves
+                const survivorIdx = Math.floor(Math.random() * splitCount);
+                
+                // Track sub-leaf nodes and stems for the sub-branching phase
+                let subLeafData = []; // { parentLeaf, subNodes, subStems }
+                let subLeafDecided = false;
+                
+                // Sub-leaf growth phase — some non-surviving leaves sprout
+                // small secondary branches before everything falls
+                seq.add(dur(config.subLeafGrowDuration, gen), (p) => {
+                    if (!subLeafDecided) {
+                        subLeafDecided = true;
+                        leafNodes.forEach((leaf, i) => {
+                            if (i === survivorIdx) return; // survivor doesn't sub-branch
+                            if (Math.random() > config.subLeafChance) return; // skip by chance
+                            
+                            const [minSub, maxSub] = config.subLeafCount;
+                            const count = minSub + Math.floor(Math.random() * (maxSub - minSub + 1));
+                            const entry = { parentLeaf: leaf, subNodes: [], subStems: [] };
+                            
+                            const parentX = leaf._targetX || leaf.x;
+                            const parentY = leaf._targetY || leaf.y;
+                            const totalSpread = Math.PI * 0.5 + count * 0.1;
+                            
+                            for (let j = 0; j < count; j++) {
+                                const frac = count === 1 ? 0.5 : j / (count - 1);
+                                const angle = -Math.PI / 2 - totalSpread / 2 + totalSpread * frac;
+                                const jAngle = angle + (Math.random() - 0.5) * 0.3;
+                                const jLen = config.subLeafSplitLength * (0.8 + Math.random() * 0.4);
+                                
+                                const targetX = parentX + Math.cos(jAngle) * jLen;
+                                const targetY = parentY + Math.sin(jAngle) * jLen;
+                                
+                                colorIdx++;
+                                const subNode = new GrowthNode(parentX, parentY, colorIdx);
+                                subNode.opacity = 0;
+                                subNode._targetX = targetX;
+                                subNode._targetY = targetY;
+                                subNode._isSubLeaf = true;
+                                nodes.push(subNode);
+                                entry.subNodes.push(subNode);
+                                
+                                const subStem = new Stem(parentX, parentY, targetX, targetY, subNode.color);
+                                stems.push(subStem);
+                                entry.subStems.push(subStem);
+                            }
+                            
+                            // Staggered sub-leaf pluck
+                            entry.subNodes.forEach((_, si) => sound.appear(si * 0.05));
+                            subLeafData.push(entry);
+                        });
+                    }
+                    
+                    // Animate sub-leaves growing outward
+                    const eased = easeOutCubic(p);
+                    subLeafData.forEach(entry => {
+                        const px = entry.parentLeaf.x;
+                        const py = entry.parentLeaf.y;
+                        entry.subNodes.forEach((sn, j) => {
+                            sn.x = px + (sn._targetX - px) * eased;
+                            sn.y = py + (sn._targetY - py) * eased;
+                            sn.opacity = Math.min(1, p * 2.5);
+                            entry.subStems[j].progress = eased;
+                        });
+                    });
+                }, () => {
+                    subLeafData.forEach(entry => {
+                        entry.subNodes.forEach(sn => { sn.opacity = 1; });
+                    });
+                });
+                
+                // Brief pause after sub-leaves appear
+                seq.add(dur(config.subLeafPause, gen), () => {}, () => {});
+                
+                // Everything falls — all leaves (+ sub-leaves) except survivor
+                let fallStarted = false;
+                
+                seq.add(dur(config.baseFallDuration, gen), (p) => {
+                    if (!fallStarted) {
+                        fallStarted = true;
+                        
+                        // Collect all sub-leaf nodes and stems for mass detach
+                        const allSubStems = [];
+                        subLeafData.forEach(entry => {
+                            entry.subStems.forEach(s => allSubStems.push(s));
+                        });
+                        
+                        leafNodes.forEach((leaf, i) => {
+                            if (i === survivorIdx) {
+                                leaf._surviving = true;
+                            } else {
+                                leaf._falling = true;
+                                const staggerDelay = Math.random() * 0.35;
+                                const fl = new FallingLeaf(leaf, false, staggerDelay);
+                                fallingLeaves.push(fl);
+                                const idx = nodes.indexOf(leaf);
+                                if (idx >= 0) nodes.splice(idx, 1);
+                                leafStems[i]._fading = true;
+                                sound.detach(staggerDelay);
+                            }
+                        });
+                        
+                        // Sub-leaves also fall
+                        subLeafData.forEach(entry => {
+                            entry.subNodes.forEach(sn => {
+                                const staggerDelay = Math.random() * 0.4 + 0.1; // offset slightly after parent
+                                const fl = new FallingLeaf(sn, false, staggerDelay);
+                                fallingLeaves.push(fl);
+                                const idx = nodes.indexOf(sn);
+                                if (idx >= 0) nodes.splice(idx, 1);
+                                sound.detach(staggerDelay);
+                            });
+                            entry.subStems.forEach(s => { s._fading = true; });
+                        });
+                    }
+                    
+                    // Fade all detached stems
+                    const fadeProgress = easeInCubic(p);
+                    leafStems.forEach(s => {
+                        if (s && s._fading) {
+                            s.progress = Math.max(0, 1 - fadeProgress);
+                        }
+                    });
+                    subLeafData.forEach(entry => {
+                        entry.subStems.forEach(s => {
+                            if (s._fading) {
+                                s.progress = Math.max(0, 1 - fadeProgress);
+                            }
+                        });
+                    });
+                }, () => {
+                    currentTip = leafNodes[survivorIdx];
+                    stems = stems.filter(s => !s._fading);
+                });
+                
+                // Pause
+                seq.add(dur(config.basePauseAfterFall, gen), () => {}, () => {});
+            }
+            
+            for (let g = 0; g < config.maxGenerations; g++) {
+                addCycle(g);
+            }
+            
+            // ===== END PHASE =====
+            // Tree collapses quickly, new growth starts almost immediately.
+            
+            let treeFallStarted = false;
+            seq.add(0.8, (p, dt) => {
+                if (!treeFallStarted) {
+                    treeFallStarted = true;
+                    nodes.forEach((n, ni) => {
+                        if (n === seedNode) return;
+                        const stagger = Math.random() * 0.4;
+                        const fl = new FallingLeaf(n, true, stagger);
+                        fallingLeaves.push(fl);
+                        sound.detach(stagger + ni * 0.03);
+                    });
+                    nodes = seedNode ? [seedNode] : [];
+                }
+                const stemFade = easeInOutCubic(Math.min(1, p * 2.5));
+                stems.forEach(s => { s.progress = Math.max(0, 1 - stemFade); });
+            }, () => {
+                stems = [];
+            });
+            
+            // Restart quickly — leaves dissolve in background
+            seq.add(0.15, () => {}, () => {
+                nodes = seedNode ? [seedNode] : [];
+                stems = [];
+                globalOpacity = 1;
+                sequencer = buildSequenceProper();
+            });
+            
+            return seq;
+        }
+        
+        // ===== UPDATE =====
+        function update(dt) {
+            animationTime += dt;
+            if (sequencer) sequencer.update(dt);
+            
+            nodes.forEach(n => n.update(dt));
+            fallingLeaves.forEach(l => l.update(dt));
+            
+            // Remove fully dissolved leaves
+            fallingLeaves = fallingLeaves.filter(fl => !fl.dissolved);
+        }
+        
+        // ===== DRAW =====
         function draw() {
-            // Clear canvas
             ctx.fillStyle = colors.base;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            // Draw layers: trails → connections → nodes
-            drawTrails();
-            drawConnections();
-            nodes.forEach(drawNode);
+            // Wind sway
+            const windOffset = Math.sin(animationTime * Math.PI * 2 * config.windFreq)
+                             * config.windAmplitude
+                             + Math.sin(animationTime * Math.PI * 2 * config.windFreq2 + 1.3)
+                             * config.windAmplitude * 0.5;
+            
+            const pivotY = groundY;
+            
+            ctx.save();
+            const skew = windOffset / (canvas.height * 0.6);
+            ctx.transform(1, 0, skew, 1, -skew * pivotY, 0);
+            
+            stems.forEach(s => s.draw());
+            nodes.forEach(n => n.draw());
+            
+            ctx.restore();
+            
+            // Falling/dissolving leaves are not swayed
+            fallingLeaves.forEach(l => l.draw());
         }
         
-        // Animation loop
+        // ===== ANIMATION LOOP =====
         let lastTime = 0;
         function animate(currentTime) {
             const deltaTime = lastTime ? (currentTime - lastTime) / 1000 : 0.016;
             lastTime = currentTime;
-            
-            // Cap delta to prevent jumps on tab switch
             const cappedDelta = Math.min(deltaTime, 0.1);
             
             update(cappedDelta);
@@ -576,12 +816,10 @@
             requestAnimationFrame(animate);
         }
         
-        // Initialize and start
-        initNodes();
+        sequencer = buildSequenceProper();
         requestAnimationFrame(animate);
     }
     
-    // Initialize when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initSelfLearningSystems);
     } else {
