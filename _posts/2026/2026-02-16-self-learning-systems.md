@@ -11,7 +11,7 @@ We're already used to tools helping us with planning and doing things in varying
 
 That boundary matters. A system can optimize efficiency, but it cannot decide what's worth optimizing for. It can surface patterns, but it cannot tell you whether those patterns align with what you actually care about. This is the in between space where human judgment remains irreplaceable and intentional design matters.
 
-### Don’t Write Off Apps Just Yet
+### Don’t write off apps just yet
 
 Where the new and old meet. There's good reason for being hysterical about how easily existing functionality can be one-shotted or rebuilt with now minimal effort. At the same time I'm even more interested in genuinely new experiences we're now able to create.
 

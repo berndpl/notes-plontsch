@@ -8,16 +8,38 @@
     <link rel="icon" type="image/png" href="{{ '/apple-touch-icon.png' | relative_url }}">
     <link rel="apple-touch-icon" href="{{ '/apple-touch-icon.png' | relative_url }}">
 
+    <!-- Social Media Share Image
+         Priority: 1) page.social-teaser — dedicated social-only teaser image (never rendered in post)
+                   2) page.image — but only if it's a real image, not a .js visual
+                   3) fallback to apple-touch-icon
+         This keeps social-teaser separate from the in-post visual system (JS canvas, etc.) -->
+    {% assign share_image = nil %}
+    {% assign has_share_image = false %}
+    {% if page.social-teaser %}
+      {% assign share_image = page.social-teaser | absolute_url %}
+      {% assign has_share_image = true %}
+    {% elsif page.image %}
+      {% unless page.image contains '.js' %}
+        {% assign share_image = page.image | absolute_url %}
+        {% assign has_share_image = true %}
+      {% endunless %}
+    {% endif %}
+    {% unless share_image %}
+      {% assign share_image = '/apple-touch-icon.png' | absolute_url %}
+    {% endunless %}
+
     <!-- Open Graph Tags -->
     <meta property="og:title" content="{{ page.title | default: content | strip_html  | capitalize | truncatewords: 10, '' }}" />
     <meta property="og:description" content="{{ content | strip_html | strip_newlines | truncate: 160 }}" />
     <meta property="og:url" content="{{ page.url | absolute_url }}" />
     <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}" />
-    <meta property="og:image" content="{% if page.image %}{{ page.image | absolute_url }}{% else %}{{ '/apple-touch-icon.png' | absolute_url }}{% endif %}" />
-    <meta property="og:image:width" content="180" />
-    <meta property="og:image:height" content="180" />
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:image" content="{% if page.image %}{{ page.image | absolute_url }}{% else %}{{ '/apple-touch-icon.png' | absolute_url }}{% endif %}" />
+    <meta property="og:image" content="{{ share_image }}" />
+    {% if has_share_image %}<meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="638" />{% else %}<meta property="og:image:width" content="180" />
+    <meta property="og:image:height" content="180" />{% endif %}
+    <!-- Twitter Card — upgrades to large image when a real thumbnail/image is available -->
+    <meta name="twitter:card" content="{% if has_share_image %}summary_large_image{% else %}summary{% endif %}" />
+    <meta name="twitter:image" content="{{ share_image }}" />
   </head>
   <body>
     <header{% if is_about_active %} class="about-header"{% endif %}>
