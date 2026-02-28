@@ -5,6 +5,14 @@ set -euo pipefail
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR" || exit 1
 
+# Initialize rbenv if available (needed for correct Ruby version)
+if command -v rbenv >/dev/null 2>&1; then
+	eval "$(rbenv init -)"
+elif [ -d "$HOME/.rbenv" ]; then
+	export PATH="$HOME/.rbenv/bin:$PATH"
+	eval "$(rbenv init -)"
+fi
+
 # Wait for server to be ready, then open browser (in background)
 (
 	URL="http://localhost:4000"
