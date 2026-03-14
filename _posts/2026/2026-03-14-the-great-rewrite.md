@@ -1,12 +1,13 @@
 ---
 title: "The Great Rewrite"
+image: /assets/images/2026/2026-03-14-the-great-rewrite.js
 ---
 
 Something interesting will happen once most of us have recreated the apps on our home screens: software will shift from a shared experience to a fully individual one, from being a tool to becoming a real medium.
 
 ## Will this happen?
 
-We already do it with everything else. We pick the furniture, the desk lamp, the notebook color. Defaults exist, but nobody aspires to the default. The only reason software stayed generic this long is that we couldn't change it effectively. Now we can.
+We already do it with everything else. We pick our furniture, desk lamps, notebook colors. Defaults exist, but nobody aspires to the default. The only reason software stayed generic this long is that we couldn't change it effectively. Now we can.
 
 ## Will everything change?
 
