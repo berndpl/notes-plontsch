@@ -125,23 +125,21 @@
             ctx.closePath();
         }
 
-        // ── Morph wave: 2s rise · 2s hold · 2s fall · 4s rest (10s total) ─
-        const period   = 10;
-        const riseFrac = 0.20;
-        const holdFrac = 0.20;
-        const fallFrac = 0.20;
+        // ── Morph wave: fast snap with spring bounce ─────────────────────
+        const period = 4;
 
         let t = 0;
 
         function cycleMorph(phase) {
             const x = ((t / period + phase / (Math.PI * 2)) % 1 + 1) % 1;
-            if (x < riseFrac)
-                return smoothstep(x / riseFrac);
-            if (x < riseFrac + holdFrac)
-                return 1;
-            if (x < riseFrac + holdFrac + fallFrac)
-                return 1 - smoothstep((x - riseFrac - holdFrac) / fallFrac);
-            return 0;
+            // first half: snap to 1 with bounce; second half: snap back to 0 with bounce
+            const half = x < 0.5 ? x * 2 : (x - 0.5) * 2;
+            const dir  = x < 0.5 ? 1 : 0;
+            // fast spring: quick rise with decaying oscillation
+            const decay = Math.exp(-6 * half);
+            const spring = 1 - decay * Math.cos(half * Math.PI * 5);
+            return dir ? Math.max(0, Math.min(1.15, spring)) 
+                       : Math.max(0, Math.min(1.15, 1 - spring));
         }
 
         // Unified color drifts slowly through palette (full lap ~66s)
