@@ -336,6 +336,7 @@ main ul {
   padding-left: 1.5em;
   line-height: 0;
   font-size: 18px;
+  margin-bottom: 1rem;
 }
 
 article ul li::marker,
@@ -347,6 +348,7 @@ article ol,
 main ol {
   list-style-type: decimal;
   padding-left: 1.5em;
+  margin-bottom: 1rem;
 }
 
 article ul li,
