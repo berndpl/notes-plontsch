@@ -4,7 +4,7 @@ title: "Is this grief?"
 
 There is a surprising parallel between the current discourse around AI and the [stages of grief](https://en.wikipedia.org/wiki/Five_stages_of_grief).
 
-Whether you feel ahead or afraid you're falling behind, this framing can help make sense of the different narratives swirling around you. It did for me.
+Whether you feel ahead or afraid you're falling behind, this helped me to name what I was feeling as well as put some of the current narratives into perspective. Maybe it helps you, too.
 
 1. Denial — "AI won't really change my field."
 2. Anger — "Companies are destroying creative jobs."
@@ -14,9 +14,9 @@ Whether you feel ahead or afraid you're falling behind, this framing can help ma
 
 I was surprised how much of what I see published — the spin, the hot takes, the think pieces — maps onto these stages. They're not separate sentiments. They're all part of the same thing. Most of us are somewhere in this cycle, often in more than one stage at once. It's okay.
 
-### If this is grief, we're not without guidance. 
+### If this is grief…
 
-Grief counselors and researchers offer a few consistent principles:
+…we're not without guidance. Grief counselors and researchers offer a few consistent principles:
 
 > Allow the feeling rather than manage it. The instinct is to fix or shorten grief. That usually backfires — suppressed grief tends to resurface harder later.
 >
