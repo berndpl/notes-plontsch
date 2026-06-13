@@ -14,8 +14,10 @@
         canvas.width  = 1200;
         canvas.height = 638;
 
-        const base     = '#1e1e2e';
-        const surface0 = '#313244';
+        function themeValue(name, fallback) {
+            const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+            return value || fallback;
+        }
 
         const palette = [
             '#b4befe', // lavender
@@ -151,12 +153,12 @@
 
         // ── Render ──────────────────────────────────────────────────────
         function draw() {
-            ctx.fillStyle = base;
+            ctx.fillStyle = themeValue('--theme-base', '#1e1e2e');
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             // Phone body
             roundedRect(phoneX, phoneY, phoneW, phoneH, phoneCorner);
-            ctx.fillStyle = surface0;
+            ctx.fillStyle = themeValue('--theme-surface0', '#313244');
             ctx.fill();
 
             const uc = unifiedColor();

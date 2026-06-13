@@ -6,6 +6,17 @@
     <title>{{ page.title | capitalize | default: content | strip_html | truncatewords: 10, "" }} - {{ site.title }}</title>
     <meta name="title" content="{{ page.title | default: content | strip_html | capitalize | truncatewords: 10, '' }} - {{ site.title }}" />
     <meta name="description" content="{{ content | strip_html | strip_newlines | truncate: 160 }}" />
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem('notes-theme');
+          if (theme === 'mocha') theme = 'dark';
+          if (theme === 'light' || theme === 'dark') {
+            document.documentElement.setAttribute('data-theme', theme);
+          }
+        } catch (e) {}
+      })();
+    </script>
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
     <link rel="icon" type="image/png" href="{{ '/apple-touch-icon.png' | relative_url }}">
     <link rel="apple-touch-icon" href="{{ '/apple-touch-icon.png' | relative_url }}">
@@ -73,7 +84,11 @@
     </main>
 
     <footer>
-      <p>&copy; {{ site.time | date: '%Y' }} {{ site.title }} • {{ site.description }}Notes, <a href="{{ '/questions' | relative_url }}">questions</a>, <a href="{{ '/insights' | relative_url }}">insights</a> <!--a href="{{ '/work/' | relative_url }}" class="nav-link">Work</a--></p>
+      <div class="footer-row">
+        <p>&copy; {{ site.time | date: '%Y' }} {{ site.title }} • {{ site.description }}Notes, <a class="generated-footer-link" href="{{ '/questions' | relative_url }}">questions</a>, <a class="generated-footer-link" href="{{ '/insights' | relative_url }}">insights</a> <!--a href="{{ '/work/' | relative_url }}" class="nav-link">Work</a--></p>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle color theme"></button>
+      </div>
     </footer>
+    <script src="{{ '/assets/js/theme-picker.js' | relative_url }}"></script>
   </body>
 </html>

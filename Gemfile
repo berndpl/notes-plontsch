@@ -18,6 +18,7 @@ gem "github-pages", group: :jekyll_plugins
 gem "csv"
 gem "base64"
 gem "bigdecimal"
+gem "webrick", "~> 1.8"
 # If you have any plugins, put them here!
 group :jekyll_plugins do
   gem "jekyll-feed", "~> 0.12"

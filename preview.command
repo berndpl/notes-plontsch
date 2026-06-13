@@ -5,6 +5,19 @@ set -euo pipefail
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR" || exit 1
 
+# Prefer a versioned Homebrew Ruby that is compatible with GitHub Pages/Jekyll 3.
+# macOS Ruby 2.6 is too old for Bundler 2.6.6, while Homebrew's unversioned
+# Ruby may be too new for Liquid 4.
+if [ -x /opt/homebrew/opt/ruby@3.1/bin/ruby ]; then
+	export PATH="/opt/homebrew/opt/ruby@3.1/bin:$PATH"
+elif [ -x /usr/local/opt/ruby@3.1/bin/ruby ]; then
+	export PATH="/usr/local/opt/ruby@3.1/bin:$PATH"
+elif [ -x /opt/homebrew/opt/ruby/bin/ruby ]; then
+	export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+elif [ -x /usr/local/opt/ruby/bin/ruby ]; then
+	export PATH="/usr/local/opt/ruby/bin:$PATH"
+fi
+
 # Initialize rbenv if available (needed for correct Ruby version)
 if command -v rbenv >/dev/null 2>&1; then
 	eval "$(rbenv init -)"

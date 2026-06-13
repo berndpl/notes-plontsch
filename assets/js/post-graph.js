@@ -30,22 +30,43 @@
     resize();
     window.addEventListener('resize', () => { resize(); computePositions(); });
 
-    /* ── Palette — Catppuccin Mocha ─────────────────────────────── */
-    const base = '#1e1e2e';
-    // One colour per year-theme (order: 2017, 2023, 2024, 2025, 2026+)
-    const themeColors = [
-      '#cba6f7',   // 2017 — mauve
-      '#f9e2af',   // 2023 — yellow
-      '#89b4fa',   // 2024 — blue
-      '#a6e3a1',   // 2025 — green
-      '#fab387',   // 2026 — peach
-    ];
+    /* ── Palette — follows CSS theme tokens ────────────────────── */
+    const fallbackColors = ['#cba6f7', '#a6e3a1', '#fab387', '#89b4fa', '#f38ba8', '#94e2d5'];
+
+    function themeValue(name, fallback) {
+      const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      return value || fallback;
+    }
+
+    function graphTheme() {
+      return {
+        base: themeValue('--graph-base', '#1e1e2e'),
+        overlay: themeValue('--theme-overlay0', '#6c7086'),
+        chord: parseColor(themeValue('--graph-chord', 'rgba(205, 214, 244, 0.07)')),
+        colors: fallbackColors.map((color, index) => themeValue('--graph-color-' + index, color)),
+      };
+    }
+
+    let currentGraphTheme = graphTheme();
 
     function hexToRgb(hex) {
       const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
       return m
         ? { r: parseInt(m[1], 16), g: parseInt(m[2], 16), b: parseInt(m[3], 16) }
         : { r: 180, g: 190, b: 254 };
+    }
+
+    function parseColor(color) {
+      const rgba = /rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)(?:\s*,\s*([\d.]+))?\s*\)/i.exec(color);
+      if (rgba) {
+        return {
+          r: Number(rgba[1]),
+          g: Number(rgba[2]),
+          b: Number(rgba[3]),
+          a: rgba[4] === undefined ? 1 : Number(rgba[4]),
+        };
+      }
+      return { ...hexToRgb(color), a: 1 };
     }
 
     /* ── Parse posts from DOM ──────────────────────────────────── */
@@ -76,11 +97,12 @@
     const NODE_R = 2.5;
     const nodes = posts.map((p, i) => {
       const ti = themeIndex(p.date);
+      const color = currentGraphTheme.colors[ti] || fallbackColors[ti];
       return {
         ...p,
         theme: ti,
-        color: themeColors[ti],
-        rgb: hexToRgb(themeColors[ti]),
+        color,
+        rgb: hexToRgb(color),
         chronoAngle: 0,
         themeAngle: 0,
         currentAngle: 0,
@@ -93,6 +115,15 @@
         opacity: 1,
       };
     });
+
+    function applyGraphTheme() {
+      currentGraphTheme = graphTheme();
+      nodes.forEach((node) => {
+        node.color = currentGraphTheme.colors[node.theme] || fallbackColors[node.theme];
+        node.rgb = hexToRgb(node.color);
+      });
+      toastEl.style.color = currentGraphTheme.overlay;
+    }
 
     /* ── Build edges ─────────────────────────────────────────────
        Cross-theme: posts < 90 days apart, different themes.
@@ -255,7 +286,7 @@
       left: '0.75rem',
       fontFamily: "'Inconsolata', monospace",
       fontSize: '1rem',
-      color: '#6c7086',
+      color: currentGraphTheme.overlay,
       pointerEvents: 'none',
       opacity: '0',
       transition: 'opacity 0.3s ease',
@@ -399,7 +430,8 @@
 
     /* ── Drawing ───────────────────────────────────────────────── */
     function draw() {
-      ctx.fillStyle = base;
+      applyGraphTheme();
+      ctx.fillStyle = currentGraphTheme.base;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Edges
@@ -409,17 +441,11 @@
         const minOp = Math.min(a.opacity, b.opacity);
         if (minOp < 0.01) return;
 
-        const baseOp = edge.cross ? 0.04 : 0.06;
+        const baseOp = currentGraphTheme.chord.a * (edge.cross ? 0.65 : 1);
         const op = baseOp * edge.strength * minOp;
         if (op < 0.003) return;
 
-        const rgb = {
-          r: (a.rgb.r + b.rgb.r) >> 1,
-          g: (a.rgb.g + b.rgb.g) >> 1,
-          b: (a.rgb.b + b.rgb.b) >> 1,
-        };
-
-        ctx.strokeStyle = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + op + ')';
+        ctx.strokeStyle = 'rgba(' + currentGraphTheme.chord.r + ',' + currentGraphTheme.chord.g + ',' + currentGraphTheme.chord.b + ',' + op + ')';
         ctx.lineWidth = edge.cross ? 0.5 : 0.7;
 
         if (edge.cross) {
@@ -483,6 +509,8 @@
         requestAnimationFrame(loop);
       }
     });
+
+    window.addEventListener('notes-theme-change', applyGraphTheme);
   }
 
   if (document.readyState === 'loading') {

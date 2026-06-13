@@ -9,6 +9,19 @@ title: Style Guide
 
 <h2>Color Palette</h2>
 
+<h3>Theme Modes</h3>
+<p>The footer theme toggle switches between Mocha dark and Frost light. The selected theme is stored locally in the browser; without a stored choice, the site follows the visitor's OS color-scheme preference.</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+  <div style="background-color: #1e1e2e; padding: 1rem; border-radius: 4px; border: 1px solid #313244;">
+    <div style="color: #cdd6f4; font-weight: 500;">Mocha</div>
+    <div style="color: #6c7086; font-size: 0.9rem;">Dark theme</div>
+  </div>
+  <div style="background-color: #f7f8fb; padding: 1rem; border-radius: 4px; border: 1px solid #d2d5e0;">
+    <div style="color: #2b2f43; font-weight: 500;">Frost</div>
+    <div style="color: #9498ab; font-size: 0.9rem;">Light theme</div>
+  </div>
+</div>
+
 <h3>Base Colors</h3>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
   <div style="background-color: #1e1e2e; padding: 1rem; border-radius: 4px; border: 1px solid #313244;">
@@ -26,6 +39,11 @@ title: Style Guide
     <div style="color: rgba(221, 182, 242, 0.7); font-size: 0.9rem;">#1a1825</div>
     <div style="color: rgba(221, 182, 242, 0.7); font-size: 0.9rem;">Generated page cards</div>
   </div>
+  <div style="background-color: #f7f8fb; padding: 1rem; border-radius: 4px; border: 1px solid #d2d5e0;">
+    <div style="color: #2b2f43; font-weight: 500;">Frost Base</div>
+    <div style="color: #9498ab; font-size: 0.9rem;">#f7f8fb</div>
+    <div style="color: #9498ab; font-size: 0.9rem;">Light background</div>
+  </div>
 </div>
 
 <h3>Text Colors</h3>
@@ -37,8 +55,8 @@ title: Style Guide
   </div>
   <div style="background-color: #1e1e2e; padding: 1rem; border-radius: 4px; border: 1px solid #313244;">
     <div style="color: rgba(166, 173, 200, 0.6); font-weight: 500;">Body Text</div>
-    <div style="color: #6c7086; font-size: 0.9rem;">rgba(166, 173, 200, 0.6)</div>
-    <div style="color: #6c7086; font-size: 0.9rem;">Paragraphs, list items</div>
+    <div style="color: #6c7086; font-size: 0.9rem;">Dark: 60% opacity</div>
+    <div style="color: #6c7086; font-size: 0.9rem;">Paragraphs, list items, cards</div>
   </div>
   <div style="background-color: #1e1e2e; padding: 1rem; border-radius: 4px; border: 1px solid #313244;">
     <div style="color: #bac2de; font-weight: 500;">Headings</div>
@@ -49,6 +67,16 @@ title: Style Guide
     <div style="color: #a6adc8; font-weight: 500;">Subtext0</div>
     <div style="color: #6c7086; font-size: 0.9rem;">#a6adc8</div>
     <div style="color: #6c7086; font-size: 0.9rem;">Blockquote text</div>
+  </div>
+  <div style="background-color: #f7f8fb; padding: 1rem; border-radius: 4px; border: 1px solid #d2d5e0;">
+    <div style="color: #363a4f; font-weight: 500;">Frost Text</div>
+    <div style="color: #9498ab; font-size: 0.9rem;">#363a4f</div>
+    <div style="color: #9498ab; font-size: 0.9rem;">Light primary text</div>
+  </div>
+  <div style="background-color: #f7f8fb; padding: 1rem; border-radius: 4px; border: 1px solid #d2d5e0;">
+    <div style="color: rgba(54, 58, 79, 0.78); font-weight: 500;">Frost Body</div>
+    <div style="color: #9498ab; font-size: 0.9rem;">78% opacity</div>
+    <div style="color: #9498ab; font-size: 0.9rem;">Light paragraphs</div>
   </div>
 </div>
 
@@ -73,6 +101,25 @@ title: Style Guide
     <div style="color: #f5c2e7; font-weight: 500;">Pink</div>
     <div style="color: #6c7086; font-size: 0.9rem;">#f5c2e7</div>
     <div style="color: #6c7086; font-size: 0.9rem;">Generated page hover</div>
+  </div>
+  <div style="background-color: #f7f8fb; padding: 1rem; border-radius: 4px; border: 1px solid #d2d5e0;">
+    <div style="color: #1f3df2; font-weight: 500;">Frost Link</div>
+    <div style="color: #9498ab; font-size: 0.9rem;">#1f3df2</div>
+    <div style="color: #9498ab; font-size: 0.9rem;">Light links</div>
+  </div>
+</div>
+
+<h3>Graph Tokens</h3>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+  <div style="background-color: #1e1e2e; padding: 1rem; border-radius: 4px; border: 1px solid #313244;">
+    <div style="color: #cdd6f4; font-weight: 500;">Mocha Chord</div>
+    <div style="color: #6c7086; font-size: 0.9rem;">rgba(205, 214, 244, 0.07)</div>
+    <div style="color: #6c7086; font-size: 0.9rem;">Homepage graph connections</div>
+  </div>
+  <div style="background-color: #f7f8fb; padding: 1rem; border-radius: 4px; border: 1px solid #d2d5e0;">
+    <div style="color: #2b2f43; font-weight: 500;">Frost Chord</div>
+    <div style="color: #9498ab; font-size: 0.9rem;">rgba(54, 58, 79, 0.07)</div>
+    <div style="color: #9498ab; font-size: 0.9rem;">Homepage graph connections</div>
   </div>
 </div>
 
@@ -148,7 +195,7 @@ title: Style Guide
 
 <h2>Body Text</h2>
 
-<p>This is a regular paragraph. Body text uses rgba(166, 173, 200, 0.6) at 60% opacity for a subtle appearance. Font size is 1rem with font-weight 500 and line-height 1.4.</p>
+<p>This is a regular paragraph. Body text uses a theme-specific opacity: 60% in Mocha and 78% in Frost. Font size is 1rem with font-weight 500 and line-height 1.4.</p>
 
 <p><strong>This is bold text within a paragraph.</strong> Bold text uses full opacity rgba(166, 173, 200, 1) but maintains font-weight 400 (normal weight, not bold).</p>
 
@@ -180,7 +227,7 @@ title: Style Guide
 
 <h3>Unordered List</h3>
 <ul>
-  <li>First item with rgba(166, 173, 200, 0.6) text color</li>
+  <li>First item with theme body text color</li>
   <li>Second item with disc marker in #6c7086</li>
   <li>Third item with line-height 29px</li>
 </ul>

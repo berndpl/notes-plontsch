@@ -36,6 +36,16 @@
             overlay0: '#6c7086',
             surface0: '#313244'
         };
+
+        function themeValue(name, fallback) {
+            const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+            return value || fallback;
+        }
+
+        function themedLine(opacity) {
+            const rgb = themeValue('--theme-body-rgb', '180, 190, 254');
+            return `rgba(${rgb}, ${opacity})`;
+        }
         
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
@@ -217,7 +227,7 @@
                 if (node.isCenter) return;
                 
                 const lineOpacity = (node.opacity || 1) * 0.2;
-                ctx.strokeStyle = `rgba(180, 190, 254, ${lineOpacity})`;
+                ctx.strokeStyle = themedLine(lineOpacity);
                 ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.moveTo(centerNode.x, centerNode.y);
@@ -255,8 +265,10 @@
             
             // Fill background if alpha > 0
             if (bgAlpha > 0) {
-                ctx.fillStyle = `rgba(0, 0, 0, ${bgAlpha})`;
+                ctx.fillStyle = themeValue('--theme-base', '#1e1e2e');
+                ctx.globalAlpha = bgAlpha;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.globalAlpha = 1;
             }
             
             const phase = getPhase(time);

@@ -40,6 +40,11 @@
             surface0: '#313244',
             base: '#1e1e2e'
         };
+
+        function themeValue(name, fallback) {
+            const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+            return value || fallback;
+        }
         
         const centerX = canvas.width / 2;
         const groundY = canvas.height - 35;
@@ -147,7 +152,7 @@
             transform: 'translateX(-50%)',
             fontFamily: "'Inconsolata', monospace",
             fontSize: '1rem',
-            color: '#6c7086',
+            color: themeValue('--theme-overlay0', '#6c7086'),
             pointerEvents: 'none',
             opacity: '0',
             transition: 'opacity 0.3s ease',
@@ -779,7 +784,7 @@
         
         // ===== DRAW =====
         function draw() {
-            ctx.fillStyle = colors.base;
+            ctx.fillStyle = themeValue('--theme-base', colors.base);
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             // Wind sway

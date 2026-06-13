@@ -37,6 +37,11 @@
             overlay0: '#6c7086',
             surface0: '#313244'
         };
+
+        function themeValue(name, fallback) {
+            const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+            return value || fallback;
+        }
         
         // Animation state
         let time = 0;
@@ -194,7 +199,7 @@
         // Main draw function
         function draw() {
             // Clear canvas with background
-            ctx.fillStyle = '#1e1e2e'; // Catppuccin Mocha base - matches page background
+            ctx.fillStyle = themeValue('--theme-base', '#1e1e2e');
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             const nodes = getNodePositions(time);

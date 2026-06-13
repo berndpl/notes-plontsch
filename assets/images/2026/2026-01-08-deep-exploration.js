@@ -3,7 +3,8 @@
     'use strict';
     
     function initDeepExploration() {
-        const canvas = document.getElementById('deep-exploration-canvas');
+        const canvas = document.getElementById('2026-01-08-deep-exploration-canvas') ||
+            document.getElementById('deep-exploration-canvas');
         if (!canvas) {
             console.warn('Deep Exploration: Canvas element not found');
             return;
@@ -37,6 +38,16 @@
             overlay0: '#6c7086',
             surface0: '#313244'
         };
+
+        function themeValue(name, fallback) {
+            const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+            return value || fallback;
+        }
+
+        function themedLine(opacity) {
+            const rgb = themeValue('--theme-body-rgb', '180, 190, 254');
+            return `rgba(${rgb}, ${opacity})`;
+        }
         
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
@@ -267,7 +278,7 @@
                 // Line opacity matches node opacity
                 const lineOpacity = (node.opacity || 1) * 0.2;
                 
-                ctx.strokeStyle = `rgba(180, 190, 254, ${lineOpacity})`;
+                ctx.strokeStyle = themedLine(lineOpacity);
                 ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.moveTo(centerNode.x, centerNode.y);
@@ -288,7 +299,7 @@
         // Main draw function
         function draw() {
             // Clear canvas with subtle background
-            ctx.fillStyle = '#1e1e2e'; // Catppuccin Mocha base - matches page background
+            ctx.fillStyle = themeValue('--theme-base', '#1e1e2e');
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             const phase = getPhase(time);

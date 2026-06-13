@@ -38,6 +38,16 @@
             surface0: '#313244',
             base: '#1e1e2e'
         };
+
+        function themeValue(name, fallback) {
+            const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+            return value || fallback;
+        }
+
+        function themedLine(opacity) {
+            const rgb = themeValue('--theme-body-rgb', '180, 190, 254');
+            return `rgba(${rgb}, ${opacity})`;
+        }
         
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
@@ -323,7 +333,7 @@
             
             const childPos = child.getAnimatedPosition();
             
-            ctx.strokeStyle = `rgba(180, 190, 254, ${opacity})`;
+            ctx.strokeStyle = themedLine(opacity);
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(parent.x, parent.y);
@@ -351,7 +361,7 @@
         // Main draw function
         function draw() {
             // Clear canvas
-            ctx.fillStyle = colors.base;
+            ctx.fillStyle = themeValue('--theme-base', colors.base);
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             // Sort nodes by generation (draw parents first, then children)
