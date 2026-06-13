@@ -836,19 +836,20 @@ nav a:hover {
 }
 
 footer a.generated-footer-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35em;
   color: var(--theme-generated);
+  white-space: nowrap;
 }
 
 footer a.generated-footer-link::before {
   content: "";
+  display: inline-block;
   width: 0.38em;
   height: 0.38em;
+  margin-right: 0.35em;
   border-radius: 50%;
   background: currentColor;
   opacity: 0.75;
+  vertical-align: 0.08em;
 }
 
 footer a.generated-footer-link:hover {
