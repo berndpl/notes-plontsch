@@ -12,4 +12,4 @@ How? Your skill needs memory. A log, a blog, something that documents how you us
 
 And the best thing about it is how this feels rewarding in a different way. It's not just the slot-machine hit at the moment of delivery. It's also the feeling of looking back and seeing the evolution, seeing how you improved, and knowing you had a hand in that.
 
-Try telling the skill you use every day to keep a log of itself in a simple HTML blog style, and check in on it now and then. You're not just getting things done anymore. You're watching yourself get better at them.
+Just try telling the skill you use every day to keep a log of itself in a simple HTML blog style, and check in on it now and then. You're not just getting things done anymore. You're watching yourself get better at them.
