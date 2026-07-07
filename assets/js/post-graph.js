@@ -1,15 +1,21 @@
-// Post Graph — "Emerging Themes"
+// Post Graph — "Shifting Views"
 //
-// Circular layout where nodes represent posts, colored by year-theme.
-// Nodes start in chronological order around the circle, then slowly
-// drift into theme-grouped sectors over ~20 seconds — themes emerge
-// organically from the timeline.
+// Nodes represent posts, colored by year-theme. The graph morphs between
+// several named views, each a different spatial arrangement of the same
+// dots — so a post keeps its identity (color) while the shape reorganises:
 //
-// Cross-connections: curved lines linking temporally close posts across
-// different theme groups. Within-theme connections arc along the rim.
-// Slow global rotation, individual breathing. No click interactivity.
+//   • Timeline — a simple line of dots along a gentle wave, oldest → newest
+//   • Groups   — spatial clusters grouped by year
+//   • Topics   — spatial clusters grouped by inferred topic
+//   • Circle   — the classic chronological ring
 //
-// 4px dots, no glow, Catppuccin Mocha palette on #1e1e2e base.
+// Tap an individual dot to open its post. Tap empty space to advance to the
+// next view. Views auto-cycle; the view name toasts in on every switch.
+//
+// Nodes are connected by a light thread (chronological chain + nearby
+// cross-theme links) that reshapes fluidly across every view.
+//
+// 2.5px dots, no glow, Catppuccin Mocha palette on #1e1e2e base.
 // ─────────────────────────────────────────────────────────────────────
 
 (function () {
@@ -28,7 +34,7 @@
       canvas.height = 300;
     }
     resize();
-    window.addEventListener('resize', () => { resize(); computePositions(); });
+    window.addEventListener('resize', () => { resize(); computeLayouts(); });
 
     /* ── Palette — follows CSS theme tokens ────────────────────── */
     const fallbackColors = ['#cba6f7', '#a6e3a1', '#fab387', '#89b4fa', '#f38ba8', '#94e2d5'];
@@ -93,26 +99,46 @@
       return idx >= 0 ? idx : yearBuckets.length - 1;
     }
 
+    /* ── Topic inference (from title keywords) ──────────────────
+       Deterministic, keyword-driven so new posts auto-classify.
+       First matching bucket wins; unmatched fall into "Ideas". ── */
+    const TOPICS = [
+      { name: 'Making',  keys: ['app', 'apps', 'coding', 'code', 'software', 'rewrite', 'skill', 'edit', 'build', 'building', 'data', 'vibe', 'blog', 'words', 'recall', 'funtography', 'feeds', 'form', 'factor', 'replacement', 'replace', 'coexist', 'writing', 'durable'] },
+      { name: 'Work',    keys: ['work', 'meeting', 'meetings', 'group', 'groups', 'contribution', 'team', 'role', 'roles', 'user', 'users', 'lonely', 'attention', 'time', 'hard', 'things', 'frontier', 'meaningless'] },
+      { name: 'Mind',    keys: ['grief', 'hope', 'breathing', 'breath', 'diet', 'human', 'journal', 'journaling', 'joy', 'losing', 'love', 'grounding', 'breakable', 'nothing', 'something', 'point', 'view', 'feel'] },
+      { name: 'Futures', keys: ['system', 'systems', 'learning', 'self', 'exploration', 'deep', 'compounding', 'zelda', 'predicting', 'future', 'ideal', 'music'] },
+    ];
+    const FALLBACK_TOPIC = 'Ideas';
+
+    function topicOf(title) {
+      const words = title.toLowerCase().split(/[^a-z]+/).filter(Boolean);
+      for (const topic of TOPICS) {
+        if (words.some((w) => topic.keys.includes(w))) return topic.name;
+      }
+      return FALLBACK_TOPIC;
+    }
+
     /* ── Build nodes ───────────────────────────────────────────── */
     const NODE_R = 2.5;
+    const HIT_R = 13;
     const nodes = posts.map((p, i) => {
       const ti = themeIndex(p.date);
       const color = currentGraphTheme.colors[ti] || fallbackColors[ti];
       return {
         ...p,
         theme: ti,
+        topic: topicOf(p.title),
         color,
         rgb: hexToRgb(color),
-        chronoAngle: 0,
-        themeAngle: 0,
-        currentAngle: 0,
-        x: 0, y: 0,
-        // Deterministic sine phase spread evenly across nodes
+        pos: {},            // per-view target positions {x,y}
+        baseX: 0, baseY: 0, // interpolated (pre-breathing) position
+        fx: 0, fy: 0,       // snapshot "from" position at start of a morph
+        x: 0, y: 0,         // rendered position (incl. breathing)
         phase: (i / posts.length) * Math.PI * 2,
         breatheFreq: 0.3,
-        breatheRadial: 1.5,
-        breatheAngular: 0.002,
+        breatheAmp: 1.6,
         opacity: 1,
+        hover: false,
       };
     });
 
@@ -125,158 +151,132 @@
       toastEl.style.color = currentGraphTheme.overlay;
     }
 
-    /* ── Build edges ─────────────────────────────────────────────
-       Cross-theme: posts < 90 days apart, different themes.
-       Within-theme: all pairs in same theme. ─────────────────── */
+    /* ── Build edges — a light connective thread ─────────────────
+       Chronological chain (consecutive posts) + each node's nearest
+       cross-theme neighbour within 100 days. Reshapes across views. */
     const edges = [];
+    const byDate = nodes.slice().sort((a, b) => a.date - b.date);
+    const indexOfNode = new Map(nodes.map((n, i) => [n, i]));
 
-    for (let i = 0; i < nodes.length; i++) {
-      for (let j = i + 1; j < nodes.length; j++) {
-        const a = nodes[i], b = nodes[j];
-        const daysDiff = Math.abs((a.date - b.date) / 864e5);
-        const sameTheme = a.theme === b.theme;
+    for (let i = 0; i < byDate.length - 1; i++) {
+      edges.push({
+        i: indexOfNode.get(byDate[i]),
+        j: indexOfNode.get(byDate[i + 1]),
+        cross: byDate[i].theme !== byDate[i + 1].theme,
+        strength: 1,
+      });
+    }
 
-        if (sameTheme) {
-          edges.push({
-            i, j, cross: false,
-            strength: Math.max(0.15, 1 - daysDiff / 365),
-          });
-        } else if (daysDiff <= 90) {
-          edges.push({
-            i, j, cross: true,
-            strength: 1 - daysDiff / 90,
-          });
+    const crossSeen = new Set();
+    nodes.forEach((node, i) => {
+      let best = null, bestDays = Infinity;
+      nodes.forEach((other, j) => {
+        if (i === j || other.theme === node.theme) return;
+        const days = Math.abs((node.date - other.date) / 864e5);
+        if (days < bestDays) { bestDays = days; best = j; }
+      });
+      if (best !== null && bestDays <= 100) {
+        const key = i < best ? i + '-' + best : best + '-' + i;
+        if (!crossSeen.has(key)) {
+          crossSeen.add(key);
+          edges.push({ i, j: best, cross: true, strength: 1 - bestDays / 100 });
         }
       }
-    }
+    });
 
-    /* ── Layout computation ────────────────────────────────────── */
-    let cx, cy, circleR;
+    /* ── Layout computation ─────────────────────────────────────
+       Each node gets a target {x,y} for every view. Positions are
+       interpolated between views so morphs are seamless. ──────── */
+    const PAD = 44;
 
-    function computePositions() {
-      cx = canvas.width / 2;
-      cy = canvas.height / 2;
-      circleR = Math.min(canvas.width * 0.38, canvas.height * 0.4);
-
+    function computeLayouts() {
+      const W = canvas.width;
+      const H = canvas.height;
       const n = nodes.length;
+      const order = nodes.slice().sort((a, b) => a.date - b.date);
 
-      // 1) Chronological angles — evenly spaced, starting at top
-      const chronoOrder = nodes.slice().sort((a, b) => a.date - b.date);
-      chronoOrder.forEach((node, ci) => {
-        node.chronoAngle = (ci / n) * Math.PI * 2 - Math.PI / 2;
+      /* Timeline — line of dots along a gentle wave, oldest → newest */
+      order.forEach((node, i) => {
+        const t = n > 1 ? i / (n - 1) : 0.5;
+        node.pos.timeline = {
+          x: PAD + t * (W - 2 * PAD),
+          y: H / 2 + Math.sin(t * Math.PI * 3) * (H * 0.16),
+        };
       });
 
-      // 2) Theme-grouped angles — each theme gets a proportional arc
-      //    sector with small gaps between groups.
-      const themeGroups = {};
-      nodes.forEach((node) => {
-        if (!themeGroups[node.theme]) themeGroups[node.theme] = [];
-        themeGroups[node.theme].push(node);
+      /* Circle — chronological ring */
+      const cx = W / 2, cy = H / 2;
+      const R = Math.min(W * 0.36, H * 0.42);
+      order.forEach((node, i) => {
+        const a = (i / n) * Math.PI * 2 - Math.PI / 2;
+        node.pos.circle = { x: cx + Math.cos(a) * R, y: cy + Math.sin(a) * R };
       });
 
-      const themeKeys = Object.keys(themeGroups).sort((a, b) => a - b);
-      const gapAngle = 0.12;
-      const totalGap = gapAngle * themeKeys.length;
-      const availableAngle = Math.PI * 2 - totalGap;
+      /* Grouped clusters */
+      clusterLayout('groups', groupBy((node) => node.theme));
+      clusterLayout('topics', groupBy((node) => node.topic));
 
-      let cursor = -Math.PI / 2;
-
-      themeKeys.forEach((tk) => {
-        const group = themeGroups[tk];
-        group.sort((a, b) => a.date - b.date);
-        const sectorAngle = (group.length / n) * availableAngle;
-
-        group.forEach((node, gi) => {
-          const t = group.length > 1 ? gi / (group.length - 1) : 0.5;
-          node.themeAngle = cursor + t * sectorAngle;
+      function groupBy(keyFn) {
+        const map = new Map();
+        order.forEach((node) => {
+          const k = keyFn(node);
+          if (!map.has(k)) map.set(k, []);
+          map.get(k).push(node);
         });
-
-        cursor += sectorAngle + gapAngle;
-      });
-
-      // 3) Title-alphabetical angles
-      const alphaOrder = nodes.slice().sort((a, b) => a.title.localeCompare(b.title));
-      alphaOrder.forEach((node, ai) => {
-        node.alphaAngle = (ai / n) * Math.PI * 2 - Math.PI / 2;
-      });
-
-      // 4) Seasonal — by month+day (ignoring year), Jan→Dec
-      const seasonalOrder = nodes.slice().sort((a, b) => {
-        const ma = a.date.getMonth() * 31 + a.date.getDate();
-        const mb = b.date.getMonth() * 31 + b.date.getDate();
-        return ma - mb;
-      });
-      seasonalOrder.forEach((node, si) => {
-        node.seasonalAngle = (si / n) * Math.PI * 2 - Math.PI / 2;
-      });
-
-      // 5) Length — by title character count (short→long)
-      const lengthOrder = nodes.slice().sort((a, b) => a.title.length - b.title.length);
-      lengthOrder.forEach((node, li) => {
-        node.lengthAngle = (li / n) * Math.PI * 2 - Math.PI / 2;
-      });
-
-      // 6) Shuffle — random positions, re-randomised each computation
-      const shuffled = nodes.slice();
-      for (let si = shuffled.length - 1; si > 0; si--) {
-        const sj = Math.floor(Math.random() * (si + 1));
-        [shuffled[si], shuffled[sj]] = [shuffled[sj], shuffled[si]];
+        return map;
       }
-      shuffled.forEach((node, ri) => {
-        node.shuffleAngle = (ri / n) * Math.PI * 2 - Math.PI / 2;
-      });
 
-      // 7) Density — posts with more temporal neighbours first
-      const densityScores = nodes.map((node) => {
-        let score = 0;
-        nodes.forEach((other) => {
-          if (other === node) return;
-          const days = Math.abs((node.date - other.date) / 864e5);
-          if (days < 60) score += 1 - days / 60;
+      function clusterLayout(viewKey, groups) {
+        const keys = Array.from(groups.keys());
+        const g = keys.length;
+        let maxCount = 1;
+        groups.forEach((members) => { maxCount = Math.max(maxCount, members.length); });
+
+        const maxR = Math.min((W - 2 * PAD) / g * 0.44, H * 0.34);
+        const golden = Math.PI * (3 - Math.sqrt(5));
+
+        keys.forEach((k, gi) => {
+          const members = groups.get(k);
+          const ccx = PAD + (gi + 0.5) / g * (W - 2 * PAD);
+          const ccy = H / 2 + Math.sin(gi * 2.2 + 0.6) * (H * 0.16);
+          const clusterR = maxR * (0.42 + 0.58 * Math.sqrt(members.length / maxCount));
+
+          members.forEach((node, mi) => {
+            const rr = members.length > 1 ? clusterR * Math.sqrt((mi + 0.5) / members.length) : 0;
+            const aa = mi * golden;
+            node.pos[viewKey] = { x: ccx + Math.cos(aa) * rr, y: ccy + Math.sin(aa) * rr };
+          });
         });
-        return { node, score };
-      });
-      densityScores.sort((a, b) => b.score - a.score);
-      densityScores.forEach(({ node }, di) => {
-        node.densityAngle = (di / n) * Math.PI * 2 - Math.PI / 2;
-      });
+      }
     }
 
-    computePositions();
+    computeLayouts();
 
-    /* ── Animation — cycling between randomised orderings ──────
-       Tap/click canvas to manually trigger next transition.
-       Order of states is shuffled. First transition after 3s. ── */
-    let time = 0;
-    const ROTATION_SPEED = 0.006;
-    const TRANSITION_SEC = 12;
+    /* ── Views + view state ────────────────────────────────────── */
+    const views = ['timeline', 'groups', 'topics', 'circle'];
+    const viewLabels = {
+      timeline: 'Timeline',
+      groups:   'Groups',
+      topics:   'Topics',
+      circle:   'Circle',
+    };
+
+    const TRANSITION_SEC = 2.4;
     const HOLD_SEC = 6;
 
-    // Shuffle ordering sequence so it's not always the same
-    function shuffleArray(arr) {
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
-    }
+    let toIdx = 0;             // index of the view we're settling into
+    let progress = 1;         // 0 = at "from", 1 = arrived
+    let holding = true;
+    let holdTimer = 3.5;      // first hold is shorter
 
-    // All available ordering keys + single-word display labels
-    const orderingKeys = ['chrono', 'theme', 'alpha', 'seasonal', 'length', 'scatter', 'density'];
-    const orderingLabels = {
-      chrono:   'Timeline',
-      theme:    'Themes',
-      alpha:    'Alphabetical',
-      seasonal: 'Seasonal',
-      length:   'Length',
-      scatter:  'Scatter',
-      density:  'Density',
-    };
-    // Always start with Timeline, then shuffle the rest
-    let orderSequence = ['chrono'].concat(shuffleArray([...orderingKeys.filter(k => k !== 'chrono')]));
+    // Start fully settled on the first view
+    nodes.forEach((node) => {
+      const p = node.pos[views[toIdx]];
+      node.baseX = node.fx = node.x = p.x;
+      node.baseY = node.fy = node.y = p.y;
+    });
 
-    // Toast overlay — matches self-learning-systems style:
-    // top-centered, Inconsolata 1rem, overlay0 (#6c7086), aria-live.
+    /* ── Toast overlay ─────────────────────────────────────────── */
     let toastTimeout = null;
     const toastEl = document.createElement('div');
     toastEl.setAttribute('aria-live', 'polite');
@@ -300,131 +300,115 @@
       toastEl.textContent = text;
       toastEl.style.opacity = '1';
       clearTimeout(toastTimeout);
-      toastTimeout = setTimeout(() => {
-        toastEl.style.opacity = '0';
-      }, duration || 1200);
+      toastTimeout = setTimeout(() => { toastEl.style.opacity = '0'; }, duration || 1400);
     }
 
-    function getAngleForKey(node, key) {
-      switch (key) {
-        case '_snap':    return node.snappedAngle || node.chronoAngle;
-        case 'chrono':   return node.chronoAngle;
-        case 'theme':    return node.themeAngle;
-        case 'alpha':    return node.alphaAngle;
-        case 'seasonal': return node.seasonalAngle;
-        case 'length':   return node.lengthAngle;
-        case 'scatter':  return node.shuffleAngle;
-        case 'density':  return node.densityAngle;
-        default:         return node.chronoAngle;
-      }
+    /* ── Advancing between views ───────────────────────────────── */
+    function advanceTo(nextIdx) {
+      // Snapshot current (pre-breathing) positions as the morph origin
+      nodes.forEach((node) => { node.fx = node.baseX; node.fy = node.baseY; });
+      toIdx = ((nextIdx % views.length) + views.length) % views.length;
+      progress = 0;
+      holding = false;
+      showToast(viewLabels[views[toIdx]]);
     }
 
-    // State machine: tracks current ordering index + transition progress
-    let currentIdx = 0;           // index into orderSequence
-    let transitionProgress = 0;   // 0 = at "from", 1 = arrived at "to"
-    let holding = true;           // true = holding, false = transitioning
-    let holdTimer = 3;            // first hold is only 3s
+    function advanceNext() { advanceTo(toIdx + 1); }
 
-    // Ensure sequence is long enough — append reshuffled copies as needed
-    function ensureSequence(needIdx) {
-      while (needIdx >= orderSequence.length) {
-        // Avoid repeating the last state at the seam
-        let next = shuffleArray([...orderingKeys]);
-        while (next[0] === orderSequence[orderSequence.length - 1]) {
-          next = shuffleArray([...orderingKeys]);
-        }
-        orderSequence = orderSequence.concat(next);
-      }
+    /* ── Pointer interaction — tap dot to open, tap space to cycle */
+    function pointerPos(evt) {
+      const rect = canvas.getBoundingClientRect();
+      const src = evt.touches && evt.touches[0] ? evt.touches[0] : evt;
+      return {
+        x: (src.clientX - rect.left) * (canvas.width / rect.width),
+        y: (src.clientY - rect.top) * (canvas.height / rect.height),
+      };
     }
 
-    // Tap to advance
-    canvas.addEventListener('click', triggerNext);
-    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); triggerNext(); });
+    function nodeAt(px, py) {
+      let hit = null, bestDist = HIT_R * HIT_R;
+      nodes.forEach((node) => {
+        const dx = node.x - px, dy = node.y - py;
+        const d = dx * dx + dy * dy;
+        if (d <= bestDist) { bestDist = d; hit = node; }
+      });
+      return hit;
+    }
 
-    function triggerNext() {
-      if (holding) {
-        // Skip remaining hold, start transition
-        holding = false;
-        transitionProgress = 0;
-        ensureSequence(currentIdx + 1);
-        showToast(orderingLabels[orderSequence[currentIdx + 1]]);
+    function handleTap(px, py) {
+      const node = nodeAt(px, py);
+      if (node && node.url) {
+        window.location.href = node.url;
       } else {
-        // Mid-transition: snapshot current positions as new "from",
-        // advance to next state so movement continues smoothly.
-        nodes.forEach((node) => {
-          node.snappedAngle = node.currentAngle;
-        });
-        currentIdx++;
-        ensureSequence(currentIdx + 1);
-        transitionProgress = 0;
-        // Override getAngleForKey to use snappedAngle as "from"
-        // by setting the current ordering to a special marker
-        orderSequence[currentIdx] = '_snap';
-        showToast(orderingLabels[orderSequence[currentIdx + 1]]);
+        advanceNext();
       }
     }
 
-    function finishTransition() {
-      currentIdx++;
-      ensureSequence(currentIdx + 1);
-      transitionProgress = 0;
-      holding = true;
-      holdTimer = HOLD_SEC;
-    }
+    canvas.addEventListener('click', (e) => {
+      const p = pointerPos(e);
+      handleTap(p.x, p.y);
+    });
+    canvas.addEventListener('touchstart', (e) => {
+      const p = pointerPos(e);
+      handleTap(p.x, p.y);
+      e.preventDefault();
+    }, { passive: false });
 
+    // Hover: highlight the dot under the cursor + show its title (only on change)
+    let hovered = null;
+    canvas.addEventListener('mousemove', (e) => {
+      const p = pointerPos(e);
+      const node = nodeAt(p.x, p.y);
+      canvas.style.cursor = 'pointer';
+      if (node === hovered) return;
+      if (hovered) hovered.hover = false;
+      hovered = node;
+      if (node) {
+        node.hover = true;
+        showToast(node.title, 2000);
+      }
+    });
+    canvas.addEventListener('mouseleave', () => {
+      if (hovered) hovered.hover = false;
+      hovered = null;
+    });
+
+    /* ── Easing helpers ────────────────────────────────────────── */
     function smoothstep(t) {
       t = Math.max(0, Math.min(1, t));
       return t * t * (3 - 2 * t);
     }
 
-    function lerpAngle(a, b, t) {
-      let diff = b - a;
-      while (diff > Math.PI) diff -= Math.PI * 2;
-      while (diff < -Math.PI) diff += Math.PI * 2;
-      return a + diff * t;
-    }
-
-    ensureSequence(1);
+    /* ── Update ────────────────────────────────────────────────── */
+    let time = 0;
 
     function update(dt) {
       time += dt;
 
-      // State machine: hold → transition → hold → …
       if (holding) {
         holdTimer -= dt;
-        if (holdTimer <= 0) {
-          holding = false;
-          transitionProgress = 0;
-        }
+        if (holdTimer <= 0) advanceNext();
       } else {
-        transitionProgress += dt / TRANSITION_SEC;
-        if (transitionProgress >= 1) {
-          transitionProgress = 1;
-          finishTransition();
+        progress += dt / TRANSITION_SEC;
+        if (progress >= 1) {
+          progress = 1;
+          holding = true;
+          holdTimer = HOLD_SEC;
         }
       }
 
-      const morphT = smoothstep(transitionProgress);
-      const fromKey = orderSequence[currentIdx];
-      const toKey = orderSequence[currentIdx + 1] || fromKey;
+      const morphT = smoothstep(progress);
+      const viewKey = views[toIdx];
 
-      const globalAngle = time * ROTATION_SPEED;
+      nodes.forEach((node) => {
+        const target = node.pos[viewKey];
+        node.baseX = node.fx + (target.x - node.fx) * morphT;
+        node.baseY = node.fy + (target.y - node.fy) * morphT;
 
-      nodes.forEach((node, i) => {
-        // Interpolate between current and next ordering
-        const fromAngle = getAngleForKey(node, fromKey);
-        const toAngle = getAngleForKey(node, toKey);
-        node.currentAngle = lerpAngle(fromAngle, toAngle, morphT);
-
-        // Sine-based breathing — deterministic, keeps circular shape
-        const breatheR = Math.sin(time * node.breatheFreq + node.phase) * node.breatheRadial;
-        const breatheA = Math.sin(time * node.breatheFreq * 0.8 + node.phase + Math.PI * 0.5) * node.breatheAngular;
-
-        const angle = node.currentAngle + globalAngle + breatheA;
-        const r = circleR + breatheR;
-
-        node.x = cx + Math.cos(angle) * r;
-        node.y = cy + Math.sin(angle) * r;
+        const bx = Math.sin(time * node.breatheFreq + node.phase) * node.breatheAmp;
+        const by = Math.cos(time * node.breatheFreq * 0.85 + node.phase) * node.breatheAmp;
+        node.x = node.baseX + bx;
+        node.y = node.baseY + by;
       });
     }
 
@@ -434,53 +418,40 @@
       ctx.fillStyle = currentGraphTheme.base;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Edges
+      const chord = currentGraphTheme.chord;
+
       edges.forEach((edge) => {
         const a = nodes[edge.i];
         const b = nodes[edge.j];
         const minOp = Math.min(a.opacity, b.opacity);
         if (minOp < 0.01) return;
 
-        const baseOp = currentGraphTheme.chord.a * (edge.cross ? 0.65 : 1);
-        const op = baseOp * edge.strength * minOp;
-        if (op < 0.003) return;
+        const op = chord.a * (edge.cross ? 0.7 : 1) * edge.strength * minOp;
+        if (op < 0.004) return;
 
-        ctx.strokeStyle = 'rgba(' + currentGraphTheme.chord.r + ',' + currentGraphTheme.chord.g + ',' + currentGraphTheme.chord.b + ',' + op + ')';
+        ctx.strokeStyle = 'rgba(' + chord.r + ',' + chord.g + ',' + chord.b + ',' + op + ')';
         ctx.lineWidth = edge.cross ? 0.5 : 0.7;
 
-        if (edge.cross) {
-          // Cross-connections curve inward toward centre
-          const pull = 0.35;
-          const cpx = cx + (a.x + b.x - 2 * cx) * (1 - pull) * 0.5;
-          const cpy = cy + (a.y + b.y - 2 * cy) * (1 - pull) * 0.5;
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.quadraticCurveTo(cpx, cpy, b.x, b.y);
-          ctx.stroke();
-        } else {
-          // Within-theme connections arc outward along the rim
-          const mx = (a.x + b.x) / 2;
-          const my = (a.y + b.y) / 2;
-          const dx = mx - cx;
-          const dy = my - cy;
-          const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-          const push = 15;
-          const cpx = mx + (dx / dist) * push;
-          const cpy = my + (dy / dist) * push;
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.quadraticCurveTo(cpx, cpy, b.x, b.y);
-          ctx.stroke();
-        }
+        // Gentle perpendicular bow so lines read as soft arcs, not wires
+        const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+        const dx = b.x - a.x, dy = b.y - a.y;
+        const len = Math.sqrt(dx * dx + dy * dy) || 1;
+        const bow = Math.min(14, len * 0.12);
+        const cpx = mx + (-dy / len) * bow;
+        const cpy = my + (dx / len) * bow;
+
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.quadraticCurveTo(cpx, cpy, b.x, b.y);
+        ctx.stroke();
       });
 
-      // Nodes
       nodes.forEach((node) => {
         if (node.opacity <= 0) return;
         ctx.globalAlpha = node.opacity;
         ctx.fillStyle = node.color;
         ctx.beginPath();
-        ctx.arc(node.x, node.y, NODE_R, 0, Math.PI * 2);
+        ctx.arc(node.x, node.y, node.hover ? NODE_R + 1.5 : NODE_R, 0, Math.PI * 2);
         ctx.fill();
       });
 
