@@ -36,6 +36,8 @@
         {% assign share_image = page.image | absolute_url %}
         {% assign has_share_image = true %}
       {% endunless %}
+    {% elsif page.teaser_video %}
+      {% assign has_share_image = true %}
     {% endif %}
     {% unless share_image %}
       {% assign share_image = '/apple-touch-icon.png' | absolute_url %}
@@ -43,8 +45,9 @@
 
     <!-- Open Graph Tags -->
     <meta property="og:title" content="{{ page.title | default: content | strip_html  | capitalize | truncatewords: 10, '' }}" />
-    <meta property="og:description" content="{{ content | strip_html | strip_newlines | truncate: 160 }}" />
+    <meta property="og:description" content="{{ content | strip_html | strip_newlines | truncate: 125 }}" />
     <meta property="og:url" content="{{ page.url | absolute_url }}" />
+    <meta property="og:site_name" content="{{ site.title }}" />
     <meta property="og:type" content="{% if page.teaser_video %}video.other{% elsif page.layout == 'post' %}article{% else %}website{% endif %}" />
     <meta property="og:image" content="{{ share_image }}" />
     {% if has_share_image %}<meta property="og:image:width" content="1200" />
@@ -61,7 +64,7 @@
     <meta name="twitter:image" content="{{ share_image }}" />
     {% if page.teaser_video %}
     <meta name="twitter:title" content="{{ page.title | default: content | strip_html | capitalize | truncatewords: 10, '' }}" />
-    <meta name="twitter:description" content="{{ page.teaser_video_description | default: content | strip_html | strip_newlines | truncate: 160 }}" />
+    <meta name="twitter:description" content="{{ page.teaser_video_description | default: content | strip_html | strip_newlines | truncate: 125 }}" />
     {% endif %}
   </head>
   <body>
