@@ -494,6 +494,37 @@ main img {
     border-radius: 4px;
   }
 
+article .post-teaser-video,
+main .post-teaser-video {
+  max-width: 80%;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 1rem 0;
+  border-radius: 4px;
+}
+
+article .post-teaser,
+main .post-teaser {
+  max-width: 80%;
+  margin: 1rem 0;
+}
+
+article .post-teaser-video,
+main .post-teaser-video {
+  max-width: 100%;
+  margin: 0;
+}
+
+article .post-teaser-caption,
+main .post-teaser-caption {
+  margin-top: 0.6rem;
+  color: #6c7086;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+}
+
 /* Interactive header canvas */
 .interactive-header {
     max-width: 80%;
