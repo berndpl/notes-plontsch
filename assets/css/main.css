@@ -501,13 +501,15 @@ main .post-teaser-video {
   height: auto;
   display: block;
   margin: 1rem 0;
-  border-radius: 4px;
+  border-radius: 18px;
 }
 
 article .post-teaser,
 main .post-teaser {
   max-width: 80%;
   margin: 1rem 0;
+  border-radius: 18px;
+  overflow: hidden;
 }
 
 article .post-teaser-video,
@@ -519,7 +521,7 @@ main .post-teaser-video {
 article .post-teaser-caption,
 main .post-teaser-caption {
   margin-top: 0.6rem;
-  color: #6c7086;
+  color: var(--theme-surface1);
   font-size: 0.9rem;
   line-height: 1.45;
   letter-spacing: 0.01em;
