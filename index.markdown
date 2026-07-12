@@ -27,4 +27,4 @@ title: Notes
   {% endfor %}
 </ul>
 
-<script src="{{ '/assets/js/post-graph.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/rain-header.js' | relative_url }}"></script>
