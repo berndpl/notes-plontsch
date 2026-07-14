@@ -15,9 +15,6 @@ html {
 body {
   color: var(--theme-text);
   background-color: var(--theme-base);
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
   transition: background-color 0.35s ease, color 0.25s ease;
 }
 
