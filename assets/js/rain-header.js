@@ -106,7 +106,8 @@
         quietFor: 0,
         // popcorn state
         heatTimer: 0,
-        heatDelay: 90 + Math.random() * 420,  // frames after settling before wiggle
+        // First pop should happen sooner; keep later cycles unchanged.
+        heatDelay: 45 + Math.random() * 210,  // frames after settling before wiggle
         phase:     Math.random() * Math.PI * 2,
       };
     });
@@ -302,12 +303,11 @@
     canvas.addEventListener('mouseleave', () => { mx = -9999; my = -9999; });
 
     canvas.addEventListener('touchmove', e => {
-      e.preventDefault();
       const r = canvas.getBoundingClientRect();
       const t = e.touches[0];
       mx = (t.clientX - r.left) * (W / r.width);
       my = (t.clientY - r.top)  * (H / r.height);
-    }, { passive: false });
+    }, { passive: true });
     canvas.addEventListener('touchend', () => { mx = -9999; my = -9999; });
 
     // click / tap → navigate to post
