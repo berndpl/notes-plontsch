@@ -68,6 +68,7 @@ main > *:first-child {
 .post-graph-container {
   width: 100%;
   margin-bottom: 2rem;
+  touch-action: pan-y;
 }
 
 #post-graph {
@@ -75,6 +76,7 @@ main > *:first-child {
   height: 420px;
   display: block;
   cursor: pointer;
+  touch-action: pan-y;
 }
 
 /* Post list styles */
