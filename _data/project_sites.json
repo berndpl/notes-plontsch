@@ -1,0 +1,31 @@
+{
+  "version": "2026-07-14",
+  "sites": [
+    {
+      "slug": "louder",
+      "name": "Louder",
+      "repository": "berndpl/Louder",
+      "url": "https://berndpl.github.io/Louder/blog/",
+      "iconPath": "docs/blog/img/icon.png",
+      "theme": {
+        "accentLight": "#1f3df2",
+        "hoverLight": "#5b6dff",
+        "accentDark": "#89b4fa",
+        "hoverDark": "#b4befe"
+      }
+    },
+    {
+      "slug": "steps",
+      "name": "Steps",
+      "repository": "berndpl/Steps",
+      "url": "https://berndpl.github.io/Steps/blog/",
+      "iconPath": "docs/blog/img/icon.png",
+      "theme": {
+        "accentLight": "#FF5184",
+        "hoverLight": "#E43F72",
+        "accentDark": "#f38ba8",
+        "hoverDark": "#eb6f92"
+      }
+    }
+  ]
+}

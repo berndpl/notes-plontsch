@@ -6,18 +6,13 @@
     <title>{{ page.title | capitalize | default: content | strip_html | truncatewords: 10, "" }} - {{ site.title }}</title>
     <meta name="title" content="{{ page.title | default: content | strip_html | capitalize | truncatewords: 10, '' }} - {{ site.title }}" />
     <meta name="description" content="{{ content | strip_html | strip_newlines | truncate: 160 }}" />
-    <script>
-      (function () {
-        try {
-          var theme = localStorage.getItem('notes-theme');
-          if (theme === 'mocha') theme = 'dark';
-          if (theme === 'light' || theme === 'dark') {
-            document.documentElement.setAttribute('data-theme', theme);
-          }
-        } catch (e) {}
-      })();
-    </script>
+    <script src="{{ '/assets/js/family-theme.js' | relative_url }}"></script>
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/family-theme.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/family-typography.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/family-header.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/family-footer.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/family-actions.css' | relative_url }}">
     <link rel="icon" type="image/png" href="{{ '/apple-touch-icon.png' | relative_url }}">
     <link rel="apple-touch-icon" href="{{ '/apple-touch-icon.png' | relative_url }}">
 
@@ -68,40 +63,28 @@
     {% endif %}
   </head>
   <body>
-    <header{% if is_about_active %} class="about-header"{% endif %}>
-      <nav>
-        <!-- <a href="{{ '/about/' | relative_url }}"><img src="{{ '/assets/images/leaf.svg' | relative_url }}" alt="Home" width="24" height="24"></a> -->
-        {% assign is_notes_active = false %}
-        {% if page.url == '/' %}{% assign is_notes_active = true %}{% endif %}
-        {% if page.url == '' %}{% assign is_notes_active = true %}{% endif %}
-        {% if page.layout == 'default' and page.title == 'Notes' %}{% assign is_notes_active = true %}{% endif %}
-        {% if page.layout == 'post' %}{% assign is_notes_active = true %}{% endif %}
-        <a href="{{ '/' | relative_url }}"{% if is_notes_active %} class="active"{% endif %}>Notes</a>
-        {% assign is_about_active = false %}
-        {% if page.permalink == '/about/' %}{% assign is_about_active = true %}{% endif %}
-        {% if page.url == '/about/' %}{% assign is_about_active = true %}{% endif %}
-        <a href="{{ '/about/' | relative_url }}"{% if is_about_active %} class="active"{% endif %}>About</a> 
-        <!-- <a href="#" class="inactive">Meaning <span class="badge">alpha</span></a> -->
-        {% if is_about_active %}
-        <a href="https://www.linkedin.com/in/bernd-plontsch-14538b13" class="lets-talk-button">Let's talk</a>
-        {% endif %}
-      </nav>
-    </header>
+    {% include site-header.html %}
 
     {% assign is_generated = false %}
     {% if page.title == 'Questions' or page.title == 'Insights' %}{% assign is_generated = true %}{% endif %}
     {% assign is_questions = false %}
     {% if page.title == 'Questions' %}{% assign is_questions = true %}{% endif %}
-    <main{% if page.permalink == '/about/' %} class="about-page"{% elsif is_questions %} class="generated-page questions-page"{% elsif is_generated %} class="generated-page"{% endif %}>
+    <main id="main-content" tabindex="-1"{% if page.permalink == '/about/' %} class="about-page"{% elsif is_questions %} class="generated-page questions-page"{% elsif is_generated %} class="generated-page"{% endif %}>
       {{ content }}
     </main>
 
     <footer>
       <div class="footer-row">
         <p>&copy; {{ site.time | date: '%Y' }} {{ site.title }} • {{ site.description }}Notes, <a class="generated-footer-link" href="{{ '/questions' | relative_url }}">questions</a>, <a class="generated-footer-link" href="{{ '/insights' | relative_url }}">insights</a> <!--a href="{{ '/work/' | relative_url }}" class="nav-link">Work</a--></p>
-        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle color theme"></button>
+        <div class="footer-controls">
+          <div class="accent-picker">
+            <button class="accent-toggle" type="button" aria-label="Choose accent color" aria-haspopup="menu" aria-expanded="false"></button>
+            <div class="accent-palette" role="menu" aria-label="Accent colors" hidden></div>
+          </div>
+          <button class="theme-toggle" type="button" aria-label="Toggle color theme"></button>
+        </div>
       </div>
     </footer>
-    <script src="{{ '/assets/js/theme-picker.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/family-footer.js' | relative_url }}"></script>
   </body>
 </html>

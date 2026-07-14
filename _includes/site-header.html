@@ -1,0 +1,30 @@
+{% assign is_notes_active = false %}
+{% if page.url == '/' %}{% assign is_notes_active = true %}{% endif %}
+{% if page.url == '' %}{% assign is_notes_active = true %}{% endif %}
+{% if page.layout == 'default' and page.title == 'Notes' %}{% assign is_notes_active = true %}{% endif %}
+{% if page.layout == 'post' %}{% assign is_notes_active = true %}{% endif %}
+
+{% assign is_about_active = false %}
+{% if page.permalink == '/about/' %}{% assign is_about_active = true %}{% endif %}
+{% if page.url == '/about/' %}{% assign is_about_active = true %}{% endif %}
+
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="nav-left">
+      <nav class="site-nav" aria-label="Primary">
+        <a href="{{ '/' | relative_url }}"{% if is_notes_active %} class="active" aria-current="page"{% endif %}>Notes</a>
+        <a href="{{ '/about/' | relative_url }}"{% if is_about_active %} class="active" aria-current="page"{% endif %}>About</a>
+      </nav>
+    </div>
+    <div class="nav-right">
+      <nav class="project-nav" aria-label="Project Websites">
+        {% for project in site.data.project_sites.sites %}
+        <a class="project-link" href="{{ project.url }}" aria-label="{{ project.name }}" title="{{ project.name }}">
+          <img class="project-mark" src="{{ '/assets/project-icons/' | append: project.slug | append: '.png' | relative_url }}" alt="" width="256" height="256">
+        </a>
+        {% endfor %}
+      </nav>
+    </div>
+  </div>
+</header>

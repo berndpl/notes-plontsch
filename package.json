@@ -1,1 +1,9 @@
-{}
+{
+  "scripts": {
+    "build:threads": "esbuild _visuals/2026/2026-07-12-threads.js --bundle --format=iife --target=es2020 --minify --legal-comments=inline --outfile=assets/images/2026/2026-07-12-threads.js"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.1",
+    "three": "0.185.1"
+  }
+}

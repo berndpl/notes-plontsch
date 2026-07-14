@@ -164,28 +164,41 @@ main a {
 }
 
 a:hover,
-nav a:hover {
+.site-nav a:hover {
   color: var(--theme-hover);
   text-decoration: underline;
 }
 
-nav {
+.topbar {
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid var(--theme-surface0);
+  background: var(--theme-base);
+  background: color-mix(in srgb, var(--theme-base) 88%, transparent);
+  backdrop-filter: saturate(140%) blur(10px);
+}
+
+.topbar-inner,
+.site-nav {
   display: flex;
+  align-items: center;
   gap: 1rem;
 }
 
-nav a {
+.site-nav a {
   color: rgba(var(--theme-body-rgb), 0.6);
   font-size: 1rem;
   font-weight: 400;
+  line-height: 1;
 }
 
-nav a.active {
+.site-nav a.active,
+.site-nav a[aria-current="page"] {
   color: var(--theme-text);
   text-decoration: none;
 }
 
-nav a.inactive,
+.site-nav a.inactive,
 .subtle {
   color: var(--theme-overlay0);
   opacity: 0.7;
@@ -193,7 +206,9 @@ nav a.inactive,
 }
 ```
 
-Navigation should feel like text, not controls. Use button styling only for a single clear call to action.
+The header markup lives in `_includes/site-header.html`. Its colors must come from theme tokens so
+the same component works in Mocha dark, Frost light, and the OS-selected default. Navigation should
+feel like text, not controls. Use button styling only for a single clear call to action.
 
 ## Cards
 
