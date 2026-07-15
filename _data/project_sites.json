@@ -1,5 +1,5 @@
 {
-  "version": "2026-07-14",
+  "version": "2026-07-15.28",
   "sites": [
     {
       "slug": "louder",
@@ -10,8 +10,10 @@
       "theme": {
         "accentLight": "#1f3df2",
         "hoverLight": "#5b6dff",
+        "secondaryLight": "#a41469",
         "accentDark": "#89b4fa",
-        "hoverDark": "#b4befe"
+        "hoverDark": "#b4befe",
+        "secondaryDark": "#f5c2e7"
       }
     },
     {
@@ -23,8 +25,10 @@
       "theme": {
         "accentLight": "#FF5184",
         "hoverLight": "#E43F72",
+        "secondaryLight": "#8839ef",
         "accentDark": "#f38ba8",
-        "hoverDark": "#eb6f92"
+        "hoverDark": "#eb6f92",
+        "secondaryDark": "#cba6f7"
       }
     }
   ]
