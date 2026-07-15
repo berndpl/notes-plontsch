@@ -229,10 +229,6 @@
     function draw() {
       ctx.clearRect(0, 0, W, H);
 
-      // background
-      ctx.fillStyle = css('--graph-base', '#1e1e2e');
-      ctx.fillRect(0, 0, W, H);
-
       // edges — disabled for cleaner look
       // ctx.lineWidth = 1;
       // edges.forEach(e => {
