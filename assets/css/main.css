@@ -29,15 +29,6 @@ a {
   margin-top: 1.5rem;
 }
 
-.lets-talk-coffee {
-  width: 1.4em;
-  height: 1.1em;
-  flex: 0 0 auto;
-  background: currentColor;
-  -webkit-mask: url("../images/mugs.svg") center / contain no-repeat;
-  mask: url("../images/mugs.svg") center / contain no-repeat;
-}
-
 .badge {
   display: inline-block;
   font-size: 0.6em;
