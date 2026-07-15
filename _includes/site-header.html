@@ -7,6 +7,7 @@
 {% assign is_about_active = false %}
 {% if page.permalink == '/about/' %}{% assign is_about_active = true %}{% endif %}
 {% if page.url == '/about/' %}{% assign is_about_active = true %}{% endif %}
+{% assign project_sites = site.data.project_sites.sites %}
 
 <a class="skip-link" href="#main-content">Skip to content</a>
 <header class="topbar">
@@ -17,14 +18,16 @@
         <a href="https://plontsch.de/"{% if is_about_active %} class="active" aria-current="page"{% endif %}>About</a>
       </nav>
     </div>
+    {% if project_sites != empty %}
     <div class="nav-right">
       <nav class="project-nav" aria-label="Project Websites">
-        {% for project in site.data.project_sites.sites %}
+        {% for project in project_sites %}
         <a class="project-link" href="{{ project.url }}" aria-label="{{ project.name }}" title="{{ project.name }}">
           <img class="project-mark" src="{{ '/assets/project-icons/' | append: project.slug | append: '.png' | relative_url }}" alt="" width="256" height="256">
         </a>
         {% endfor %}
       </nav>
     </div>
+    {% endif %}
   </div>
 </header>

@@ -1,35 +1,4 @@
 {
-  "version": "2026-07-15.28",
-  "sites": [
-    {
-      "slug": "louder",
-      "name": "Louder",
-      "repository": "berndpl/Louder",
-      "url": "https://berndpl.github.io/Louder/blog/",
-      "iconPath": "docs/blog/img/icon.png",
-      "theme": {
-        "accentLight": "#1f3df2",
-        "hoverLight": "#5b6dff",
-        "secondaryLight": "#a41469",
-        "accentDark": "#89b4fa",
-        "hoverDark": "#b4befe",
-        "secondaryDark": "#f5c2e7"
-      }
-    },
-    {
-      "slug": "steps",
-      "name": "Steps",
-      "repository": "berndpl/Steps",
-      "url": "https://berndpl.github.io/Steps/blog/",
-      "iconPath": "docs/blog/img/icon.png",
-      "theme": {
-        "accentLight": "#FF5184",
-        "hoverLight": "#E43F72",
-        "secondaryLight": "#8839ef",
-        "accentDark": "#f38ba8",
-        "hoverDark": "#eb6f92",
-        "secondaryDark": "#cba6f7"
-      }
-    }
-  ]
+  "version": "2026-07-15.32",
+  "sites": []
 }
