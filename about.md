@@ -14,4 +14,4 @@ I also roast coffee using a popcorn popper and build the occasional experimental
 
 If you are around, let's meet.
 
-<p class="about-cta"><a href="https://www.linkedin.com/in/bernd-plontsch-14538b13" class="lets-talk-button"><span class="lets-talk-coffee" aria-hidden="true"></span>Let's talk</a></p>
+<p class="about-cta"><a href="https://www.linkedin.com/in/bernd-plontsch-14538b13" class="lets-talk-button"><span class="lets-talk-coffee action-symbol" aria-hidden="true"></span>Let's talk</a></p>
