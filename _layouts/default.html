@@ -6,6 +6,7 @@
     <title>{{ page.title | capitalize | default: content | strip_html | truncatewords: 10, "" }} - {{ site.title }}</title>
     <meta name="title" content="{{ page.title | default: content | strip_html | capitalize | truncatewords: 10, '' }} - {{ site.title }}" />
     <meta name="description" content="{{ content | strip_html | strip_newlines | truncate: 160 }}" />
+    {% if page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}">{% endif %}
     <script src="{{ '/assets/js/family-theme.js' | relative_url }}"></script>
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/css/family-theme.css' | relative_url }}">
@@ -41,7 +42,7 @@
     <!-- Open Graph Tags -->
     <meta property="og:title" content="{{ page.title | default: content | strip_html  | capitalize | truncatewords: 10, '' }}" />
     <meta property="og:description" content="{{ content | strip_html | strip_newlines | truncate: 125 }}" />
-    <meta property="og:url" content="{{ page.url | absolute_url }}" />
+    <meta property="og:url" content="{% if page.canonical_url %}{{ page.canonical_url }}{% else %}{{ page.url | absolute_url }}{% endif %}" />
     <meta property="og:site_name" content="{{ site.title }}" />
     <meta property="og:type" content="{% if page.teaser_video %}video.other{% elsif page.layout == 'post' %}article{% else %}website{% endif %}" />
     <meta property="og:image" content="{{ share_image }}" />
