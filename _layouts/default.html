@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-custom-palettes>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -78,9 +78,10 @@
         <p>&copy; {{ site.time | date: '%Y' }} {{ site.title }} • {{ site.description }}Notes, <a class="generated-footer-link" href="{{ '/questions' | relative_url }}">questions</a>, <a class="generated-footer-link" href="{{ '/insights' | relative_url }}">insights</a> <!--a href="{{ '/work/' | relative_url }}" class="nav-link">Work</a--></p>
         <div class="footer-controls">
           <div class="accent-picker">
-            <button class="accent-toggle" type="button" aria-label="Choose accent color" aria-haspopup="menu" aria-expanded="false"></button>
-            <div class="accent-palette" role="menu" aria-label="Accent colors" hidden></div>
+            <button class="accent-toggle" type="button" aria-label="Choose color palette" aria-haspopup="menu" aria-expanded="false"></button>
+            <div class="accent-palette" role="menu" aria-label="Color palettes" hidden></div>
           </div>
+          <button class="font-toggle" type="button" aria-label="Switch font">Aa</button>
           <button class="theme-toggle" type="button" aria-label="Toggle color theme"></button>
         </div>
       </div>

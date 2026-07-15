@@ -29,10 +29,6 @@
   function css(v, fb) {
     return getComputedStyle(document.documentElement).getPropertyValue(v).trim() || fb;
   }
-  function hexRgb(h) {
-    const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(h);
-    return m ? { r: +('0x' + m[1]), g: +('0x' + m[2]), b: +('0x' + m[3]) } : { r: 180, g: 190, b: 254 };
-  }
 
   /* ── Year → palette index ────────────────────────────────────── */
   const YEAR_BUCKETS = ['2017', '2023', '2024', '2025', '2026'];
@@ -40,13 +36,7 @@
   const FALLBACK_COLS = ['#FF1493', '#FF6B35', '#39FF14', '#00D9FF', '#9D4EDD', '#FFDC00'];
 
   function getColors() {
-    const cols = FALLBACK_COLS.map((_, i) => css('--graph-color-' + i, FALLBACK_COLS[i]));
-    // If in light mode, use slightly adjusted riso colors for better contrast
-    const bgColor = css('--graph-base', '#1e1e2e').toLowerCase();
-    const isDark = bgColor.charCodeAt(1) < '8'.charCodeAt(0);
-    return isDark ? cols : [
-      '#E6006F', '#FF5722', '#2EFF00', '#00C9FF', '#8B00FF', '#FFD700'
-    ];
+    return FALLBACK_COLS.map((_, i) => css('--graph-color-' + i, FALLBACK_COLS[i]));
   }
   function yearIndex(date) {
     const y = date.getFullYear().toString();
@@ -85,18 +75,18 @@
 
     resize();
 
-    const COLS = getColors();
+    let colors = getColors();
     nodes = postEls.map((li, i) => {
       const a   = li.querySelector('a');
       const t   = li.querySelector('time');
       const dt  = t ? new Date(t.getAttribute('datetime')) : new Date();
       const ti  = yearIndex(dt);
-      const col = COLS[ti] || FALLBACK_COLS[ti];
+      const col = colors[ti] || FALLBACK_COLS[ti];
       return {
         url:   a ? a.href : '',
         title: a ? a.textContent.trim() : '',
+        paletteIndex: ti,
         color: col,
-        rgb:   hexRgb(col),
         x:        NODE_R + Math.random() * (W - NODE_R * 2),
         // stagger: earlier posts fall later (deeper offset above viewport)
         y:        -NODE_R - i * 16 - Math.random() * 180,
@@ -111,6 +101,13 @@
         phase:     Math.random() * Math.PI * 2,
       };
     });
+
+    function refreshColors() {
+      colors = getColors();
+      nodes.forEach((node) => {
+        node.color = colors[node.paletteIndex] || FALLBACK_COLS[node.paletteIndex];
+      });
+    }
 
     /* ── Chronological edges ─────────────────────────────────────── */
     const sorted = postEls
@@ -294,6 +291,8 @@
         }
       });
     });
+    window.addEventListener('family-theme-change', refreshColors);
+    window.addEventListener('family-accent-change', refreshColors);
 
     canvas.addEventListener('mousemove', e => {
       const r = canvas.getBoundingClientRect();
