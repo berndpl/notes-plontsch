@@ -1,6 +1,6 @@
 ---
 title: "Merged Media"
-teaser_video: /assets/images/2026/2026-07-21-exploring-generative-narration-and-ambience.mp4
+teaser_video: /assets/images/2026/2026-07-21-merged-media.mp4
 teaser_video_description: "Generative narration and ambience based on a magazine title page"
 ---
 
