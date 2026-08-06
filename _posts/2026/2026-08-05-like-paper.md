@@ -3,9 +3,9 @@ title: "Like Paper"
 image: /assets/images/2026/2026-08-05-like-paper.png
 ---
 
-What screens do and how we relate to them is changing drastically. And when I think of something that might help guide us along that unbeaten path it's paper.
+What screens do and how we relate to them is changing drastically. And when I think of something that might help guide us along that unbeaten path it has to be paper.
 
-A blank sheet of paper can become almost anything. It has a minimal barrier of entry. It's an incredibly versatile canvas for expression, a tool for communication, a medium for preserving thought over time. Paper combines accessibility and versatility naturally.
+A blank sheet of paper can become almost anything. It has a minimal barrier of entry. It's an incredibly versatile canvas for expression, a tool for communication, a medium for preserving thought over time. Paper combines accessibility and versatility effortlesly.
 
 ## From Scarcity to Abundance
 
@@ -19,7 +19,7 @@ The new idea of a truly personal computer isn't just everybody being able to use
 
 ## Beyond Digital Dopamine
 
-The same abundance might also help resolve our crisis of digital stimulation. When screens can become anything, we might just grow tired of that rush of flashing pixels. 
+It could feel counter intuitive but the same abundance might also help resolve our crisis of digital stimulation. When screens can become anything, maybe we just grow tired of that rush of flashing pixels eventually. 
 
 Screens might slowly become boring enough again for us to turn inward, becoming aware and to just start use them as the tools they are instead of being a destination.
 
