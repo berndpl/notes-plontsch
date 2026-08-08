@@ -13,7 +13,7 @@ Screen-based devices have approached this ideal in theory, but the cost of creat
 
 This new idea of a personal computer isn't just about everyone being able to use one. It's that everyone can shape the entire experience around their own needs. The software user relationship becomes one to one.
 
-And it turns out the distance between that potential and reality was mostly cost. Now nothing needs justifying. The only measure that counts is whether it matters to you. You build a tool for one task, use it for a minute or a lifetime, and let it go when it stops being useful. The crumple up and forget era of Software. It's liberating.
+Turns out the distance between that potential and reality was mostly cost. Now nothing needs justifying. The only measure is whether it matters to you. You build a tool for one task, use it for a minute or a lifetime, and let it go when it stops being useful. The crumple up and forget era of Software. It's liberating.
 
 ## Overcoming Digital Dopamine
 
