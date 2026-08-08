@@ -3,7 +3,7 @@ title: "Like Paper"
 image: /assets/images/2026/2026-08-05-like-paper.png
 ---
 
-What screens do and how we relate to them is changing drastically. And when I think of something that might help guide us along that unbeaten path it has to be paper.
+What screens do and how we relate to them is changing drastically. And when I think of something that might help guide us along that unbeaten path it's …paper.
 
 A blank sheet of paper can become almost anything. It has a minimal barrier of entry. It's an incredibly versatile canvas for expression, a tool for communication, a medium for preserving thought over time. Paper combines accessibility and versatility effortlesly.
 
