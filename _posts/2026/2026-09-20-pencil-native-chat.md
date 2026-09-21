@@ -1,6 +1,6 @@
 ---
 title: "Pencil Native Chat"
-teaser_video: /assets/images/2026/2026-09-20-pencil-and-text.mp4
+teaser_video: /assets/images/2026/2026-09-20-pencil-native-chat.mp4
 teaser_video_description: "Exploring a pencil-native chat flow"
 ---
 
@@ -12,7 +12,7 @@ Here's a little prototype exploring and reflecting on some of the possibilities.
 
 A crossed-out sentence means "not this". A question mark asks for an explanation. A circle focuses the conversation. A small sketch can express something that is awkward or hard to describe. Arrows, hearts, stars… it's not a rigid system. Your markup can be as varied as the content it annotates. And there's the fun in it.
 
-![Markup used to inform chat responses](/assets/images/2026/2026-09-20-pencil-and-text-markup.png) 
+![Markup used to inform chat responses](/assets/images/2026/2026-09-20-pencil-native-chat-markup.png) 
 
 How much of a chat flow could be driven by just these quick cues and marks? That's something I was curious to explore in this little prototype.
 
@@ -20,7 +20,7 @@ How much of a chat flow could be driven by just these quick cues and marks? That
 
 One of the greatest delights of scribbling is flow. A scribble already has a natural ending: the end of a line, the punctuation ending a sentence or simply lifting the pencil and pausing. No submit button is needed when writing on a page. Removing the button felt like a refreshing unlock in the prototype. Dissolving the back-and-forth into one continuous motion.
 
-![Markup examples integrated with text](/assets/images/2026/2026-09-20-pencil-and-text-photo.jpeg)
+![Markup examples integrated with text](/assets/images/2026/2026-09-20-pencil-native-chat-photo.jpeg)
 
 ## You are what's unique
 
